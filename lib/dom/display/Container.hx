@@ -158,20 +158,27 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
     }
 
     /**
-     * Удалить все дочерние элементы.
+     * Удалить все дочерние элементы.  
+     * @param full Если `true`, полностью очищает ноду: `innerHTML=""`.
+     *             Иначе удаляет только дочерние экземпляры `dom.display.Component`.
      */
-    public function removeChildren():Void {
+    public function removeChildren(full:Bool = false):Void {
         var old = childrens;
+        var i = 0;
+        var len = old.length;
         childrens = new Array();
         numChildren = 0;
 
-        // Удалить все из DOM:
-        var i = 0;
-        var len = old.length;
-        while (i < len) {
-            var child = old[i++];
-            if (node == child.node.parentNode)
-                node.removeChild(child.node);
+        // Очистка DOM:
+        if (full) {
+            node.innerHTML = "";
+        }
+        else {
+            while (i < len) {
+                var child = old[i++];
+                if (node == child.node.parentNode)
+                    node.removeChild(child.node);
+            }
         }
 
         // События в конце:
