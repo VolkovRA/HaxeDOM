@@ -23,10 +23,13 @@ class Stage<E:Element> extends Container<Stage<E>, E>
         stage = this;
         node.classList.add("stage");
 
-        var observer = new ResizeObserver(function(entries, observer){
-            onResize.emit(this);
-        });
-        observer.observe(node);
+        // Событие ресайзинга:
+        if (NativeJS.isResizeObserverSupported()) {
+            var observer = new ResizeObserver(function(entries, observer){
+                onResize.emit(this);
+            });
+            observer.observe(node);
+        }
     }
 
     /**

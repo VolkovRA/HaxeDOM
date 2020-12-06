@@ -1,5 +1,6 @@
 package dom.utils;
 
+import js.Browser;
 import js.Syntax;
 
 /**
@@ -46,5 +47,13 @@ class NativeJS
      */
     inline static public function arrRemove(arr:Array<Dynamic>, index:Int):Void {
         Syntax.code('{0}.splice({1}, 1)', arr, index);
+    }
+
+    /**
+     * Проверить поддержку DOM API [ResizeObserver]()  
+     * @return Возвращает `true`, если этот класс определён, `false` в остальных случаях.
+     */
+    inline static public function isResizeObserverSupported():Bool {
+        return Syntax.code('window["ResizeObserver"] !== undefined');
     }
 }

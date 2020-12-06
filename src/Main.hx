@@ -3,11 +3,13 @@ package;
 import dom.display.Stage;
 import dom.display.Component;
 import dom.display.Container;
+import dom.utils.NativeJS;
 import js.Browser;
 
 class Main
 {   
     static public function main() {
+        trace("Поддержка ResizeObserver: " + NativeJS.isResizeObserverSupported());
         testAddChildAt();
     }
 
