@@ -10,15 +10,6 @@ import js.Syntax;
 class NativeJS
 {
     /**
-     * Получить имя конструктора. (Нативный JS)  
-     * @param value Проверяемое значение.
-     * @return Возвращает тип JavaScript значения.
-     */
-    inline static public function constructorName(value:Dynamic):String {
-        return Syntax.code("({0}.constructor.name)", value);
-    }
-
-    /**
      * Проверка на `undefined`. (Нативный JS)  
      * Возвращает `true`, если переданное значение равно `undefined`.
      * @param value Проверяемое значение.

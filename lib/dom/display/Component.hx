@@ -33,7 +33,6 @@ class Component<T:Component<T,E>, E:Element>
             throw new Error("HTML Элемент не должен быть null");
 
         this.node = node;
-        this.node.classList.add("component");
     }
 
 
@@ -156,12 +155,12 @@ class Component<T:Component<T,E>, E:Element>
             return value;
 
         pixelSnapping = value;
-        updateCSS_x();
-        updateCSS_y();
-        updateCSS_width();
-        updateCSS_height();
+        updateCSS();
         return value;
     }
+
+
+    public var units(default, set):String
 
     /**
      * Родительский контейнер.  
@@ -192,8 +191,9 @@ class Component<T:Component<T,E>, E:Element>
      * @return Возвращает текстовое представление этого экземпляра.
      */
     @:keep
+    @:noCompletion
     public function toString():String {
-        return "[Component " + NativeJS.constructorName(node) + "]";
+        return "[Component]";
     }
 
 
@@ -250,9 +250,18 @@ class Component<T:Component<T,E>, E:Element>
     private var parentIndex:Int = -1;
 
     /**
+     * Обновить все CSS свойства.
+     */
+    inline private function updateCSS():Void {
+        updateCSS_x();
+        updateCSS_y();
+        updateCSS_width();
+        updateCSS_height();
+    }
+
+    /**
      * Обновить значение CSS свойства для переменной `x`.
      */
-    @:noCompletion
     private function updateCSS_x():Void {
         if (x == null)
             node.style.left = "";
@@ -263,7 +272,6 @@ class Component<T:Component<T,E>, E:Element>
     /**
      * Обновить значение CSS свойства для переменной `y`.
      */
-    @:noCompletion
     private function updateCSS_y():Void {
         if (y == null)
             node.style.top = "";
@@ -274,7 +282,6 @@ class Component<T:Component<T,E>, E:Element>
     /**
      * Обновить значение CSS свойства для переменной `width`.
      */
-    @:noCompletion
     private function updateCSS_width():Void {
         if (width == null)
             node.style.width = "";
@@ -285,7 +292,6 @@ class Component<T:Component<T,E>, E:Element>
     /**
      * Обновить значение CSS свойства для переменной `height`.
      */
-    @:noCompletion
     private function updateCSS_height():Void {
         if (height == null)
             node.style.height = "";

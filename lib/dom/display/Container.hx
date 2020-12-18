@@ -19,8 +19,6 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      */
     public function new(node:E) {
         super(node);
-
-        node.classList.add("container");
     }
 
     /**
@@ -222,7 +220,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
     @:keep
     @:noCompletion
     override public function toString():String {
-        return "[Container " + NativeJS.constructorName(node) + "]";
+        return "[Container]";
     }
 
 

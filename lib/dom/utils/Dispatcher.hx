@@ -162,6 +162,7 @@ class Dispatcher<T:Function>
      * @return Возвращает текстовое представление этого экземпляра.
      */
     @:keep
+    @:noCompletion
     public function toString():String {
         return "[Dispatcher]";
     }

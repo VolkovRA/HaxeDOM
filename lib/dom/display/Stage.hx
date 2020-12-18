@@ -21,7 +21,6 @@ class Stage<E:Element> extends Container<Stage<E>, E>
         super(node);
 
         stage = this;
-        node.classList.add("stage");
 
         // Событие ресайзинга:
         if (NativeJS.isResizeObserverSupported()) {
@@ -55,6 +54,6 @@ class Stage<E:Element> extends Container<Stage<E>, E>
     @:keep
     @:noCompletion
     override public function toString():String {
-        return "[Stage " + NativeJS.constructorName(node) + "]";
+        return "[Stage]";
     }
 }
