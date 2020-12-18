@@ -16,7 +16,7 @@ class NativeJS
      * @return Результат проверки.
      */
     inline static public function isUndefined(value:Dynamic):Bool {
-        return Syntax.code('({0} === "undefined")', value);
+        return Syntax.code('({0} === undefined)', value);
     }
 
     /**
