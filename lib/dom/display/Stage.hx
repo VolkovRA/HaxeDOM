@@ -9,7 +9,7 @@ import dom.utils.ResizeObserver;
  * Корневой узел.  
  * Этот объект должен использоваться как самый верхний элемент в
  * иерархии отображения всех компонентов. Он нужен для правильной
- * работы событий: `onAddedToStage`, `onRemovedFromStage` и `onResize`.
+ * работы событий: `onAddedToStage`, `onRemovedFromStage` и `onResize`
  */
 class Stage<E:Element> extends Container<Stage<E>, E>
 {

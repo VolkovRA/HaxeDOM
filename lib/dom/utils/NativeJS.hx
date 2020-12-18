@@ -1,6 +1,5 @@
 package dom.utils;
 
-import js.Browser;
 import js.Syntax;
 
 /**
@@ -10,8 +9,8 @@ import js.Syntax;
 class NativeJS
 {
     /**
-     * Проверка на `undefined`. (Нативный JS)  
-     * Возвращает `true`, если переданное значение равно `undefined`.
+     * Проверка на: `undefined`  
+     * Возвращает `true`, если переданное значение равно: `undefined`
      * @param value Проверяемое значение.
      * @return Результат проверки.
      */
@@ -20,7 +19,17 @@ class NativeJS
     }
 
     /**
-     * Вставка в произвольное место массива. (Нативный JS)  
+     * Приведение к: `String`  
+     * Приводит любое значение к строке.
+     * @param v Значение.
+     * @return Строка.
+     */
+    static public inline function str(v:Dynamic):String {
+        return Syntax.code("({0} + '')", v);
+    }
+
+    /**
+     * Вставка в произвольное место массива.  
      * Вставка в указанную позицию в массиве со сдвигом элементов вправо.
      * @param arr Изменяемый массив.
      * @param index Позиция для вставки.
@@ -31,7 +40,7 @@ class NativeJS
     }
 
     /**
-     * Удалить указанный индекс в массиве. (Нативный JS)  
+     * Удалить указанный индекс в массиве.  
      * @param arr Изменяемый массив.
      * @param index Позиция для вставки.
      * @param value Вставляемое значение.

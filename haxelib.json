@@ -2,9 +2,9 @@
     "name": "dom",
     "url": "https://github.com/VolkovRA/HaxeDOM/blob/master/README.md",
     "license": "MIT",
-    "tags": ["dom", "web", "html", "html5", "onAddedToStage"],
-    "description": "Very tiny framework for work with dom api",
-    "version": "1.0.0",
+    "tags": ["dom", "ui", "gui", "web", "html", "html5", "onAddedToStage"],
+    "description": "Небольшой фреймворк для работы с DOM API",
+    "version": "2.0.0",
     "releasenote": "Release",
     "contributors": ["VolkovRA"],
     "classPath": "lib"

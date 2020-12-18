@@ -3,13 +3,14 @@
 Описание
 ------------------------------
 
-Это крошечный Haxe [DOM API](https://developer.mozilla.org/ru/docs/DOM/DOM_Reference) фреймворк для добавления дополнительных возможностей при работе с стандартным DOM API.  
+Это небольшой Haxe [DOM API](https://developer.mozilla.org/ru/docs/DOM/DOM_Reference) фреймворк для добавления дополнительных возможностей при работе с стандартным DOM API.  
 Он добавляет:
-- События добавления и удаления элемента с html страницы. Это полезно, когда вам нужно знать, отображается элемент или нет. (Добавлен в DOM) Это реализация событий: `onAddedToStage` и `onRemovedFromStage`. (Возможно, вам это знакомо)
-- События добавления элемента в контейнер: `onAdded` и `onRemoved`.
-- Событие ресайза: `onResize`. Используется реализация без циклов и опросов DOM, на основе [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
-- Возможность управления: `x`, `y`, `width` и `height` свойствами обычных DOM элементов, через чуть более удобный интерфейс. Чтоб не писать каждый раз `px` и не парсить стили. (Опционально, по желанию.)
+- События добавления и удаления элемента с html страницы. Это полезно, когда вам нужно знать, отображается элемент или нет. (Добавлен в DOM) Это реализация событий: `onAddedToStage` и `onRemovedFromStage` (Возможно, вам это знакомо)
+- События добавления элемента в контейнер: `onAdded` и `onRemoved`
+- Событие ресайза: `onResize` Используется реализация без циклов и опросов DOM, на основе [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
+- Возможность управления: `x`, `y`, `width` и `height` свойствами обычных DOM элементов, через чуть более удобный интерфейс. Чтоб не писать каждый раз `px` или `em` и не парсить стили. (Опционально, по желанию.)
 - Использовать чуть более высокоуровневое API для создания приложения, но не более. (Сцены, дисплей-листы)
+- Простые UI компоненты на основе DOM. Библиотека реализует только функциональность UI компонентов, все CSS стили вы должны добавить самостоятельно. Это позволяет кастомизировать элементы интерфейса совершенно любым образом.
 
 Больше этот фреймворк ничего не делает. Не используемый код выпиливается из JS. (Haxe dce)
 
@@ -48,7 +49,7 @@ haxelib git dom https://github.com/VolkovRA/HaxeDOM master
 haxelib git [project-name] [git-clone-path] [branch]
 haxelib git minject https://github.com/massiveinteractive/minject.git         # Use HTTP git path.
 haxelib git minject git@github.com:massiveinteractive/minject.git             # Use SSH git path.
-haxelib git minject git@github.com:massiveinteractive/minject.git v2          # Checkout branch or tag `v2`.
+haxelib git minject git@github.com:massiveinteractive/minject.git v2          # Checkout branch or tag `v2`
 ```
 3. Добавьте библиотеку dom в ваш Haxe проект.
 
