@@ -6,7 +6,7 @@ import dom.display.Component;
 
 /**
  * Текстовая метка.  
- * Представлена обычным span тегом в DOM.
+ * В DOM представлена тегом: `<span>`
  */
 class Label extends Component<Label, SpanElement>
 {
@@ -14,10 +14,12 @@ class Label extends Component<Label, SpanElement>
      * Создать обычное, текстовое поле.
      * @param text Текст в текстовом поле.
      */
-    public function new(text:String = "") {
+    public function new(?text:String) {
         super(Browser.document.createSpanElement());
         this.node.classList.add("label");
-        this.text = text;
+
+        if (text != null)
+            this.text = text;
     }
 
     /**
