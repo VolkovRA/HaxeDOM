@@ -6,6 +6,7 @@ import js.html.Element;
  * Объект для наблюдения изменений в размерах DOM элемента.  
  * Это экстерн для нативного JavaScript класса [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
  */
+@:dce
 @:native("ResizeObserver")
 extern class ResizeObserver
 {

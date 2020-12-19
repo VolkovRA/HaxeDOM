@@ -11,6 +11,7 @@ import haxe.Constraints.Function;
  * 
  * *п.с. На каждый отдельный тип события должен быть создан свой слушатель.*
  */
+@:dce
 class Dispatcher<T:Function>
 {
     /**

@@ -6,6 +6,7 @@ import js.Syntax;
  * Нативный JS.  
  * Статический класс с нативными JavaScript функциями.
  */
+@:dce
 class NativeJS
 {
     /**

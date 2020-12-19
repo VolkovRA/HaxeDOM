@@ -5,6 +5,7 @@ package dom.enums;
  * Перечисление содержит доступные единицы измерения в CSS для
  * управления стилями.
  */
+@:dce
 enum abstract Units(String) to String from String
 {
     /**

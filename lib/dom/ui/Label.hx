@@ -2,13 +2,13 @@ package dom.ui;
 
 import js.Browser;
 import js.html.SpanElement;
-import dom.display.Component;
 
 /**
  * Текстовая метка.  
  * В DOM представлена тегом: `<span>`
  */
-class Label extends Component<Label, SpanElement>
+@:dce
+class Label extends InteractiveObject<Label, SpanElement>
 {
     /**
      * Создать обычное, текстовое поле.

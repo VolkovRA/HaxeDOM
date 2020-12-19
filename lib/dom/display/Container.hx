@@ -11,11 +11,12 @@ import dom.utils.NativeJS;
  * - События добавления/удаления в родительский контейнер.
  * - События добавления/удаления в корневой DOM. (Stage)
  */
+@:dce
 class Container<T:Container<T,E>, E:Element> extends Component<T,E>
 {
     /**
      * Создать контейнер для компонентов.  
-     * @param node Корневой узел, в котором будут отображаться страницы.
+     * @param node Используемый DOM узел для этого экземпляра.
      */
     public function new(node:E) {
         super(node);

@@ -11,11 +11,12 @@ import dom.utils.ResizeObserver;
  * иерархии отображения всех компонентов. Он нужен для правильной
  * работы событий: `onAddedToStage`, `onRemovedFromStage` и `onResize`
  */
+@:dce
 class Stage<E:Element> extends Container<Stage<E>, E>
 {
     /**
      * Создать корневой узел отображения.
-     * @param node HTML Элемент, представляющий корень сцены.
+     * @param node DOM Элемент, представляющий корень сцены.
      */
     public function new(node:E) {
         super(node);

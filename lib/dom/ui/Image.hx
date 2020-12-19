@@ -3,14 +3,14 @@ package dom.ui;
 import js.Browser;
 import js.lib.Error;
 import js.html.ImageElement;
-import dom.display.Component;
 import dom.utils.Dispatcher;
 
 /**
  * Картинка.  
  * В DOM представлена тегом: `<img>`
  */
-class Image extends Component<Image, ImageElement>
+@:dce
+class Image extends InteractiveObject<Image, ImageElement>
 {
     /**
      * Создать обычное, текстовое поле.

@@ -16,6 +16,7 @@ import dom.utils.NativeJS;
  * 
  * Может использоваться самостоятельно или как базовый класс.
  */
+@:dce
 class Component<T:Component<T,E>, E:Element>
 {
     /**
@@ -27,7 +28,7 @@ class Component<T:Component<T,E>, E:Element>
 
     /**
      * Создать HTML компонент.
-     * @param node HTML DOM Узел, представляющий этот компонент.
+     * @param node Используемый DOM узел для этого экземпляра.
      * @throws Error HTML Элемент не должен быть: `null`
      */
     public function new(node:E) {
