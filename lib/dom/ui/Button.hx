@@ -1,5 +1,6 @@
 package dom.ui;
 
+import dom.utils.Dispatcher;
 import js.Browser;
 import js.html.AnchorElement;
 import js.html.PointerEvent;
@@ -51,8 +52,18 @@ class Button extends InteractiveObject<Button, AnchorElement>
         }
 
         state = value;
+        onState.emit(this);
         return value;
     }
+
+    /**
+     * Событие изменения состояния кнопки.  
+     * Посылается каждый раз, когда изменяется значение
+     * свойства: `Button.state`
+     * 
+     * Не может быть `null`
+     */
+    public var onState(default, null):Dispatcher<Button->Void> = new Dispatcher();
 
     /**
      * Текст на кнопке.  

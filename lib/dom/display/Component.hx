@@ -33,7 +33,7 @@ class Component<T:Component<T,E>, E:Element>
      */
     public function new(node:E) {
         if (node == null)
-            throw new Error("HTML Элемент не должен быть null");
+            throw new Error("HTML Элемент компонента не может быть null");
 
         this.node = node;
     }
