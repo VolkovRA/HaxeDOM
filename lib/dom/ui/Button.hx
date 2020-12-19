@@ -14,8 +14,8 @@ import js.lib.Error;
 class Button extends InteractiveObject<Button, AnchorElement>
 {
     /**
-     * Создать обычное, текстовое поле.
-     * @param text Текст в текстовом поле.
+     * Создать новый экземпляр.
+     * @param text Текст на кнопке.
      */
     public function new(?text:String) {
         super(Browser.document.createAnchorElement());
