@@ -34,9 +34,6 @@ class InteractiveObject<T:InteractiveObject<T,E>, E:Element> extends Container<T
      */
     public var disabled(default, set):Bool = false;
     function set_disabled(value:Bool):Bool {
-        if (value == disabled)
-            return value;
-
         if (value) {
             disabled = true;
             node.setAttribute("disabled", "disabled");

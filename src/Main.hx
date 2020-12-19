@@ -14,11 +14,11 @@ class Main
         var stage = new Stage(Browser.document.body);
 
         var lb = new Label("Label");
+        lb.disabled = true;
         var img = new Image("http://www.flasher.ru/forum/images/russian/flasher_logo_2013.gif");
-        //var bt = new Button("Button");
-
+        var bt = new Button("Button");
         stage.addChild(lb);
         stage.addChild(img);
-        //stage.addChild(bt);
+        stage.addChild(bt);
     }
 }

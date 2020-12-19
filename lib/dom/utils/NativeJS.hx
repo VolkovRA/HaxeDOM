@@ -20,6 +20,14 @@ class NativeJS
     }
 
     /**
+     * Точка остановки.  
+     * Вставляет точку остановки для активации дебаггера и отладки.
+     */
+    inline static public function debugger():Void {
+        Syntax.code('debugger;');
+    }
+
+    /**
      * Приведение к: `String`  
      * Приводит любое значение к строке.
      * @param v Значение.
