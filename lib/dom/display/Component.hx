@@ -3,6 +3,7 @@ package dom.display;
 import js.lib.Error;
 import js.html.Element;
 import dom.enums.Units;
+import dom.theme.Theme;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
 
@@ -58,6 +59,37 @@ class Component<T:Component<T,E>, E:Element>
      * Не может быть `null`
      */
     public var node(default, null):E;
+
+    /**
+     * Тип компонента.  
+     * Используется для дополнительной стилизации.
+     * (См. класс: `dom.theme.Theme`)
+     * 
+     * По умолчанию: `null` *(Дополнительное декорирование не используется)*
+     */
+    public var type(default, set):String = null;
+    function set_type(value:String):String {
+        if (theme != null) {
+            theme.clean(this);
+            theme = null;
+        }
+        type = value;
+        if (value != null && Theme.current != null) {
+            theme = Theme.current;
+            theme.apply(this);
+        }
+        return value;
+    }
+
+    /**
+     * Используемая тема оформления.  
+     * Свойство используется для автоматической очистки
+     * дополнительной стилизации. (См.: `type`)
+     * 
+     * По умолчанию: `null`
+     */
+    @:noCompletion
+    private var theme:Theme;
 
     /**
      * Позиция элемента по оси X.  
