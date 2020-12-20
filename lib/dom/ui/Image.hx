@@ -1,16 +1,17 @@
 package dom.ui;
 
+import dom.display.Component;
+import dom.utils.Dispatcher;
 import js.Browser;
 import js.lib.Error;
 import js.html.ImageElement;
-import dom.utils.Dispatcher;
 
 /**
  * Картинка.  
  * В DOM представлена тегом: `<img>`
  */
 @:dce
-class Image extends InteractiveObject<Image, ImageElement>
+class Image extends Component<Image, ImageElement>
 {
     /**
      * Создать обычное, текстовое поле.

@@ -1,5 +1,6 @@
 package dom.ui;
 
+import dom.display.Container;
 import dom.utils.Dispatcher;
 import js.Browser;
 import js.html.AnchorElement;
@@ -11,7 +12,7 @@ import js.lib.Error;
  * В DOM представлена тегом: `<a>`
  */
 @:dce
-class Button extends InteractiveObject<Button, AnchorElement>
+class Button extends Container<Button, AnchorElement>
 {
     /**
      * Создать новый экземпляр.

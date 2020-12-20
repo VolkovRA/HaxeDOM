@@ -1,5 +1,6 @@
 package dom.ui;
 
+import dom.display.Component;
 import js.Browser;
 import js.html.SpanElement;
 
@@ -8,7 +9,7 @@ import js.html.SpanElement;
  * В DOM представлена тегом: `<span>`
  */
 @:dce
-class Label extends InteractiveObject<Label, SpanElement>
+class Label extends Component<Label, SpanElement>
 {
     /**
      * Создать обычное, текстовое поле.
