@@ -65,4 +65,15 @@ class NativeJS
     inline static public function isResizeObserverSupported():Bool {
         return Syntax.code('window["ResizeObserver"] !== undefined');
     }
+
+    /**
+     * Получить текущее время. *(mc)*  
+     * Метод возвращает количество миллисекунд, прошедших с 1 января 1970
+     * года 00:00:00 по UTC по текущий момент времени в качестве числа.
+     * @return Текущее время.
+     * @see Date.now() https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Date/now
+     */
+    inline static public function stamp():Float {
+        return Syntax.code('Date.now()');
+    }
 }

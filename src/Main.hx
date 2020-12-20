@@ -2,6 +2,8 @@ package;
 
 import dom.display.Stage;
 import dom.theme.Theme;
+import dom.ticker.IAnimated;
+import dom.ticker.Ticker;
 import dom.ui.Image;
 import dom.ui.Button;
 import dom.ui.Label;
@@ -24,5 +26,29 @@ class Main
         stage.addChild(img);
         stage.addChild(bt);
         bt.type = "button";
+
+        Ticker.global.add(new MyAnimatedObject());
+        Ticker.global.add(new MyAnimatedObject());
+        Ticker.global.add(new MyAnimatedObject());
+        Ticker.global.add(new MyAnimatedObject());
+        Ticker.global.add(new MyAnimatedObject());
+    }
+}
+
+class MyAnimatedObject implements IAnimated
+{
+    public function new() {
+    }
+
+    private var ticker:Dynamic = null;
+
+    public function tick(dt:Float):Bool {
+        if (Math.random() > 0.92) {
+            Ticker.global.add(new MyAnimatedObject());
+        }
+        if (Math.random() > 0.9)
+            return true;
+        else
+            return false;
     }
 }
