@@ -1,7 +1,5 @@
 package;
 
-import dom.ui.Label;
-import dom.ui.Image;
 import dom.ui.Button;
 import dom.theme.Theme;
 
@@ -17,13 +15,10 @@ class MyTheme extends Theme
     }
 
     private function applyButton(item:Button):Void {
-        var ico = new Image("https://pngicon.ru/file/uploads/like-256x256.png");
-        var label = new Label("Кнопка");
-        item.addChild(ico);
-        item.addChild(label);
+        item.node.classList.add("beautiful");
     }
 
     private function cleanButton(item:Button):Void {
-        item.removeChildren();
+        item.node.classList.remove("beautiful");
     }
 }

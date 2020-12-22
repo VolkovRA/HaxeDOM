@@ -22,9 +22,9 @@ var child1 = new Container(Browser.document.createDivElement());
 var child2 = new Component(Browser.document.createSpanElement());
 var child3 = new Component(Browser.document.createButtonElement());
 
-child1.node.innerText = "1";
-child2.node.innerText = "2";
-child3.node.innerText = "3";
+child1.node.textContent = "1";
+child2.node.textContent = "2";
+child3.node.textContent = "3";
 
 stage.addChild(child1);
 stage.addChild(child2);

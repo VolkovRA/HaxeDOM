@@ -1,10 +1,13 @@
 package dom.ui;
 
-import dom.display.Container;
+import dom.display.Component;
 import dom.utils.Dispatcher;
+import dom.utils.NativeJS;
 import js.Browser;
 import js.html.AnchorElement;
+import js.html.Element;
 import js.html.PointerEvent;
+import js.html.SpanElement;
 import js.lib.Error;
 
 /**
@@ -12,7 +15,7 @@ import js.lib.Error;
  * В DOM представлена тегом: `<a>`
  */
 @:dce
-class Button extends Container<Button, AnchorElement>
+class Button extends Component<Button, AnchorElement>
 {
     /**
      * Создать новый экземпляр.
@@ -24,11 +27,20 @@ class Button extends Container<Button, AnchorElement>
         this.node.classList.add("button");
         this.state = ButtonState.NORMAL;
 
+        this.nodeLabel = Browser.document.createSpanElement();
+        this.nodeLabel.classList.add("label");
+
         if (text != null)
             this.text = text;
 
         addListeners();
     }
+
+    /**
+     * Дочерний `<span>` узел для отображения текстовой метки.  
+     * Не может быть: `null`
+     */
+    public var nodeLabel(default, null):SpanElement;
 
     /**
      * Состояние кнопки.  
@@ -58,6 +70,41 @@ class Button extends Container<Button, AnchorElement>
     }
 
     /**
+     * Текст на кнопке.  
+     * По умолчанию: `null`
+     */
+    public var label(default, set):String = null;
+    function set_label(value:String):String {
+        if (value == label)
+            return value;
+        label = value;
+        if (value == null)
+            nodeLabel.textContent = "";
+        else
+            nodeLabel.textContent = value;
+        updateDOM();
+        return value;
+    }
+
+    /**
+     * Иконка на кнопке.  
+     * Вы можете указать произвольный элемент, который будет
+     * добавлен в DOM дерево кнопки.
+     * 
+     * По умолчанию: `null`
+     */
+    public var ico(default, set):Element = null;
+    function set_ico(value:Element):Element {
+        if (value == ico)
+            return value;
+        ico = value;
+        if (value != null)
+            NativeJS.indexNode(value);
+        updateDOM();
+        return value;
+    }
+
+    /**
      * Событие изменения состояния кнопки.  
      * Посылается каждый раз, когда изменяется значение
      * свойства: `Button.state`
@@ -76,7 +123,7 @@ class Button extends Container<Button, AnchorElement>
             return value;
 
         text = value;
-        node.innerText = value;
+        node.textContent = value;
         return value;
     }
 
@@ -138,6 +185,16 @@ class Button extends Container<Button, AnchorElement>
         node.removeEventListener("pointerup", onPointerUp);
         node.removeEventListener("pointercancel", onPointerCancel);
         node.removeEventListener("pointerout", onPointerOut);
+    }
+
+    /**
+     * Обновить DOM этого компонента.
+     */
+    private function updateDOM():Void {
+        var arr:Array<Element> = [];
+        if (ico != null)    arr.push(ico);
+        if (label != null)  arr.push(nodeLabel);
+        NativeJS.set(node, arr);
     }
 
     /**

@@ -36,7 +36,7 @@ class Component<T:Component<T,E>, E:Element>
         if (node == null)
             throw new Error("HTML Элемент компонента не может быть null");
 
-        this.node = node;
+        this.node = NativeJS.indexNode(node);
     }
 
 
@@ -192,6 +192,16 @@ class Component<T:Component<T,E>, E:Element>
             node.removeAttribute("disabled");
         }
 
+        return value;
+    }
+
+    /**
+     * Имя компонента.  
+     * По умолчанию: `null`
+     */
+    public var name(default, set):String = null;
+    function set_name(value:String):String {
+        name = value;
         return value;
     }
 

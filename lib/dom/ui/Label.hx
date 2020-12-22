@@ -33,7 +33,7 @@ class Label extends Component<Label, SpanElement>
             return value;
 
         text = value;
-        node.innerText = value;
+        node.textContent = value;
         return value;
     }
 

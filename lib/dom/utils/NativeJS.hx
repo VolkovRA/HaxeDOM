@@ -1,6 +1,7 @@
 package dom.utils;
 
 import js.Syntax;
+import js.html.Element;
 
 /**
  * Нативный JS.  
@@ -9,6 +10,87 @@ import js.Syntax;
 @:dce
 class NativeJS
 {
+    /**
+     * Следующий, уникальный ID для обрабатываемого узла DOM.  
+     * Используется для оптимизации алгоритмов работы с DOM API.
+     */
+    static private var autoID:Int = 0;
+
+    /**
+     * Индексировать DOM элемент: `element.__nodeID`  
+     * Прописывает в переданный элемент уникальный ID в рамках
+     * Haxe приложения и возвращает этот элемент. Это позволяет
+     * оптимизировать алгоритмы для работы с DOM API.
+     * @param node Индексируемый элемент DOM.
+     * @return Возвращает элемент для дальнейшей работы с ним.
+     */
+    static public function indexNode<T:Element>(node:T):T {
+        Syntax.code('if({0}.__nodeID===undefined){0}.__nodeID=++{1}', node, autoID);
+        return node;
+    }
+
+    /**
+     * Установить список детей в ноде.  
+     * Используйте этот методы, чтобы привести список детей ноды 
+     * в соответствие с переданным масивом.
+     * - Добавляет в `parent` всех детей из списка: `childs`, если они
+     *   ещё не добавлены.
+     * - Удаляет из `parent` всех детей, не содержащихся в `childs`.
+     * - Сортирует все элементы `parent` в соответствии с их порядком
+     *   в `childs`.
+     * - Манипулирует DOM только в случае необходимости, чтоб не
+     *   перестраивать его без надобности.
+     * - Этот метод обрабатывает только проиндексированные DOM
+     *   элементы в `parent`, не затрагивая пользовательские, которые
+     *   могли быть добавлены произвольно, чтобы они не были удалены.
+     * - Этот метод также индексирует все ноды в `childs`.
+     * @param parent Обновляемый узел.
+     * @param childs Список детей.
+     * @see Индексация DOM элементов: `NativeJS.indexNode()`
+     */
+    static public function set(parent:Element, childs:Array<Element>):Void {
+
+        // Добавляем новые узлы, сортируем:
+        var len = childs.length;
+        var i = len;
+        var map:Dynamic = {};
+        while (i-- != 0) {
+            var el:Dynamic = childs[i];
+
+            // Индексация нод для быстрого поиска:
+            indexNode(el);
+            map[el.__nodeID] = el;
+
+            // Добавление и сортировка без лишнего манипулирования DOM:
+            if (el.parentNode == parent) {
+                if (i == len-1) {
+                    if (el.nextSibling != null)
+                        parent.insertBefore(el, null);
+                }
+                else {
+                    if (el.nextSibling != childs[i+1])
+                        parent.insertBefore(el, childs[i+1]);
+                }
+            }
+            else {
+                if (i == len-1)
+                    parent.appendChild(el);
+                else
+                    parent.insertBefore(el, childs[i+1]);
+            }
+        }
+
+        // Удаление лишних нод:
+        len = parent.children.length;
+        while (len-- != 0) {
+            var el:Dynamic = parent.children.item(len);
+            if (isUndefined(el.__nodeID))
+                continue;
+            if (map[el.__nodeID] == null)
+                parent.removeChild(el);
+        }
+    }
+
     /**
      * Проверка на: `undefined`  
      * Возвращает `true`, если переданное значение равно: `undefined`
