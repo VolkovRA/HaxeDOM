@@ -8,7 +8,7 @@ import js.html.ImageElement;
 
 /**
  * Картинка.  
- * В DOM представлена тегом: `<img>`
+ * В DOM представлена тегом: `<img class="image">`
  */
 @:dce
 class Image extends Component<Image, ImageElement>

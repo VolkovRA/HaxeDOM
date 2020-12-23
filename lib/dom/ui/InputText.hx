@@ -11,7 +11,7 @@ import js.html.SpanElement;
 
 /**
  * Поле для ввода однострочного текста.  
- * В DOM представлен тегами: `<div><input type="text"><span></span></div>`
+ * В DOM представлен тегами: `<div class="input_text">`
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce

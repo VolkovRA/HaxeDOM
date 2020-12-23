@@ -7,7 +7,7 @@ import js.html.InputElement;
 
 /**
  * Базовое поле для ввода данных.  
- * В DOM представлен тегом: `<input>`
+ * В DOM представлен тегом: `<input class="input">`
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce

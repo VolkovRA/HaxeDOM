@@ -6,7 +6,7 @@ import js.html.SpanElement;
 
 /**
  * Текстовая метка.  
- * В DOM представлена тегом: `<span>`
+ * В DOM представлена тегом: `<span class="label">`
  */
 @:dce
 class Label extends Component<Label, SpanElement>

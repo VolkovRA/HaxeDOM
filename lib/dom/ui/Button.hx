@@ -11,8 +11,8 @@ import js.html.SpanElement;
 import js.lib.Error;
 
 /**
- * Кнопка.  
- * В DOM представлена тегом: `<a>`
+ * Обычная кнопка.  
+ * В DOM представлена тегом: `<a class="button">`
  */
 @:dce
 class Button extends Component<Button, AnchorElement>
@@ -188,7 +188,7 @@ class Button extends Component<Button, AnchorElement>
     }
 
     /**
-     * Обновить DOM этого компонента.
+     * Обновить DOM для этого компонента.
      */
     private function updateDOM():Void {
         var arr:Array<Element> = [];

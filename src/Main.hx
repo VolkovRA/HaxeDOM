@@ -1,8 +1,8 @@
 package;
 
+import dom.ui.RadioButton;
 import dom.display.Stage;
 import dom.theme.Theme;
-import dom.ui.Image;
 import dom.ui.Button;
 import dom.ui.Label;
 import dom.ui.InputText;
@@ -18,29 +18,18 @@ class Main
         var stage = new Stage(Browser.document.body);
 
         var lb = new Label("Label");
-        lb.disabled = true;
-        var img = new Image("http://www.flasher.ru/forum/images/russian/flasher_logo_2013.gif");
-        var bt = new Button();
-        bt.label = "Привет";
-        bt.ico = Browser.document.createImageElement();
-        untyped bt.ico.src = "https://avatanplus.com/files/resources/small/5a3f65e5b960e16087a6097f.png";
+        var bt = new Button("Привет");
         var inputText = new InputText();
+        var radio1 = new RadioButton("Радио-кнопка 1");
+        var radio2 = new RadioButton("Радио-кнопка 2");
         stage.addChild(lb);
-        stage.addChild(img);
         stage.addChild(bt);
         stage.addChild(inputText);
-        bt.type = "button";
+        stage.addChild(radio1);
+        stage.addChild(radio2);
 
-        trace(inputText.value == "");
-        //inputText.disabled = true;
         inputText.name = "Ly2";
         inputText.label = "Wat?";
-        inputText.require = "Require text";
-        inputText.isWrong = true;
         inputText.placeholder = "Wy not?";
-        inputText.error = "Ошибко";
-        //inputText.isWrong = false;
-        trace(inputText.toString());
-
     }
 }
