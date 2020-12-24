@@ -3,7 +3,9 @@ package dom.ui;
 import dom.display.Component;
 import dom.enums.CSSClass;
 import dom.enums.InputType;
+import dom.utils.Dispatcher;
 import js.Browser;
+import js.html.Event;
 import js.html.InputElement;
 
 /**
@@ -22,6 +24,7 @@ class Input extends Component<Input, InputElement>
         super(Browser.document.createInputElement());
         this.node.type = type;
         this.node.classList.add(CSSClass.UI_INPUT);
+        this.node.addEventListener("change", onNativeChange);
     }
 
     /**
@@ -129,6 +132,27 @@ class Input extends Component<Input, InputElement>
     override function set_name(value:String):String {
         node.name = value;
         return super.set_name(value);
+    }
+
+    /**
+     * Событие изменения введённых данных.
+     * - Посылается при завершении ввода данных в поле. Например,
+     *   при потере фокуса после окончания ввода.
+     * - Это событие не посылается при ручном изменении данных:
+     *   `value=data`
+     * - Событие не посылается, если компонент выключен: `disabled=true`
+     * 
+     * Не может быть: `null`
+     */
+    public var onChange(default, null):Dispatcher<InputText->Void> = new Dispatcher();
+
+    /**
+     * Нативное событие изменения значения.
+     * @param e Событие.
+     */
+    private function onNativeChange(e:Event):Void {
+        if (!disabled)
+            onChange.emit(this);
     }
 
     /**

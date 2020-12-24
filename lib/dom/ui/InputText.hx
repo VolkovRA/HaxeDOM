@@ -3,10 +3,13 @@ package dom.ui;
 import dom.display.Component;
 import dom.enums.CSSClass;
 import dom.enums.InputType;
+import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
 import js.Browser;
-import js.html.LabelElement;
+import js.html.Event;
 import js.html.Element;
+import js.html.LabelElement;
+import js.html.InputEvent;
 import js.html.InputElement;
 import js.html.SpanElement;
 
@@ -28,6 +31,8 @@ class InputText extends Component<InputText, LabelElement>
 
         this.nodeInput = NativeJS.indexNode(Browser.document.createInputElement());
         this.nodeInput.type = InputType.TEXT;
+        this.nodeInput.addEventListener("input", onNativeInput);
+        this.nodeInput.addEventListener("change", onNativeChange);
         this.node.appendChild(this.nodeInput);
 
         if (value != null)
@@ -257,6 +262,47 @@ class InputText extends Component<InputText, LabelElement>
      * По умолчанию: `null`
      */
     public var nodeError(default, null):SpanElement;
+
+    /**
+     * Событие изменения введённых данных.
+     * - Посылается при завершении ввода данных в поле. Например,
+     *   при потере фокуса после окончания ввода.
+     * - Это событие не посылается при ручном изменении данных:
+     *   `value="Hello"`
+     * - Событие не посылается, если компонент выключен: `disabled=true`
+     * 
+     * Не может быть: `null`
+     */
+    public var onChange(default, null):Dispatcher<InputText->Void> = new Dispatcher();
+
+    /**
+     * Событие ввода данных.
+     * - Посылается каждый раз, когда вводится новый символ.
+     * - Это событие не посылается при ручном изменении данных:
+     *   `value="Hello"`
+     * - Событие не посылается, если компонент выключен: `disabled=true`
+     * 
+     * Не может быть: `null`
+     */
+    public var onInput(default, null):Dispatcher<InputText->Void> = new Dispatcher();
+
+    /**
+     * Нативное событие ввода значения.
+     * @param e Событие.
+     */
+    private function onNativeInput(e:InputEvent):Void {
+        if (!disabled)
+            onInput.emit(this);
+    }
+
+    /**
+     * Нативное событие изменения значения.
+     * @param e Событие.
+     */
+    private function onNativeChange(e:Event):Void {
+        if (!disabled)
+            onChange.emit(this);
+    }
 
     /**
      * Проверить корректность заполнения поля.  

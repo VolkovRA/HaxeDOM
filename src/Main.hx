@@ -34,7 +34,6 @@ class Main
         inputText.placeholder = "Wy not?";
         inputText.error = "Error msg";
         inputText.isWrong = true;
-        inputText.disabled = true;
         inputText.require = "Ну надо";
         inputText.required = true;
         radio1.group = "1";
