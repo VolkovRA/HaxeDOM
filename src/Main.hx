@@ -16,20 +16,29 @@ class Main
 
         trace("Поддержка ResizeObserver: " + NativeJS.isResizeObserverSupported());
         var stage = new Stage(Browser.document.body);
+        var img = Browser.document.createImageElement();
+        img.src = "http://www.flasher.ru/forum/images/russian/flasher_logo_2013.gif";
 
         var lb = new Label("Label");
         var bt = new Button("Привет");
         var inputText = new InputText();
-        var radio1 = new RadioButton("Радио-кнопка 1");
+        var radio1 = new RadioButton("");
         var radio2 = new RadioButton("Радио-кнопка 2");
         stage.addChild(lb);
         stage.addChild(bt);
         stage.addChild(inputText);
         stage.addChild(radio1);
         stage.addChild(radio2);
-
         inputText.name = "Ly2";
         inputText.label = "Wat?";
         inputText.placeholder = "Wy not?";
+        radio1.group = "1";
+        radio2.group = "1";
+        radio2.ico = img;
+
+        Browser.window.setInterval(function(){
+            radio2.value = true;
+            trace(radio2.value);
+        }, 3000);
     }
 }
