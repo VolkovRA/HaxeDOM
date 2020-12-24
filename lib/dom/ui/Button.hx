@@ -1,95 +1,71 @@
 package dom.ui;
 
 import dom.display.Component;
+import dom.enums.CSSClass;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
 import js.Browser;
-import js.html.AnchorElement;
+import js.html.ButtonElement;
 import js.html.Element;
-import js.html.PointerEvent;
+import js.html.MouseEvent;
 import js.html.SpanElement;
-import js.lib.Error;
 
 /**
  * Обычная кнопка.  
- * В DOM представлена тегом: `<a class="button">`
+ * В DOM представлена тегом: `<button class="ui_button">`
  */
 @:dce
-class Button extends Component<Button, AnchorElement>
+class Button extends Component<Button, ButtonElement>
 {
     /**
      * Создать новый экземпляр.
-     * @param text Текст на кнопке.
+     * @param label Текст на кнопке.
      */
-    public function new(?text:String) {
-        super(Browser.document.createAnchorElement());
+    public function new(?label:String) {
+        super(Browser.document.createButtonElement());
+        this.node.classList.add(CSSClass.UI_BUTTON);
+        this.node.addEventListener("click", onButtonClick);
 
-        this.node.classList.add("button");
-        this.state = ButtonState.NORMAL;
-
-        this.nodeLabel = Browser.document.createSpanElement();
-        this.nodeLabel.classList.add("label");
-
-        if (text != null)
-            this.text = text;
-
-        addListeners();
-    }
-
-    /**
-     * Дочерний `<span>` узел для отображения текстовой метки.  
-     * Не может быть: `null`
-     */
-    public var nodeLabel(default, null):SpanElement;
-
-    /**
-     * Состояние кнопки.  
-     * Обновляется автоматически при взаимодействии
-     * пользователя с кнопкой.
-     * 
-     * По умолчанию: `ButtonState.NORMAL`
-     * 
-     * @throws Error Передан неизвестный тип состояния кнопки.
-     */
-    public var state(default, set):ButtonState;
-    function set_state(value:ButtonState):ButtonState {
-        if (value == state)
-            return value;
-
-        if (value == ButtonState.NORMAL || value == ButtonState.OVER || value == ButtonState.DOWN) {
-            state = value;
-            node.setAttribute("state", value);
-        }
-        else {
-            throw new Error("Передан неизвестный тип состояния кнопки: " + value);
-        }
-
-        state = value;
-        onState.emit(this);
-        return value;
+        if (label != null)
+            this.label = label;
+        else
+            updateDOM();
     }
 
     /**
      * Текст на кнопке.  
-     * По умолчанию: `null`
+     * При добавлении текстового описания в DOM добавляется
+     * тег `<span>` с переданным описанием.
+     * 
+     * По умолчанию: `null` *(Кнопка без текста)*
      */
     public var label(default, set):String = null;
     function set_label(value:String):String {
         if (value == label)
             return value;
-        label = value;
-        if (value == null)
-            nodeLabel.textContent = "";
-        else
+
+        if (value == null) {
+            if (nodeLabel != null)
+                nodeLabel = null;
+        }
+        else {
+            if (nodeLabel == null) {
+                nodeLabel = Browser.document.createSpanElement();
+                nodeLabel.classList.add(CSSClass.LABEL);
+            }
             nodeLabel.textContent = value;
+        }
+        label = value;
+
         updateDOM();
         return value;
     }
 
     /**
      * Иконка на кнопке.  
-     * Вы можете указать произвольный элемент, который будет
-     * добавлен в DOM дерево кнопки.
+     * Вы можете указать произвольный DOM элемент, который
+     * будет использоваться в качестве иконки или картинки.
+     * Этот элемент автоматически добавится в DOM.
      * 
      * По умолчанию: `null`
      */
@@ -98,93 +74,40 @@ class Button extends Component<Button, AnchorElement>
         if (value == ico)
             return value;
         ico = value;
-        if (value != null)
-            NativeJS.indexNode(value);
         updateDOM();
         return value;
     }
 
     /**
-     * Событие изменения состояния кнопки.  
-     * Посылается каждый раз, когда изменяется значение
-     * свойства: `Button.state`
+     * Дочерний узел для отображения текстовой метки. `<span>`  
+     * Создаётся или удаляется автоматический в зависимости от
+     * наличия указанного значения в свойстве: `Button.label`
      * 
-     * Не может быть `null`
+     * По умолчанию: `null`
      */
-    public var onState(default, null):Dispatcher<Button->Void> = new Dispatcher();
+    public var nodeLabel(default, null):SpanElement;
 
     /**
-     * Текст на кнопке.  
-     * По умолчанию: `""`
+     * Событие клика на кнопку.  
+     * - Диспетчерезируется при нажатии на кнопку пользователем.
+     * - Это событие не посылается, если кнопка выключена: `Button.disabled=true`
+     * 
+     * Не может быть: `null`
      */
-    public var text(default, set):String = "";
-    function set_text(value:String):String {
-        if (value == text)
-            return value;
-
-        text = value;
-        node.textContent = value;
-        return value;
-    }
+    public var onClick(default, null):Dispatcher<Button->Void> = new Dispatcher();
 
     override function set_disabled(value:Bool):Bool {
-        if (disabled == value)
-            return value;
-
-        if (value)
-            removeListeners();
-        else
-            addListeners();
-
+        node.disabled = value;
         return super.set_disabled(value);
     }
 
-    private function onPointerOver(e:PointerEvent):Void {
-        //trace("onPointerOver");
-        e.preventDefault();
-        state = ButtonState.OVER;
-    }
-
-    private function onPointerDown(e:PointerEvent):Void {
-        //trace("onPointerDown");
-        e.preventDefault();
-        state = ButtonState.DOWN;
-    }
-
-    private function onPointerUp(e:PointerEvent):Void {
-        //trace("onPointerUp");
-        e.preventDefault();
-        state = ButtonState.OVER;
-    }
-
-    private function onPointerCancel(e:PointerEvent):Void {
-        //trace("onPointerCancel");
-        e.preventDefault();
-        state = ButtonState.NORMAL;
-    }
-
-    private function onPointerOut(e:PointerEvent):Void {
-        //trace("onPointerOut");
-        e.preventDefault();
-        state = ButtonState.NORMAL;
-    }
-
-    private function addListeners():Void {
-        //trace("add listeners");
-        node.addEventListener("pointerover", onPointerOver);
-        node.addEventListener("pointerdown", onPointerDown);
-        node.addEventListener("pointerup", onPointerUp);
-        node.addEventListener("pointercancel", onPointerCancel);
-        node.addEventListener("pointerout", onPointerOut);
-    }
-
-    private function removeListeners():Void {
-        //trace("remove listeners");
-        node.removeEventListener("pointerover", onPointerOver);
-        node.removeEventListener("pointerdown", onPointerDown);
-        node.removeEventListener("pointerup", onPointerUp);
-        node.removeEventListener("pointercancel", onPointerCancel);
-        node.removeEventListener("pointerout", onPointerOut);
+    /**
+     * Нативное событие клика.
+     * @param e Событие.
+     */
+    private function onButtonClick(e:MouseEvent):Void {
+        if (!disabled)
+            onClick.emit(this);
     }
 
     /**
@@ -192,8 +115,8 @@ class Button extends Component<Button, AnchorElement>
      */
     private function updateDOM():Void {
         var arr:Array<Element> = [];
-        if (ico != null)    arr.push(ico);
-        if (label != null)  arr.push(nodeLabel);
+        if (ico != null)        arr.push(ico);
+        if (nodeLabel != null)  arr.push(nodeLabel);
         NativeJS.set(node, arr);
     }
 
@@ -206,27 +129,4 @@ class Button extends Component<Button, AnchorElement>
     override public function toString():String {
         return "[Button]";
     }
-}
-
-/**
- * Состояние кнопки.  
- * Енум содержит перечисление всех доступных состояний
- * в которых может находиться кнопка.
- */
-enum abstract ButtonState(String) to String from String
-{
-    /**
-     * Обычное состояние. (По умолчанию)
-     */
-    var NORMAL = "normal";
-
-    /**
-     * Наведение указателя на кнопку.
-     */
-    var OVER = "over";
-
-    /**
-     * Нажатие.
-     */
-    var DOWN = "down";
 }

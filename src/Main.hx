@@ -32,13 +32,17 @@ class Main
         inputText.name = "Ly2";
         inputText.label = "Wat?";
         inputText.placeholder = "Wy not?";
+        inputText.error = "Error msg";
+        inputText.isWrong = true;
+        inputText.disabled = true;
+        inputText.require = "Ну надо";
+        inputText.required = true;
         radio1.group = "1";
         radio2.group = "1";
-        radio2.ico = img;
+        bt.ico = img;
 
-        Browser.window.setInterval(function(){
-            radio2.value = true;
-            trace(radio2.value);
-        }, 3000);
+        bt.onClick.on(function(bt){
+            trace("click!");
+        });
     }
 }

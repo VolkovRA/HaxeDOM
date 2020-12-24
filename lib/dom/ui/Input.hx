@@ -1,13 +1,14 @@
 package dom.ui;
 
 import dom.display.Component;
+import dom.enums.CSSClass;
 import dom.enums.InputType;
 import js.Browser;
 import js.html.InputElement;
 
 /**
  * Базовое поле для ввода данных.  
- * В DOM представлен тегом: `<input class="input">`
+ * В DOM представлен тегом: `<input class="ui_input">`
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce
@@ -20,7 +21,7 @@ class Input extends Component<Input, InputElement>
     public function new(type:InputType) {
         super(Browser.document.createInputElement());
         this.node.type = type;
-        this.node.classList.add("input");
+        this.node.classList.add(CSSClass.UI_INPUT);
     }
 
     /**
@@ -65,12 +66,18 @@ class Input extends Component<Input, InputElement>
      * `button`). В [:optional](https://developer.mozilla.org/ru/docs/Web/CSS/:optional)
      * и [:requiredCSS](https://developer.mozilla.org/ru/docs/Web/CSS/:required)
      * псевдо-классы будут применены к полю соответственно.
+     * 
+     * По умолчанию: `false` *(Заполнение не обязательно)*
      */
     public var required(get, set):Bool;
     inline function get_required():Bool {
         return node.required;
     }
-    inline function set_required(value:Bool):Bool {
+    function set_required(value:Bool):Bool {
+        if (value)
+            node.classList.add(CSSClass.REQUIRED);
+        else
+            node.classList.remove(CSSClass.REQUIRED);
         node.required = value;
         return value;
     }

@@ -1,70 +1,40 @@
 package dom.ui;
 
 import dom.display.Component;
+import dom.enums.CSSClass;
 import dom.enums.InputType;
 import dom.utils.NativeJS;
 import js.Browser;
-import js.html.DivElement;
+import js.html.LabelElement;
 import js.html.Element;
 import js.html.InputElement;
 import js.html.SpanElement;
 
 /**
  * Поле для ввода однострочного текста.  
- * В DOM представлен тегами: `<div class="input_text">`
+ * В DOM представлен тегами: `<label class="ui_input_text">`
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce
-class InputText extends Component<InputText, DivElement>
+class InputText extends Component<InputText, LabelElement>
 {
     /**
      * Создать новый экземпляр.
      * @param value Введённый текст.
      */
     public function new(?value:String) {
-        super(Browser.document.createDivElement());
+        super(Browser.document.createLabelElement());
+        this.node.classList.add(CSSClass.UI_INPUT_TEXT);
 
-        this.node.classList.add("input_text");
         this.nodeInput = NativeJS.indexNode(Browser.document.createInputElement());
         this.nodeInput.type = InputType.TEXT;
         this.node.appendChild(this.nodeInput);
 
-        this.nodeLabel = NativeJS.indexNode(Browser.document.createSpanElement());
-        this.nodeLabel.classList.add("label");
-
-        this.nodeRequire = NativeJS.indexNode(Browser.document.createSpanElement());
-        this.nodeRequire.classList.add("required");
-
-        this.nodeError = NativeJS.indexNode(Browser.document.createSpanElement());
-        this.nodeError.classList.add("error");
-
         if (value != null)
             this.value = value;
+        else
+            updateDOM();
     }
-
-    /**
-     * Дочерний `<input>` узел для ввода текста.  
-     * Не может быть: `null`
-     */
-    public var nodeInput(default, null):InputElement;
-
-    /**
-     * Дочерний `<span>` узел для отображения текстовой метки.  
-     * Не может быть: `null`
-     */
-    public var nodeLabel(default, null):SpanElement;
-
-    /**
-     * Дочерний `<span>` узел для отображения текста обязательного ввода.  
-     * Не может быть: `null`
-     */
-    public var nodeRequire(default, null):SpanElement;
-
-    /**
-     * Дочерний `<span>` узел для отображения текста с ошибкой.  
-     * Не может быть: `null`
-     */
-    public var nodeError(default, null):SpanElement;
 
     /**
      * Введённый текст.  
@@ -80,52 +50,91 @@ class InputText extends Component<InputText, DivElement>
     }
 
     /**
-     * Наименование текстового поля.  
-     * По умолчанию: `null`
+     * Текстовое описание поля.  
+     * При добавлении текстового описания в DOM добавляется
+     * тег `<span>` с переданным описанием.
+     * 
+     * По умолчанию: `null` *(Без описания поля)*
      */
     public var label(default, set):String = null;
     function set_label(value:String):String {
         if (value == label)
             return value;
-        label = value;
-        if (value == null)
-            nodeLabel.textContent = "";
-        else
+
+        if (value == null) {
+            if (nodeLabel != null)
+                nodeLabel = null;
+        }
+        else {
+            if (nodeLabel == null) {
+                nodeLabel = Browser.document.createSpanElement();
+                nodeLabel.classList.add(CSSClass.LABEL);
+            }
             nodeLabel.textContent = value;
+        }
+        label = value;
+
         updateDOM();
         return value;
     }
 
     /**
      * Сообщение об ошибке в этом текстовом поле.  
-     * По умолчанию: `null`
+     * Используется для показа ошибки заполнения пользователю.
+     * При добавлении текстового описания в DOM добавляется
+     * тег `<span>` с переданным описанием.
+     * 
+     * По умолчанию: `null` *(Без описания поля)*
      */
     public var error(default, set):String = null;
     function set_error(value:String):String {
         if (value == error)
             return value;
-        error = value;
-        if (value == null)
-            nodeError.textContent = "";
-        else
+
+        if (value == null) {
+            if (nodeError != null)
+                nodeError = null;
+        }
+        else {
+            if (nodeError == null) {
+                nodeError = Browser.document.createSpanElement();
+                nodeError.classList.add(CSSClass.ERROR);
+            }
             nodeError.textContent = value;
+        }
+        error = value;
+
         updateDOM();
         return value;
     }
 
     /**
-     * Сообщение о требованиях для этого текстового поля.  
-     * По умолчанию: `null`
+     * Сообщение об необходимости заполнения этого текстового поля.  
+     * Используется для показа пользователю текста с сообщением
+     * об обязательном требовании заполнения этого поля.
+     * При добавлении текстового описания в DOM добавляется
+     * тег `<span>` с переданным описанием.
+     * 
+     * По умолчанию: `null` *(Без текста требования)*
      */
     public var require(default, set):String = null;
     function set_require(value:String):String {
         if (value == require)
             return value;
-        require = value;
-        if (value == null)
-            nodeRequire.textContent = "";
-        else
+
+        if (value == null) {
+            if (nodeRequire != null)
+                nodeRequire = null;
+        }
+        else {
+            if (nodeRequire == null) {
+                nodeRequire = Browser.document.createSpanElement();
+                nodeRequire.classList.add(CSSClass.REQUIRE);
+            }
             nodeRequire.textContent = value;
+        }
+        require = value;
+
         updateDOM();
         return value;
     }
@@ -134,22 +143,31 @@ class InputText extends Component<InputText, DivElement>
      * Обязательное требование заполнения этого текстового поля.  
      * Влияет на результат вызова метода этого компонента: `validate()`
      * 
-     * По умолчанию: `false` *(Не обязательно)*
+     * По умолчанию: `false` *(Заполнение не обязательно)*
      */
-    public var required(default, set):Bool = false;
+    public var required(get, set):Bool;
+    inline function get_required():Bool {
+        return nodeInput.required;
+    }
     function set_required(value:Bool):Bool {
+        if (value)
+            node.classList.add(CSSClass.REQUIRED);
+        else
+            node.classList.remove(CSSClass.REQUIRED);
         nodeInput.required = value;
         return value;
     }
 
     /**
-     * Наличие ошибок.  
+     * Наличие ошибок заполнения.  
      * Свойство используется для отображения ошибки заполнения.
-     * - Если `true`, этот DOM узел помечается атрибутом: `<div wrong="wrong">`.
-     *   Также показывается сообщение об ошибке, если оно задано в
-     *   свойстве: `error`
-     * - Если `false`, атрибут `wrong` удаляется, как и сообщение об ошибке.
-     * - Это значение автоматически изменяется при вызове метода: `validate()`
+     * - Если `true`, корневой DOM элемент помечается классом:
+     *   `wrong`. Так же показывается сообщение об ошибке, если
+     *   задано свойство: `error`
+     * - Если `false`, класс с ошибкой удаляется вместе с
+     *   сообщением об ошибки.
+     * - Это значение каждый раз автоматически изменяется при
+     *   вызове метода: `validate()`
      * 
      * По умолчанию: `false` *(Всё хорошо)*
      */
@@ -159,9 +177,9 @@ class InputText extends Component<InputText, DivElement>
             return value;
         isWrong = value;
         if (value)
-            node.setAttribute("wrong", "wrong");
+            node.classList.add(CSSClass.WRONG);
         else
-            node.removeAttribute("wrong");
+            node.classList.remove(CSSClass.WRONG);
         updateDOM();
         return value;
     }
@@ -170,7 +188,7 @@ class InputText extends Component<InputText, DivElement>
      * Подсказка пользователю о том, что можно ввести в элемент управления.  
      * Текст-заполнитель не должен содержать символов возврата каретки или
      * перевода строки. Этот атрибут применяется, когда значение **типа**
-     * атрибута `text`, `search`, `tel`, `url` или `email`. В противном
+     * атрибута: `text`, `search`, `tel`, `url` или `email`. В противном
      * случае игнорируется.
      */
     public var placeholder(get, set):String;
@@ -204,6 +222,43 @@ class InputText extends Component<InputText, DivElement>
     }
 
     /**
+     * Дочерний узел для элемента ввода. `<input>`  
+     * Создаётся автоматический и никогда не может быть удалён.
+     * 
+     * Не может быть: `null`
+     */
+    public var nodeInput(default, null):InputElement;
+
+    /**
+     * Дочерний узел для отображения текстовой метки. `<span>`  
+     * Создаётся или удаляется автоматический в зависимости от
+     * наличия указанного значения в свойстве: `InputText.label`
+     * 
+     * По умолчанию: `null`
+     */
+    public var nodeLabel(default, null):SpanElement;
+
+    /**
+     * Дочерний узел для отображения текстовой метки с текстом
+     * обязательного требования. `<span>`  
+     * Создаётся или удаляется автоматический в зависимости от
+     * наличия указанного значения в свойстве: `InputText.require`
+     * 
+     * По умолчанию: `null`
+     */
+    public var nodeRequire(default, null):SpanElement;
+
+    /**
+     * Дочерний узел для отображения текстовой метки с текстом
+     * ошибки заполнения поля. `<span>`  
+     * Создаётся или удаляется автоматический в зависимости от
+     * наличия указанного значения в свойстве: `InputText.error`
+     * 
+     * По умолчанию: `null`
+     */
+    public var nodeError(default, null):SpanElement;
+
+    /**
      * Проверить корректность заполнения поля.  
      * - Возвращает: `true`, если поле заполнено корректно.
      * - Возвращает: `false`, если есть какие либо ошибки заполнения.
@@ -220,25 +275,16 @@ class InputText extends Component<InputText, DivElement>
      */
     private function updateDOM():Void {
         var arr:Array<Element> = [];
-        if (label != null)              arr.push(nodeLabel);
-                                        arr.push(nodeInput);
-        if (require != null)            arr.push(nodeRequire);
-        if (isWrong && error != null)   arr.push(nodeError);
+        if (nodeLabel != null)              arr.push(nodeLabel);
+                                            arr.push(nodeInput);
+        if (nodeRequire != null)            arr.push(nodeRequire);
+        if (isWrong && nodeError != null)   arr.push(nodeError);
         NativeJS.set(node, arr);
     }
 
     override function set_disabled(value:Bool):Bool {
-        if (value)
-            nodeInput.disabled = true;
-        else
-            nodeInput.disabled = false;
-
+        nodeInput.disabled = value;
         return super.set_disabled(value);
-    }
-
-    override function set_name(value:String):String {
-        nodeInput.name = value;
-        return super.set_name(value);
     }
 
     /**

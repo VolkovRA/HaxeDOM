@@ -1,11 +1,12 @@
 package dom.display;
 
-import js.lib.Error;
-import js.html.Element;
+import dom.enums.CSSClass;
 import dom.enums.Units;
 import dom.theme.Theme;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
+import js.lib.Error;
+import js.html.Element;
 
 /**
  * HTML Компонент.  
@@ -55,8 +56,15 @@ class Component<T:Component<T,E>, E:Element>
     private var componentID(default, null):Int = ++AUTO_ID;
 
     /**
-     * HTML Элемент, представляющий этот компонент.  
-     * Не может быть `null`
+     * Корневой узел этого компонента.  
+     * Используется для представления этого компонента в DOM.
+     * - Может содержать произвольное количество дочерних узлов,
+     *   управляемых автоматический.
+     * - Создаётся вместе с компонентом и никогда не удаляется.
+     * - Вы можете добавлять в него собственные узлы без страха
+     *   их удаления или перезаписи.
+     * 
+     * Не может быть: `null`
      */
     public var node(default, null):E;
 
@@ -185,11 +193,11 @@ class Component<T:Component<T,E>, E:Element>
     function set_disabled(value:Bool):Bool {
         if (value) {
             disabled = true;
-            node.setAttribute("disabled", "disabled");
+            node.classList.add(CSSClass.DISABLED);
         }
         else {
             disabled = false;
-            node.removeAttribute("disabled");
+            node.classList.remove(CSSClass.DISABLED);
         }
 
         return value;

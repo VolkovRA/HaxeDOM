@@ -1,8 +1,8 @@
 package dom.display;
 
+import dom.utils.NativeJS;
 import js.lib.Error;
 import js.html.Element;
-import dom.utils.NativeJS;
 
 /**
  * Контейнер для компонентов.  

@@ -1,5 +1,6 @@
 package dom.ui;
 
+import dom.enums.CSSClass;
 import dom.enums.InputType;
 import dom.display.Component;
 import dom.utils.Dispatcher;
@@ -12,33 +13,30 @@ import js.html.SpanElement;
 import js.html.InputElement;
 
 /**
- * Кнопка с исключающим выбором.  
+ * Радио-кнопка.  
  * Позволяет пользователю выбрать единственный вариант из
  * группы доступных, когда используется вместе с другими
  * элементами управления RadioButton.
  * 
- * В DOM представлена тегом: `<label class="radio">`
+ * В DOM представлена тегом: `<label class="ui_radio">`
  */
 @:dce
 class RadioButton extends Component<RadioButton, LabelElement>
 {
-    static inline private var ON = "on";
-    static inline private var OFF = "off";
-
     /**
      * Создать новый экземпляр.
-     * @param text Текст кнопки.
+     * @param label Текст кнопки.
      */
-    public function new(?text:String) {
+    public function new(?label:String) {
         super(Browser.document.createLabelElement());
-        this.node.classList.add("radio");
+        this.node.classList.add(CSSClass.UI_RADIO);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.RADIO;
         this.nodeInput.addEventListener("change", onInputChange);
 
-        if (text != null)
-            this.label = text;
+        if (label != null)
+            this.label = label;
         else
             updateDOM();
     }
@@ -84,7 +82,7 @@ class RadioButton extends Component<RadioButton, LabelElement>
         else {
             if (nodeLabel == null) {
                 nodeLabel = Browser.document.createSpanElement();
-                nodeLabel.classList.add("label");
+                nodeLabel.classList.add(CSSClass.LABEL);
             }
             nodeLabel.textContent = value;
         }
@@ -134,6 +132,14 @@ class RadioButton extends Component<RadioButton, LabelElement>
     }
 
     /**
+     * Дочерний узел для элемента ввода. `<input>`  
+     * Создаётся автоматический и никогда не может быть удалён.
+     * 
+     * Не может быть: `null`
+     */
+    public var nodeInput(default, null):InputElement;
+
+    /**
      * Дочерний узел для отображения текстовой метки. `<span>`  
      * Создаётся или удаляется автоматический в зависимости от
      * наличия указанного значения в свойстве: `RadioButton.label`
@@ -141,14 +147,6 @@ class RadioButton extends Component<RadioButton, LabelElement>
      * По умолчанию: `null`
      */
     public var nodeLabel(default, null):SpanElement;
-
-    /**
-     * Дочерний узел для элемента ввода. `<input>`  
-     * Создаётся автоматический и никогда не может быть удалён.
-     * 
-     * Не может быть: `null`
-     */
-    public var nodeInput(default, null):InputElement;
 
     /**
      * Событие переключения выбора.  
