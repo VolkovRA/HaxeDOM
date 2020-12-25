@@ -46,9 +46,6 @@ class Main
         radio1.group = "1";
         radio2.group = "1";
         bt.ico = img;
-        chkbox1.group = "2";
-        chkbox2.group = "2";
-        chkbox3.group = "2";
         chkbox3.value = true;
         chkbox2.disabled = true;
 
