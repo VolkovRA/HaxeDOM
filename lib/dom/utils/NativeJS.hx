@@ -14,19 +14,32 @@ class NativeJS
      * Следующий, уникальный ID для обрабатываемого узла DOM.  
      * Используется для оптимизации алгоритмов работы с DOM API.
      */
-    static private var autoID:Int = 0;
+    static private var autoID(default, null):Int = 0;
+
+    /**
+     * Получить ID HTML элемента.  
+     * Возвращает уникальный идентификатор переданного элемента
+     * или `undefined`, если элемент не был проиндексирован.
+     * @param element HTML DOM Элемент.
+     * @return Уникальный ID элемента или `undefined`
+     * @see Индексация DOM элементов: `dom.utils.NativeJS.setNodeID()`
+     */
+    inline static public function getNodeID(element:Element):Null<Int> {
+        return untyped element.__nodeID;
+    }
 
     /**
      * Индексировать DOM элемент: `element.__nodeID`  
      * Прописывает в переданный элемент уникальный ID в рамках
      * Haxe приложения и возвращает этот элемент. Это позволяет
-     * оптимизировать алгоритмы для работы с DOM API.
-     * @param node Индексируемый элемент DOM.
+     * оптимизировать алгоритмы для работы с DOM API, в
+     * частности, метод: `dom.utils.NativeJS.set()`
+     * @param element Индексируемый HTML DOM элемент.
      * @return Возвращает элемент для дальнейшей работы с ним.
      */
-    static public function indexNode<T:Element>(node:T):T {
-        Syntax.code('if({0}.__nodeID===undefined){0}.__nodeID=++{1}', node, autoID);
-        return node;
+    static public function setNodeID<T:Element>(element:T):T {
+        Syntax.code('if({0}.__nodeID===undefined){0}.__nodeID=++{1}', element, autoID);
+        return element;
     }
 
     /**
@@ -46,7 +59,7 @@ class NativeJS
      * - Этот метод также индексирует все ноды в `childs`.
      * @param parent Обновляемый узел.
      * @param childs Список детей.
-     * @see Индексация DOM элементов: `NativeJS.indexNode()`
+     * @see Индексация DOM элементов: `NativeJS.setNodeID()`
      */
     static public function set(parent:Element, childs:Array<Element>):Void {
 
@@ -55,11 +68,11 @@ class NativeJS
         var i = len;
         var map:Dynamic = {};
         while (i-- != 0) {
-            var el:Dynamic = childs[i];
+            var el:Element = childs[i];
 
             // Индексация нод для быстрого поиска:
-            indexNode(el);
-            map[el.__nodeID] = el;
+            setNodeID(el);
+            map[getNodeID(el)] = el;
 
             // Добавление и сортировка без лишнего манипулирования DOM:
             if (el.parentNode == parent) {
@@ -83,10 +96,10 @@ class NativeJS
         // Удаление лишних нод:
         len = parent.children.length;
         while (len-- != 0) {
-            var el:Dynamic = parent.children.item(len);
-            if (isUndefined(el.__nodeID))
+            var el:Element = parent.children.item(len);
+            if (isUndefined(getNodeID(el)))
                 continue;
-            if (map[el.__nodeID] == null)
+            if (map[getNodeID(el)] == null)
                 parent.removeChild(el);
         }
     }

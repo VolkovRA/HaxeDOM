@@ -26,7 +26,7 @@ class Component<T:Component<T,E>, E:Element>
      * Автоматически увеличивается на 1 при создании нового компонента.
      */
     @:noCompletion
-    static private var AUTO_ID:Int = 0;
+    static private var autoID(default, null):Int = 0;
 
     /**
      * Создать HTML компонент.
@@ -37,7 +37,7 @@ class Component<T:Component<T,E>, E:Element>
         if (node == null)
             throw new Error("HTML Элемент компонента не может быть null");
 
-        this.node = NativeJS.indexNode(node);
+        this.node = NativeJS.setNodeID(node);
     }
 
 
@@ -48,12 +48,12 @@ class Component<T:Component<T,E>, E:Element>
 
     /**
      * ID Компонента.  
-     * Уникальный ключ, однозначно идентифицирующий этот экземпляр.
+     * Уникальный ключ, однозначно идентифицирующий этот экземпляр
+     * объекта в рамках Haxe приложения.
      * 
      * Не может быть `null`
      */
-    @:noCompletion
-    private var componentID(default, null):Int = ++AUTO_ID;
+    public var componentID(default, null):Int = ++autoID;
 
     /**
      * Корневой узел этого компонента.  

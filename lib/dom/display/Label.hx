@@ -1,24 +1,23 @@
-package dom.ui;
+package dom.display;
 
-import dom.display.Component;
 import dom.enums.CSSClass;
 import js.Browser;
 import js.html.SpanElement;
 
 /**
- * Текстовая метка.  
- * В DOM представлена тегом: `<span class="ui_label">`
+ * Простой текст.  
+ * В DOM представлена тегом: `<span class="label">`
  */
 @:dce
 class Label extends Component<Label, SpanElement>
 {
     /**
      * Создать обычное, текстовое поле.
-     * @param value Текст в текстовом поле.
+     * @param value Отображаемый текст.
      */
     public function new(?value:String) {
         super(Browser.document.createSpanElement());
-        this.node.classList.add(CSSClass.UI_LABEL);
+        this.node.classList.add(CSSClass.LABEL);
 
         if (value != null)
             this.value = value;

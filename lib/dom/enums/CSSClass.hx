@@ -15,22 +15,10 @@ enum abstract CSSClass(String) to String from String
     ///////////////////////
 
     /**
-     * Поле с текстом.  
-     * Используется для обозначения экземпляра: `dom.ui.Label`
-     */
-    var UI_LABEL = "ui_label";
-
-    /**
      * Кнопка UI.  
      * Используется для обозначения экземпляра: `dom.ui.Button`
      */
     var UI_BUTTON = "ui_button";
-
-    /**
-     * Изображение.  
-     * Используется для обозначения экземпляра: `dom.ui.Image`
-     */
-    var UI_IMAGE = "ui_image";
 
     /**
      * Базовый элемент ввода.  
@@ -45,10 +33,16 @@ enum abstract CSSClass(String) to String from String
     var UI_INPUT_TEXT = "ui_input_text";
 
     /**
-     * Радил-кнопка.  
+     * Радио-кнопка.  
      * Используется для обозначения экземпляра: `dom.ui.RadioButton`
      */
     var UI_RADIO = "ui_radio";
+
+    /**
+     * Флажок.  
+     * Используется для обозначения экземпляра: `dom.ui.CheckBox`
+     */
+    var UI_CHECKBOX = "ui_checkbox";
 
 
 
@@ -77,7 +71,7 @@ enum abstract CSSClass(String) to String from String
      * Используется для обозначения элементов ввода, заполненных
      * с ошибками, например: `dom.ui.InputText`
      */
-    var WRONG = "wrong";
+    var INCORRECT = "incorrect";
 
 
 

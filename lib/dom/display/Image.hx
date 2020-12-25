@@ -1,15 +1,13 @@
-package dom.ui;
+package dom.display;
 
-import dom.display.Component;
-import dom.enums.CSSClass;
 import dom.utils.Dispatcher;
 import js.Browser;
 import js.lib.Error;
 import js.html.ImageElement;
 
 /**
- * Картинка.  
- * В DOM представлена тегом: `<img class="ui_image">`
+ * Простая картинка.  
+ * В DOM представлена тегом: `<img>`
  */
 @:dce
 class Image extends Component<Image, ImageElement>
@@ -20,7 +18,6 @@ class Image extends Component<Image, ImageElement>
      */
     public function new(?src:String) {
         super(Browser.document.createImageElement());
-        this.node.classList.add(CSSClass.UI_IMAGE);
 
         if (src != null)
             this.src = src;

@@ -11,15 +11,15 @@ import js.html.LabelElement;
 import js.html.InputElement;
 
 /**
- * Радио-кнопка.  
- * Позволяет пользователю выбрать единственный вариант из
- * группы доступных, когда используется вместе с другими
- * элементами управления RadioButton.
+ * Отображает состояние выбора элемента.  
+ * Позволяет пользователю выбрать один или несколько
+ * вариантов из группы доступных, когда используется
+ * вместе с другими элементами управления CheckBox.
  * 
- * В DOM представлена тегом: `<label class="ui_radio">`
+ * В DOM представлен тегом: `<label class="ui_checkbox">`
  */
 @:dce
-class RadioButton extends UIComponent<RadioButton, LabelElement>
+class CheckBox extends UIComponent<CheckBox, LabelElement>
 {
     /**
      * Создать новый экземпляр.
@@ -27,10 +27,10 @@ class RadioButton extends UIComponent<RadioButton, LabelElement>
      */
     public function new(?label:String) {
         super(Browser.document.createLabelElement());
-        this.node.classList.add(CSSClass.UI_RADIO);
+        this.node.classList.add(CSSClass.UI_CHECKBOX);
 
         this.nodeInput = Browser.document.createInputElement();
-        this.nodeInput.type = InputType.RADIO;
+        this.nodeInput.type = InputType.CHECKBOX;
         this.nodeInput.addEventListener("change", onInputChange);
 
         if (label != null)
@@ -40,32 +40,45 @@ class RadioButton extends UIComponent<RadioButton, LabelElement>
     }
 
     /**
-     * Элемент выбран.  
-     * Возвращает или задает значение, указывающее на то,
-     * проставлен флажок в этом поле или нет.
-     * - Флажок равен `true`, если пользователь выбрал данный
-     *   элемент.  
-     * - При выборе флажка пользователем посылается событие:
-     *   `RadioButton.onChange`. Это событие не посылается
-     *   при ручном сбросе флажка или при его автоматическом
-     *   сбросе из-за выбора другого флажка той же группы.
+     * Значение флажка.  
+     * Это свойство может иметь три типа значения:
+     * - Содержит `true`, если пользователь установил флажок.
+     * - Содержит `false`, если пользователь снял флажок.
+     * - Содержит `null`, если значение флажка не определено.
+     *   Такое может быть у флажков, состояние которых зависит
+     *   от других флажков, имеющих различные значения.
      * 
-     * По умолчанию: `false` *(Флажок не выбран)*
+     * По умолчанию: `false` *(Флажок не установлен)*
      */
-    public var value(get, set):Bool;
-    inline function get_value():Bool {
-        return nodeInput.checked;
+    public var value(get, set):Null<Bool>;
+    function get_value():Null<Bool> {
+        if (nodeInput.indeterminate)
+            return null;
+        else if (nodeInput.checked)
+            return true;
+        else
+            return false;
     }
-    inline function set_value(value:Bool):Bool {
-        nodeInput.checked = value;
+    function set_value(value:Null<Bool>):Null<Bool> {
+        if (value == null) {
+            nodeInput.indeterminate = true;
+        }
+        else if (value) {
+            nodeInput.indeterminate = false;
+            nodeInput.checked = true;
+        }
+        else {
+            nodeInput.indeterminate = false;
+            nodeInput.checked = false;
+        }
         return value;
     }
 
     /**
-     * Группа радио-кнопок.  
+     * Группа флажков.  
      * Используется для группировки кнопок в рамках HTML
      * страницы.
-     * - Если не задано, кнопка ни к кому не привязана и
+     * - Если не задано, флажок ни к кому не привязана и
      *   может быть выбрана независимо от всех остальных.
      * - Если указано, кнопки одной группы могут быть
      *   выбраны только по одному. (Суть радио-кнопок)
@@ -93,15 +106,14 @@ class RadioButton extends UIComponent<RadioButton, LabelElement>
 
     /**
      * Событие переключения выбора.  
-     * - Это событие посылается только при выборе пользователем,
-     *   когда он своими ручками клацнул по кнопке и установил её
-     *   в: `RadioButton.value=true`
+     * - Диспетчерезируется при переключении значения флажка
+     *   в свойстве: `CheckBox.value`
      * - Это событие не посылается при ручном изменении значения
-     *   в свойстве: `RadioButton.value=true`
+     *   флажка.
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<RadioButton->Void> = new Dispatcher();
+    public var onChange(default, null):Dispatcher<CheckBox->Void> = new Dispatcher();
 
     /**
      * Обновить DOM для этого компонента.
@@ -140,6 +152,6 @@ class RadioButton extends UIComponent<RadioButton, LabelElement>
     @:keep
     @:noCompletion
     override public function toString():String {
-        return "[RadioButton]";
+        return "[CheckBox]";
     }
 }
