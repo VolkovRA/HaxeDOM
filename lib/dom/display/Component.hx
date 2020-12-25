@@ -51,7 +51,7 @@ class Component<T:Component<T,E>, E:Element>
      * Уникальный ключ, однозначно идентифицирующий этот экземпляр
      * объекта в рамках Haxe приложения.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     public var componentID(default, null):Int = ++autoID;
 
@@ -71,9 +71,10 @@ class Component<T:Component<T,E>, E:Element>
     /**
      * Тип компонента.  
      * Используется для дополнительной стилизации.
-     * (См. класс: `dom.theme.Theme`)
      * 
      * По умолчанию: `null` *(Дополнительное декорирование не используется)*
+     * 
+     * @see Темы оформления: `dom.theme.Theme`
      */
     public var type(default, set):String = null;
     function set_type(value:String):String {
@@ -102,7 +103,7 @@ class Component<T:Component<T,E>, E:Element>
     /**
      * Позиция элемента по оси X.  
      * Позволяет позицианировать этот компонент в ручном режиме.
-     * - Если задано, html компоненту устанавливается CSS свойство: `left: {x}px`
+     * - Если задано, html компоненту устанавливается CSS свойство: `left`
      * - Если передано `null`, у компонента удаляется CSS свойство: `left`
      * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
      * 
@@ -112,16 +113,15 @@ class Component<T:Component<T,E>, E:Element>
     function set_x(value:Float):Float {
         if (value == x)
             return value;
-
         x = value;
         updateCSS_x();
         return value;
     }
 
     /**
-     * Позиция элемента по оси Y. (px)  
+     * Позиция элемента по оси Y.  
      * Позволяет позицианировать этот компонент в ручном режиме.
-     * - Если задано, html компоненту устанавливается CSS свойство: `top: {x}px`
+     * - Если задано, html компоненту устанавливается CSS свойство: `top`
      * - Если передано `null`, у компонента удаляется CSS свойство: `top`
      * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
      * 
@@ -131,17 +131,16 @@ class Component<T:Component<T,E>, E:Element>
     function set_y(value:Float):Float {
         if (value == y)
             return value;
-
         y = value;
         updateCSS_y();
         return value;
     }
 
     /**
-     * Ширина элемента. (px)  
+     * Ширина элемента.  
      * При указании значения добавляет соответствующее CSS свойство.  
      * Позволяет жёстко задать размер.
-     * - Если задано, html компоненту устанавливается CSS свойство: `width: {width}px`
+     * - Если задано, html компоненту устанавливается CSS свойство: `width`
      * - Если передано `null`, у компонента удаляется CSS свойство: `width`
      * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
      * 
@@ -151,17 +150,16 @@ class Component<T:Component<T,E>, E:Element>
     function set_width(value:Float):Float {
         if (value == width)
             return value;
-
         width = value;
         updateCSS_width();
         return value;
     }
 
     /**
-     * Высота элемента. (px)  
+     * Высота элемента.  
      * При указании значения добавляет соответствующее CSS свойство.  
      * Позволяет жёстко задать размер.
-     * - Если задано, html компоненту устанавливается CSS свойство: `height: {height}px`
+     * - Если задано, html компоненту устанавливается CSS свойство: `height`
      * - Если передано `null`, у компонента удаляется CSS свойство: `height`
      * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
      * 
@@ -171,7 +169,6 @@ class Component<T:Component<T,E>, E:Element>
     function set_height(value:Float):Float {
         if (value == height)
             return value;
-
         height = value;
         updateCSS_height();
         return value;
@@ -181,13 +178,13 @@ class Component<T:Component<T,E>, E:Element>
      * Компонент выключен.  
      * Переключение этого свойства может влиять на работу некоторых
      * UI компонентов.
-     * - Если `true`, компонент в DOM будет помечен атрибутом: `<a disabled="disabled"></a>`
+     * - Если `true`, компонент в DOM будет помечен классом: `class="disabled"`
      *   Это также влияет на срабатывания событий некоторых компонентов, например,
-     *   не будет посылаться событие нажатия на кнопку.
-     * - Если `false`, в DOM разметке будет удалён атрибут `disabled` (Если есть).
+     *   не будут посылаться события нажатия на кнопку.
+     * - Если `false`, в DOM разметке будет удалён класс `class="disabled"` (Если есть).
      *   Компонент будет работать как обычно.
      * 
-     * По умолчанию: `false` (Компонент активен)
+     * По умолчанию: `false` *(Компонент активен)*
      */
     public var disabled(default, set):Bool = false;
     function set_disabled(value:Bool):Bool {
@@ -199,12 +196,14 @@ class Component<T:Component<T,E>, E:Element>
             disabled = false;
             node.classList.remove(CSSClass.DISABLED);
         }
-
         return value;
     }
 
     /**
      * Имя компонента.  
+     * Вы можете задать произвольное имя вашему компоненту.
+     * Больше никак не используется.
+     * 
      * По умолчанию: `null`
      */
     public var name(default, set):String = null;
@@ -219,13 +218,12 @@ class Component<T:Component<T,E>, E:Element>
      * для: `x`, `y`, `width` и `height`, чтобы изображение не размывалось.  
      * Используется только для единиц измерения: `px`
      * 
-     * По умолчанию: `true` (Округлять)
+     * По умолчанию: `true` *(Округлять)*
      */
     public var pixelSnapping(default, set):Bool = true;
     function set_pixelSnapping(value:Bool):Bool {
         if (value == pixelSnapping)
             return value;
-
         pixelSnapping = value;
         updateCSS();
         return value;
@@ -250,7 +248,6 @@ class Component<T:Component<T,E>, E:Element>
     function set_units(value:String):String {
         if (value == units)
             return value;
-
         units = value;
         updateCSS();
         return value;
@@ -300,7 +297,7 @@ class Component<T:Component<T,E>, E:Element>
      * Добавление в родительский контейнер. (Событие)  
      * Посылается при добалении этого компонента в контейнер: `parent`
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     public var onAdded(default, null):Dispatcher<T->Void> = new Dispatcher();
 
@@ -308,7 +305,7 @@ class Component<T:Component<T,E>, E:Element>
      * Удаление из родительского контейнера. (Событие)  
      * Посылается при удалении этого компонента из контейнера: `parent`
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     public var onRemoved(default, null):Dispatcher<T->Void> = new Dispatcher();
 
@@ -317,7 +314,7 @@ class Component<T:Component<T,E>, E:Element>
      * Посылается при добалении этого компонента в корневой DOM контейнер
      * Stage, отдельно или в качестве дочернего узла добавленного контейнера.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     public var onAddedToStage(default, null):Dispatcher<T->Void> = new Dispatcher();
 
@@ -326,7 +323,7 @@ class Component<T:Component<T,E>, E:Element>
      * Посылается при удалении этого компонента из корневого узла отдельно,
      * или в качестве дочернего элемента удалённого контейнера.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     public var onRemovedFromStage(default, null):Dispatcher<T->Void> = new Dispatcher();
 

@@ -44,7 +44,7 @@ class Stage<E:Element> extends Container<Stage<E>, E>
      * Событие ресайза сцены.  
      * Посылается при изменений размеров элемента в node, к которому прикреплён этот Stage.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     public var onResize(default, null):Dispatcher<Stage<Dynamic>->Void> = new Dispatcher();
 

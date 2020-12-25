@@ -51,7 +51,7 @@ class UIComponent<T:UIComponent<T,E>, E:Element> extends Component<T, E>
      * автоматически добавлен узел: `<span>` с переданным
      * содержимым.
      * 
-     * По умолчанию: `null` *(Без описания)*
+     * По умолчанию: `null` *(Без текста)*
      */
     public var label(get, set):String;
     function get_label():String {
@@ -156,7 +156,7 @@ class UIComponent<T:UIComponent<T,E>, E:Element> extends Component<T, E>
     }
 
     /**
-     * Наличие ошибок.  
+     * Некорректное заполнение.  
      * Свойство используется для отображения ошибок.
      * - Если `true`, корневой DOM элемент помечается классом:
      *   `incorrect`. Так же показывается сообщение об ошибке,
@@ -212,7 +212,7 @@ class UIComponent<T:UIComponent<T,E>, E:Element> extends Component<T, E>
 
     /**
      * Провести валидацию компонента.  
-     * - Возвращает: `true`, если с компонентом всё хорошо. (Заполнен верно)
+     * - Возвращает: `true`, если с компонентом всё хорошо. *(Заполнен верно)*
      * - Возвращает: `false`, если есть какие либо ошибки.
      * - Вызов этого метода автоматически переключает свойство: `incorrect`
      *   Задаёт: `incorrect=true`, если есть ошибки, иначе: `incorrect=false`

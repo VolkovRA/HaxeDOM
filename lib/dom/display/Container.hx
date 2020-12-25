@@ -24,7 +24,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
 
     /**
      * Список дочерних узлов.  
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     @:noCompletion
     private var childrens:Array<Component<Dynamic, Dynamic>> = new Array();
