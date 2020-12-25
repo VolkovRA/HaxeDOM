@@ -21,6 +21,18 @@ enum abstract CSSClass(String) to String from String
     var UI_BUTTON = "ui_button";
 
     /**
+     * Кнопка UI инкремент.  
+     * Используется для кнопки инкремента в: `dom.ui.Stepper`
+     */
+    var UI_BUTTON_INC = "ui_button_inc";
+
+    /**
+     * Кнопка UI декремента.  
+     * Используется для кнопки декремента в: `dom.ui.Stepper`
+     */
+    var UI_BUTTON_DEC = "ui_button_dec";
+
+    /**
      * Базовый элемент ввода.  
      * Используется для обозначения экземпляра: `dom.ui.Input`
      */
@@ -43,6 +55,12 @@ enum abstract CSSClass(String) to String from String
      * Используется для обозначения экземпляра: `dom.ui.CheckBox`
      */
     var UI_CHECKBOX = "ui_checkbox";
+
+    /**
+     * Степпер.  
+     * Используется для обозначения экземпляра: `dom.ui.Stepper`
+     */
+    var UI_STEPPER = "ui_stepper";
 
 
 

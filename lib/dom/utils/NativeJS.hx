@@ -171,4 +171,59 @@ class NativeJS
     inline static public function stamp():Float {
         return Syntax.code('Date.now()');
     }
+
+    /**
+     * Распарсить число.  
+     * Считывает переданную строку и возвращает число или: `NaN`
+     * @param value Строка.
+     * @return Число.
+     */
+    inline static public function parseFloat(value:Dynamic):Float {
+        return Syntax.code('parseFloat({0})', value);
+    }
+
+    /**
+     * Нативный вызов: `isNaN()`  
+     * @param value Число, проверяемое на: `NaN`
+     * @return Переданное число является: `NaN`
+     */
+    inline static public function isNaN(value:Float):Bool {
+        return Syntax.code('isNaN({0})', value);
+    }
+
+    /**
+     * Нативный вызов: `delete`  
+     * Удаляет в указанной мапе указанный ключ.
+     * @param map Мапа.
+     * @param key Удаляемый ключ.
+     */
+    inline static public function delete(map:Dynamic, key:Dynamic):Void {
+        Syntax.code('delete {0}[{1}]', map, key);
+    }
+
+    /**
+     * Получить количество знаком в числе после запятой.  
+     * Парсит число и возвращает количество знаков после запятой.
+     * @param value Число или строка с числом.
+     * @return Количество знаков после запятой.
+     */
+    static public function dec(value:Dynamic):Int {
+        var v = str(value);
+        var i = v.indexOf(".");
+        if (i == -1)
+            return 0;
+
+        return v.length - i - 1;
+    }
+
+    /**
+     * Округлить число до заданного количества знаков после запятой.
+     * @param value Округляемое число.
+     * @param n Количество знаков после запятой.
+     * @return Округлённое число с заданным количеством знаком после запятой.
+     */
+    static public function round(value:Float, n:Int):Float {
+        var m = Math.pow(10,n);
+        return Math.round(value*m)/m;
+    }
 }

@@ -1,5 +1,6 @@
 package;
 
+import dom.ui.Stepper;
 import dom.ui.CheckBox;
 import dom.ui.RadioButton;
 import dom.display.Stage;
@@ -28,6 +29,7 @@ class Main
         var chkbox1 = new CheckBox("Флажок 1");
         var chkbox2 = new CheckBox("Флажок 2");
         var chkbox3 = new CheckBox("Флажок 3");
+        var stp = new Stepper();
         stage.addChild(lb);
         stage.addChild(bt);
         stage.addChild(inputText);
@@ -36,6 +38,7 @@ class Main
         stage.addChild(chkbox1);
         stage.addChild(chkbox2);
         stage.addChild(chkbox3);
+        stage.addChild(stp);
         inputText.name = "Ly2";
         inputText.label = "Wat?";
         inputText.labelError = "Error msg";
@@ -48,10 +51,15 @@ class Main
         bt.ico = img;
         chkbox3.value = true;
         chkbox2.disabled = true;
+        stp.value = 5;
+        stp.step = 2.3;
+        stp.max = 100;
+        stp.min = -1;
+        //stp.disabled = true;
 
-        bt.onClick.on(function(bt){
-            trace("click!");
-            chkbox3.value = null;
+        bt.onClick.on(function(bt) {
+            trace(stp.min, stp.max, stp.step);
+            trace(stp.value);
         });
     }
 }
