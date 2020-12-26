@@ -15,7 +15,7 @@ import js.html.Element;
 class Stage<E:Element> extends Container<Stage<E>, E>
 {
     /**
-     * Создать корневой узел отображения.
+     * Создать новый экземпляр.
      * @param node DOM Элемент, представляющий корень сцены.
      */
     public function new(node:E) {

@@ -15,7 +15,7 @@ import js.html.Element;
 class Container<T:Container<T,E>, E:Element> extends Component<T,E>
 {
     /**
-     * Создать контейнер для компонентов.  
+     * Создать новый экземпляр.
      * @param node Используемый DOM узел для этого экземпляра.
      */
     public function new(node:E) {

@@ -12,7 +12,7 @@ import js.html.SpanElement;
 class Label extends Component<Label, SpanElement>
 {
     /**
-     * Создать обычное, текстовое поле.
+     * Создать новый экземпляр.
      * @param value Отображаемый текст.
      */
     public function new(?value:String) {

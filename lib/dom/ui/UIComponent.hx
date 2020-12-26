@@ -20,7 +20,7 @@ import js.html.SpanElement;
 class UIComponent<T:UIComponent<T,E>, E:Element> extends Component<T, E>
 {
     /**
-     * Создать компонент пользовательского интерфейса.
+     * Создать новый экземпляр.
      * @param node Используемый DOM узел для этого экземпляра.
      */
     public function new(node:E) {

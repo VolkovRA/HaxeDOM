@@ -31,7 +31,7 @@ import haxe.DynamicAccess;
 class Theme
 {
     /**
-     * Создать новый экземпляр темы.
+     * Создать новый экземпляр.
      */
     public function new() {
     }

@@ -29,7 +29,7 @@ class Component<T:Component<T,E>, E:Element>
     static private var autoID(default, null):Int = 0;
 
     /**
-     * Создать HTML компонент.
+     * Создать новый экземпляр.
      * @param node Используемый DOM узел для этого экземпляра.
      * @throws Error HTML Элемент не должен быть: `null`
      */

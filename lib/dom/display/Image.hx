@@ -13,7 +13,7 @@ import js.html.ImageElement;
 class Image extends Component<Image, ImageElement>
 {
     /**
-     * Создать обычное, текстовое поле.
+     * Создать новый экземпляр.
      * @param src URL Адрес графического файла.
      */
     public function new(?src:String) {
