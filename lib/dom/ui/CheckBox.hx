@@ -27,7 +27,7 @@ class CheckBox extends UIComponent<CheckBox, LabelElement>
      */
     public function new(?label:String) {
         super(Browser.document.createLabelElement());
-        this.node.classList.add(CSSClass.UI_CHECKBOX);
+        this.node.classList.add(CSSClass.CHECKBOX);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.CHECKBOX;

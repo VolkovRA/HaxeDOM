@@ -18,49 +18,49 @@ enum abstract CSSClass(String) to String from String
      * Кнопка UI.  
      * Используется для обозначения экземпляра: `dom.ui.Button`
      */
-    var UI_BUTTON = "ui_button";
-
-    /**
-     * Кнопка UI инкремент.  
-     * Используется для кнопки инкремента в: `dom.ui.Stepper`
-     */
-    var UI_BUTTON_INC = "ui_button_inc";
-
-    /**
-     * Кнопка UI декремента.  
-     * Используется для кнопки декремента в: `dom.ui.Stepper`
-     */
-    var UI_BUTTON_DEC = "ui_button_dec";
+    var BUTTON = "button";
 
     /**
      * Базовый элемент ввода.  
      * Используется для обозначения экземпляра: `dom.ui.Input`
      */
-    var UI_INPUT = "ui_input";
+    var INPUT = "input";
 
     /**
      * Поле ввода однострочного текста.  
      * Используется для обозначения экземпляра: `dom.ui.InputText`
      */
-    var UI_INPUT_TEXT = "ui_input_text";
+    var INPUT_TEXT = "input_text";
 
     /**
      * Радио-кнопка.  
      * Используется для обозначения экземпляра: `dom.ui.RadioButton`
      */
-    var UI_RADIO = "ui_radio";
+    var RADIO = "radio";
 
     /**
      * Флажок.  
      * Используется для обозначения экземпляра: `dom.ui.CheckBox`
      */
-    var UI_CHECKBOX = "ui_checkbox";
+    var CHECKBOX = "checkbox";
 
     /**
      * Степпер.  
      * Используется для обозначения экземпляра: `dom.ui.Stepper`
      */
-    var UI_STEPPER = "ui_stepper";
+    var STEPPER = "stepper";
+
+    /**
+     * Кнопка степпера - инкремент.  
+     * Используется в: `dom.ui.Stepper`
+     */
+    var STEPPER_UP = "stepper_up";
+
+    /**
+     * Кнопка степпера - декремент.  
+     * Используется в: `dom.ui.Stepper`
+     */
+    var STEPPER_DOWN = "stepper_down";
 
 
 

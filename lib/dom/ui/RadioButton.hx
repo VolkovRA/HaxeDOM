@@ -27,7 +27,7 @@ class RadioButton extends UIComponent<RadioButton, LabelElement>
      */
     public function new(?label:String) {
         super(Browser.document.createLabelElement());
-        this.node.classList.add(CSSClass.UI_RADIO);
+        this.node.classList.add(CSSClass.RADIO);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.RADIO;

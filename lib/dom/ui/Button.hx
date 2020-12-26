@@ -19,7 +19,7 @@ class Button extends UIComponent<Button, ButtonElement>
      */
     public function new(?label:String) {
         super(Browser.document.createButtonElement());
-        this.node.classList.add(CSSClass.UI_BUTTON);
+        this.node.classList.add(CSSClass.BUTTON);
         this.node.addEventListener("click", onButtonClick);
 
         if (label != null)

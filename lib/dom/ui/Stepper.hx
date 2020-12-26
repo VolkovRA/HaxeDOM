@@ -28,7 +28,7 @@ class Stepper extends UIComponent<Stepper, DivElement>
      */
     public function new() {
         super(Browser.document.createDivElement());
-        this.node.classList.add(CSSClass.UI_STEPPER);
+        this.node.classList.add(CSSClass.STEPPER);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.NUMBER;
@@ -36,12 +36,12 @@ class Stepper extends UIComponent<Stepper, DivElement>
         this.nodeInput.addEventListener("change", onNativeChange);
 
         this.nodeDecrement = Browser.document.createButtonElement();
-        this.nodeDecrement.classList.add(CSSClass.UI_BUTTON_DEC);
+        this.nodeDecrement.classList.add(CSSClass.STEPPER_DOWN);
         this.nodeDecrement.addEventListener("pointerdown", onDecDown);
         this.nodeDecrement.textContent = "-";
 
         this.nodeIncrement = Browser.document.createButtonElement();
-        this.nodeIncrement.classList.add(CSSClass.UI_BUTTON_INC);
+        this.nodeIncrement.classList.add(CSSClass.STEPPER_UP);
         this.nodeIncrement.addEventListener("pointerdown", onIncDown);
         this.nodeIncrement.textContent = "+";
 

@@ -25,7 +25,7 @@ class InputText extends UIComponent<InputText, LabelElement>
      */
     public function new(?value:String) {
         super(Browser.document.createLabelElement());
-        this.node.classList.add(CSSClass.UI_INPUT_TEXT);
+        this.node.classList.add(CSSClass.INPUT_TEXT);
 
         this.nodeInput = NativeJS.setNodeID(Browser.document.createInputElement());
         this.nodeInput.type = InputType.TEXT;
