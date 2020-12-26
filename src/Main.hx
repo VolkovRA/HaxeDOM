@@ -1,5 +1,6 @@
 package;
 
+import dom.display.Static;
 import dom.ui.Stepper;
 import dom.ui.CheckBox;
 import dom.ui.RadioButton;
@@ -30,6 +31,8 @@ class Main
         var chkbox2 = new CheckBox("Флажок 2");
         var chkbox3 = new CheckBox("Флажок 3");
         var stp = new Stepper();
+        var st = new Static("Привет <b>guys</b>", Browser.document.createParagraphElement());
+        stage.addChild(st);
         stage.addChild(lb);
         stage.addChild(bt);
         stage.addChild(inputText);
