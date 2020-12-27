@@ -62,6 +62,12 @@ enum abstract CSSClass(String) to String from String
      */
     var STEPPER_DOWN = "stepper_down";
 
+    /**
+     * Прогрессбар.
+     * Используется в: `dom.ui.Progressbar`
+     */
+    var PROGRESSBAR = "progressbar";
+
 
 
     ///////////////////
@@ -125,4 +131,10 @@ enum abstract CSSClass(String) to String from String
      * *п.с.: Не путать с классом состояния: `REQUIRED`*
      */
     var REQUIRE = "require";
+
+    /**
+     * Заполнение.  
+     * Используется для полоски прогрессбара.
+     */
+    var FILL = "fill";
 }
