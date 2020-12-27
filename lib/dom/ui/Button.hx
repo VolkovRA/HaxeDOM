@@ -8,7 +8,7 @@ import js.html.MouseEvent;
 
 /**
  * Обычная кнопка.  
- * В DOM представлена тегом: `<button class="ui_button">`
+ * В DOM представлена тегом: `<button class="button">`
  */
 @:dce
 class Button extends UIComponent<Button, ButtonElement>

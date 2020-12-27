@@ -17,7 +17,7 @@ import js.html.DivElement;
 
 /**
  * Обычная кнопка.  
- * В DOM представлена тегом: `<div class="ui_stepper">`
+ * В DOM представлена тегом: `<div class="stepper">`
  */
 @:dce
 class Stepper extends UIComponent<Stepper, DivElement>

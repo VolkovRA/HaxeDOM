@@ -16,7 +16,7 @@ import js.html.InputElement;
  * группы доступных, когда используется вместе с другими
  * элементами управления RadioButton.
  * 
- * В DOM представлена тегом: `<label class="ui_radio">`
+ * В DOM представлена тегом: `<label class="radio">`
  */
 @:dce
 class RadioButton extends UIComponent<RadioButton, LabelElement>

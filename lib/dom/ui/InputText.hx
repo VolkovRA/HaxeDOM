@@ -13,7 +13,7 @@ import js.html.InputElement;
 
 /**
  * Поле для ввода однострочного текста.  
- * В DOM представлен тегами: `<label class="ui_input_text">`
+ * В DOM представлен тегами: `<label class="input_text">`
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce

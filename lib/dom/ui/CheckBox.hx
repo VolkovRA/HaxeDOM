@@ -16,7 +16,7 @@ import js.html.InputElement;
  * вариантов из группы доступных, когда используется
  * вместе с другими элементами управления CheckBox.
  * 
- * В DOM представлен тегом: `<label class="ui_checkbox">`
+ * В DOM представлен тегом: `<label class="checkbox">`
  */
 @:dce
 class CheckBox extends UIComponent<CheckBox, LabelElement>
