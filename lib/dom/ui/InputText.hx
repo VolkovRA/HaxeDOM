@@ -17,7 +17,7 @@ import js.html.InputElement;
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce
-class InputText extends UIComponent<InputText, LabelElement>
+class InputText extends UIInputComponent<InputText, LabelElement>
 {
     /**
      * Создать новый экземпляр.

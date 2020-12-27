@@ -19,7 +19,7 @@ import js.html.InputElement;
  * В DOM представлен тегом: `<label class="checkbox">`
  */
 @:dce
-class CheckBox extends UIComponent<CheckBox, LabelElement>
+class CheckBox extends UIInputComponent<CheckBox, LabelElement>
 {
     /**
      * Создать новый экземпляр.

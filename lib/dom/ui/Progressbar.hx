@@ -1,6 +1,5 @@
 package dom.ui;
 
-import dom.display.Component;
 import dom.enums.CSSClass;
 import dom.utils.NativeJS;
 import js.Browser;
@@ -11,7 +10,7 @@ import js.lib.Error;
  * Прогрессбар.  
  * В DOM представлен тегом: `<div class="progressbar">`
  */
-class Progressbar extends Component<Progressbar, DivElement>
+class Progressbar extends UIComponent<Progressbar, DivElement>
 {
     /**
      * Создать новый экземпляр.  
@@ -114,7 +113,7 @@ class Progressbar extends Component<Progressbar, DivElement>
     /**
      * Обновить DOM компонента.
      */
-    private function updateDOM():Void {
+    override private function updateDOM():Void {
         var p:Float = 0;
         if (max > min)
             p = (value / (max - min)) * 100;

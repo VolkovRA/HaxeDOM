@@ -20,7 +20,7 @@ import js.html.DivElement;
  * В DOM представлена тегом: `<div class="stepper">`
  */
 @:dce
-class Stepper extends UIComponent<Stepper, DivElement>
+class Stepper extends UIInputComponent<Stepper, DivElement>
 {
     /**
      * Создать новый экземпляр.

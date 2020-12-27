@@ -19,7 +19,7 @@ import js.html.InputElement;
  * В DOM представлена тегом: `<label class="radio">`
  */
 @:dce
-class RadioButton extends UIComponent<RadioButton, LabelElement>
+class RadioButton extends UIInputComponent<RadioButton, LabelElement>
 {
     /**
      * Создать новый экземпляр.
