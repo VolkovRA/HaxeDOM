@@ -68,6 +68,18 @@ enum abstract CSSClass(String) to String from String
      */
     var PROGRESSBAR = "progressbar";
 
+    /**
+     * Слайдер.  
+     * Используется в: `dom.ui.Slider`
+     */
+    var SLIDER = "slider";
+
+    /**
+     * Элемент слайдера.  
+     * Используется в: `dom.ui.Slider`
+     */
+    var SLIDER_ITEM = "slider_item";
+
 
 
     ///////////////////

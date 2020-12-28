@@ -1,5 +1,7 @@
 package;
 
+import dom.ui.Progressbar;
+import dom.ui.Slider;
 import dom.display.Static;
 import dom.ui.Stepper;
 import dom.ui.CheckBox;
@@ -32,6 +34,7 @@ class Main
         var chkbox3 = new CheckBox("Флажок 3");
         var stp = new Stepper();
         var st = new Static("Привет <b>guys</b>", Browser.document.createParagraphElement());
+        var pr = new Progressbar();
         stage.addChild(st);
         stage.addChild(lb);
         stage.addChild(bt);
@@ -42,6 +45,7 @@ class Main
         stage.addChild(chkbox2);
         stage.addChild(chkbox3);
         stage.addChild(stp);
+        stage.addChild(pr);
         inputText.name = "Ly2";
         inputText.label = "Wat?";
         inputText.labelError = "Error msg";
@@ -59,6 +63,9 @@ class Main
         stp.max = 100;
         stp.min = -1;
         //stp.disabled = true;
+
+        var slider = new Slider(SliderItem);
+        stage.addChild(slider);
 
         bt.onClick.on(function(bt) {
             trace(stp.min, stp.max, stp.step);
