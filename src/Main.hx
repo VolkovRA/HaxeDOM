@@ -19,7 +19,6 @@ class Main
     static public function main() {
         Theme.current = new MyTheme();
 
-        trace("Поддержка ResizeObserver: " + NativeJS.isResizeObserverSupported());
         var stage = new Stage(Browser.document.body);
         var img = Browser.document.createImageElement();
         img.src = "http://www.flasher.ru/forum/images/russian/flasher_logo_2013.gif";

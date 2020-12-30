@@ -154,14 +154,6 @@ class NativeJS
     }
 
     /**
-     * Проверить поддержку DOM API [ResizeObserver]()  
-     * @return Возвращает `true`, если этот класс определён, `false` в остальных случаях.
-     */
-    inline static public function isResizeObserverSupported():Bool {
-        return Syntax.code('window["ResizeObserver"] !== undefined');
-    }
-
-    /**
      * Получить текущее время. *(mc)*  
      * Метод возвращает количество миллисекунд, прошедших с 1 января 1970
      * года 00:00:00 по UTC по текущий момент времени в качестве числа.

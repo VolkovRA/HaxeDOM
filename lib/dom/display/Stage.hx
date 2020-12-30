@@ -1,7 +1,6 @@
 package dom.display;
 
 import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
 import dom.utils.ResizeObserver;
 import js.html.Element;
 
@@ -24,12 +23,9 @@ class Stage<E:Element> extends Container<Stage<E>, E>
         stage = this;
 
         // Событие ресайзинга:
-        if (NativeJS.isResizeObserverSupported()) {
-            var observer = new ResizeObserver(function(entries, observer){
-                onResize.emit(this);
-            });
-            observer.observe(node);
-        }
+        ResizeObserver.on(node, function(element) {
+            onResize.emit(this);
+        });
     }
 
     /**
