@@ -1,7 +1,6 @@
 package dom.display;
 
 import dom.enums.CSSClass;
-import dom.enums.Units;
 import dom.theme.Theme;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
@@ -101,80 +100,6 @@ class Component<T:Component<T,E>, E:Element>
     private var theme:Theme;
 
     /**
-     * Позиция элемента по оси X.  
-     * Позволяет позицианировать этот компонент в ручном режиме.
-     * - Если задано, html компоненту устанавливается CSS свойство: `left`
-     * - Если передано `null`, у компонента удаляется CSS свойство: `left`
-     * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
-     * 
-     * По умолчанию: `null`
-     */
-    public var x(default, set):Float = null;
-    function set_x(value:Float):Float {
-        if (value == x)
-            return value;
-        x = value;
-        updateCSS_x();
-        return value;
-    }
-
-    /**
-     * Позиция элемента по оси Y.  
-     * Позволяет позицианировать этот компонент в ручном режиме.
-     * - Если задано, html компоненту устанавливается CSS свойство: `top`
-     * - Если передано `null`, у компонента удаляется CSS свойство: `top`
-     * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
-     * 
-     * По умолчанию: `null`
-     */
-    public var y(default, set):Float = null;
-    function set_y(value:Float):Float {
-        if (value == y)
-            return value;
-        y = value;
-        updateCSS_y();
-        return value;
-    }
-
-    /**
-     * Ширина элемента.  
-     * При указании значения добавляет соответствующее CSS свойство.  
-     * Позволяет жёстко задать размер.
-     * - Если задано, html компоненту устанавливается CSS свойство: `width`
-     * - Если передано `null`, у компонента удаляется CSS свойство: `width`
-     * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
-     * 
-     * По умолчанию: `null`
-     */
-    public var width(default, set):Float = null;
-    function set_width(value:Float):Float {
-        if (value == width)
-            return value;
-        width = value;
-        updateCSS_width();
-        return value;
-    }
-
-    /**
-     * Высота элемента.  
-     * При указании значения добавляет соответствующее CSS свойство.  
-     * Позволяет жёстко задать размер.
-     * - Если задано, html компоненту устанавливается CSS свойство: `height`
-     * - Если передано `null`, у компонента удаляется CSS свойство: `height`
-     * - Единицы имзерения по умолчанию: `px` Может быть изменено в свойстве: `units`
-     * 
-     * По умолчанию: `null`
-     */
-    public var height(default, set):Float = null;
-    function set_height(value:Float):Float {
-        if (value == height)
-            return value;
-        height = value;
-        updateCSS_height();
-        return value;
-    }
-
-    /**
      * Компонент выключен.  
      * Переключение этого свойства может влиять на работу некоторых
      * UI компонентов.
@@ -209,47 +134,6 @@ class Component<T:Component<T,E>, E:Element>
     public var name(default, set):String = null;
     function set_name(value:String):String {
         name = value;
-        return value;
-    }
-
-    /**
-     * Привязка позиции компонента к ближайшему пикселю.  
-     * Это значение используется для округления устанавливаемого CSS значения
-     * для: `x`, `y`, `width` и `height`, чтобы изображение не размывалось.  
-     * Используется только для единиц измерения: `px`
-     * 
-     * По умолчанию: `true` *(Округлять)*
-     */
-    public var pixelSnapping(default, set):Bool = true;
-    function set_pixelSnapping(value:Bool):Bool {
-        if (value == pixelSnapping)
-            return value;
-        pixelSnapping = value;
-        updateCSS();
-        return value;
-    }
-
-    /**
-     * Единицы измерения, используемые этим компонентом.  
-     * Используется при заданий размеров компонента, позиций и т.п.
-     * CSS парамтеров.
-     * 
-     * Единицы измерения CSS:
-     * - `px` Пиксели. Базовая, абсолютная и окончательная единица
-     *    измерения.
-     * - `em` Относительно шрифта. `1em` – текущий размер шрифта.
-     * - `%` Проценты.
-     * - `rem` Относительно шрифта в корне. Размер расчитывается от
-     *    размерша шрифта в теге: `<html>`
-     * 
-     * По умолчанию: `px`
-     */
-    public var units(default, set):String = Units.PX;
-    function set_units(value:String):String {
-        if (value == units)
-            return value;
-        units = value;
-        updateCSS();
         return value;
     }
 
@@ -339,64 +223,6 @@ class Component<T:Component<T,E>, E:Element>
      */
     @:noCompletion
     private var parentIndex:Int = -1;
-
-    /**
-     * Обновить все CSS свойства.
-     */
-    inline private function updateCSS():Void {
-        updateCSS_x();
-        updateCSS_y();
-        updateCSS_width();
-        updateCSS_height();
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной: `x`
-     */
-    private function updateCSS_x():Void {
-        if (x == null)
-            node.style.left = "";
-        else if (units == Units.PX)
-            node.style.left = NativeJS.str(pixelSnapping?Math.round(x):x) + Units.PX;
-        else 
-            node.style.left = x + units;
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной: `y`
-     */
-    private function updateCSS_y():Void {
-        if (y == null)
-            node.style.top = "";
-        else if (units == Units.PX)
-            node.style.top = NativeJS.str(pixelSnapping?Math.round(y):y) + Units.PX;
-        else
-            node.style.top = y + units;
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной: `width`
-     */
-    private function updateCSS_width():Void {
-        if (width == null)
-            node.style.width = "";
-        else if (units == Units.PX)
-            node.style.width = NativeJS.str(pixelSnapping?Math.round(width):width) + Units.PX;
-        else
-            node.style.width = width + units;
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной: `height`
-     */
-    private function updateCSS_height():Void {
-        if (height == null)
-            node.style.height = "";
-        else if (units == Units.PX)
-            node.style.height = NativeJS.str(pixelSnapping?Math.round(height):height) + Units.PX;
-        else
-            node.style.height = height + units;
-    }
 
     /**
      * Установка нового родителя.
