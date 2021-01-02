@@ -36,12 +36,12 @@ class Stepper extends UIInputComponent<Stepper, DivElement>
         this.nodeInput.addEventListener("change", onNativeChange);
 
         this.nodeDecrement = Browser.document.createButtonElement();
-        this.nodeDecrement.classList.add(CSSClass.STEPPER_DOWN);
+        this.nodeDecrement.classList.add(CSSClass.DECREMENT);
         this.nodeDecrement.addEventListener("pointerdown", onDecDown);
         this.nodeDecrement.textContent = "-";
 
         this.nodeIncrement = Browser.document.createButtonElement();
-        this.nodeIncrement.classList.add(CSSClass.STEPPER_UP);
+        this.nodeIncrement.classList.add(CSSClass.INCREMENT);
         this.nodeIncrement.addEventListener("pointerdown", onIncDown);
         this.nodeIncrement.textContent = "+";
 
@@ -143,27 +143,29 @@ class Stepper extends UIInputComponent<Stepper, DivElement>
     public var nodeDecrement(default, null):ButtonElement;
 
     /**
-     * Событие переключения выбора.  
-     * - Это событие посылается только при выборе пользователем,
-     *   когда он своими ручками клацнул по кнопке и установил её
-     *   в: `RadioButton.value=true`
+     * Событие изменения значения.  
+     * - Это событие посылается, когда пользователь завершил
+     *   ввод данных в степпер.
      * - Это событие не посылается при ручном изменении значения
-     *   в свойстве: `RadioButton.value=true`
+     *   в: `value`
+     * - Это событие не посылается, если компонент выключен:
+     *   `disabled=true`
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<RadioButton->Void> = new Dispatcher();
+    public var onChange(default, null):Dispatcher<Stepper->Void> = new Dispatcher();
 
     /**
      * Событие ввода данных.
-     * - Посылается каждый раз, когда вводится новый символ.
-     * - Это событие не посылается при ручном изменении данных:
-     *   `value="Hello"`
-     * - Событие не посылается, если компонент выключен: `disabled=true`
+     * - Посылается каждый раз, когда вводится новый символ. (Цифра)
+     * - Это событие не посылается при ручном изменении значения
+     *   в: `value`
+     * - Это событие не посылается, если компонент выключен:
+     *   `disabled=true`
      * 
      * Не может быть: `null`
      */
-    public var onInput(default, null):Dispatcher<InputText->Void> = new Dispatcher();
+    public var onInput(default, null):Dispatcher<Stepper->Void> = new Dispatcher();
 
     /**
      * Обновить DOM для этого компонента.

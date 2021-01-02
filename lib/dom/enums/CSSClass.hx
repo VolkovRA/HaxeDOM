@@ -51,34 +51,28 @@ enum abstract CSSClass(String) to String from String
     var STEPPER = "stepper";
 
     /**
-     * Кнопка степпера - инкремент.  
-     * Используется в: `dom.ui.Stepper`
-     */
-    var STEPPER_UP = "stepper_up";
-
-    /**
-     * Кнопка степпера - декремент.  
-     * Используется в: `dom.ui.Stepper`
-     */
-    var STEPPER_DOWN = "stepper_down";
-
-    /**
      * Прогрессбар.
      * Используется в: `dom.ui.Progressbar`
      */
     var PROGRESSBAR = "progressbar";
 
     /**
-     * Слайдер.  
-     * Используется в: `dom.ui.Slider`
+     * Список.  
+     * Используется в: `dom.ui.List`
      */
-    var SLIDER = "slider";
+    var LIST = "list";
 
     /**
-     * Элемент слайдера.  
-     * Используется в: `dom.ui.Slider`
+     * Элемент списка.  
+     * Используется в: `dom.ui.List.ListItem`
      */
-    var SLIDER_ITEM = "slider_item";
+    var LIST_ITEM = "list_item";
+
+    /**
+     * Скроллбар.  
+     * Используется в: `dom.ui.List.Scrollbar`
+     */
+    var SCROLLBAR = "scrollbar";
 
 
 
@@ -108,6 +102,18 @@ enum abstract CSSClass(String) to String from String
      * с ошибками, например: `dom.ui.InputText`
      */
     var INCORRECT = "incorrect";
+
+    /**
+     * Горизонтальный.  
+     * Используется для обозначения направления. Например, ползунка.
+     */
+    var HORIZONTAL = "h";
+
+    /**
+     * Вертикальный.  
+     * Используется для обозначения направления. Например, ползунка.
+     */
+    var VERTICAL = "v";
 
 
 
@@ -149,4 +155,22 @@ enum abstract CSSClass(String) to String from String
      * Используется для полоски прогрессбара.
      */
     var FILL = "fill";
+
+    /**
+     * Кнопка инкремента.  
+     * Используется в скроллбарах и степперах.
+     */
+    var INCREMENT = "incr";
+
+    /**
+     * Кнопка декремента.  
+     * Используется в скроллбарах и степперах.
+     */
+    var DECREMENT = "decr";
+
+    /**
+     * Кнопка ползунка.  
+     * Используется в скроллбарах.
+     */
+    var THUMB = "thumb";
 }
