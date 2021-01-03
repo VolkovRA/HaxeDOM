@@ -218,4 +218,14 @@ class NativeJS
         var m = Math.pow(10,n);
         return Math.round(value*m)/m;
     }
+
+    /**
+     * Двойное отрицание.  
+     * Полезно для приведения любого значения к типу: **Bool**
+     * @param value Значение.
+     * @return Его логический эквивалент.
+     */
+    inline static public function dnot(value:Dynamic):Bool {
+        return Syntax.code('(!!{0})', value);
+    }
 }

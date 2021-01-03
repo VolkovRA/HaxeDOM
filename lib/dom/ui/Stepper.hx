@@ -13,14 +13,13 @@ import js.html.Element;
 import js.html.Event;
 import js.html.InputElement;
 import js.html.InputEvent;
-import js.html.DivElement;
 
 /**
  * Обычная кнопка.  
  * В DOM представлена тегом: `<div class="stepper">`
  */
 @:dce
-class Stepper extends UIInputComponent<Stepper, DivElement>
+class Stepper extends UIInputComponent
 {
     /**
      * Создать новый экземпляр.
@@ -44,6 +43,9 @@ class Stepper extends UIInputComponent<Stepper, DivElement>
         this.nodeIncrement.classList.add(CSSClass.INCREMENT);
         this.nodeIncrement.addEventListener("pointerdown", onIncDown);
         this.nodeIncrement.textContent = "+";
+
+        this.onInput = new Dispatcher();
+        this.onChange = new Dispatcher();
 
         updateDOM();
     }
@@ -153,7 +155,7 @@ class Stepper extends UIInputComponent<Stepper, DivElement>
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<Stepper->Void> = new Dispatcher();
+    public var onChange(default, null):Dispatcher<Stepper->Void>;
 
     /**
      * Событие ввода данных.
@@ -165,7 +167,7 @@ class Stepper extends UIInputComponent<Stepper, DivElement>
      * 
      * Не может быть: `null`
      */
-    public var onInput(default, null):Dispatcher<Stepper->Void> = new Dispatcher();
+    public var onInput(default, null):Dispatcher<Stepper->Void>;
 
     /**
      * Обновить DOM для этого компонента.

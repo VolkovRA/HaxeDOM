@@ -3,7 +3,6 @@ package dom.ui;
 import dom.enums.CSSClass;
 import dom.utils.Dispatcher;
 import js.Browser;
-import js.html.ButtonElement;
 import js.html.MouseEvent;
 
 /**
@@ -11,7 +10,7 @@ import js.html.MouseEvent;
  * В DOM представлена тегом: `<button class="button">`
  */
 @:dce
-class Button extends UIComponent<Button, ButtonElement>
+class Button extends UIComponent
 {
     /**
      * Создать новый экземпляр.
@@ -21,16 +20,12 @@ class Button extends UIComponent<Button, ButtonElement>
         super(Browser.document.createButtonElement());
         this.node.classList.add(CSSClass.BUTTON);
         this.node.addEventListener("click", onButtonClick);
+        this.onClick = new Dispatcher();
 
         if (label != null)
             this.label = label;
         else
             updateDOM();
-    }
-
-    override function set_disabled(value:Bool):Bool {
-        node.disabled = value;
-        return super.set_disabled(value);
     }
 
     /**
@@ -40,7 +35,7 @@ class Button extends UIComponent<Button, ButtonElement>
      * 
      * Не может быть: `null`
      */
-    public var onClick(default, null):Dispatcher<Button->Void> = new Dispatcher();
+    public var onClick(default, null):Dispatcher<Button->Void>;
 
     /**
      * Нативное событие клика.

@@ -12,13 +12,13 @@ import js.html.Element;
  * - События добавления/удаления в корневой DOM. (Stage)
  */
 @:dce
-class Container<T:Container<T,E>, E:Element> extends Component<T,E>
+class Container extends Component
 {
     /**
      * Создать новый экземпляр.
      * @param node Используемый DOM узел для этого экземпляра.
      */
-    public function new(node:E) {
+    public function new(node:Element) {
         super(node);
     }
 
@@ -27,7 +27,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * Не может быть: `null`
      */
     @:noCompletion
-    private var childrens:Array<Component<Dynamic, Dynamic>> = new Array();
+    private var childrens:Array<Component> = new Array();
 
     /**
      * Количество дочерних узлов.  
@@ -54,7 +54,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param index Позиция индекса дочернего объекта.
      * @return Дочерний экранный объект в заданной позиции индекса.
      */
-    inline public function getChildAt(index:Int):Component<Dynamic, Dynamic> {
+    inline public function getChildAt(index:Int):Component {
         return childrens[index];
     }
 
@@ -65,7 +65,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * - Новый элемент добавляется в конец списка DOM.
      * @param child Экземпляр для добавления.
      */
-    inline public function addChild(child:Component<Dynamic, Dynamic>):Void {
+    inline public function addChild(child:Component):Void {
         addChildAt(child, numChildren);
     }
 
@@ -76,7 +76,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param child Экземпляр для добавления.
      * @param index Позиция индекса.
      */
-    public function addChildAt(child:Component<Dynamic, Dynamic>, index:Int):Void {
+    public function addChildAt(child:Component, index:Int):Void {
         if (child == null)
             return;
         if (child.componentID == componentID)
@@ -129,7 +129,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * - Элемент удаляется из DOM дерева.
      * @param child 
      */
-    public function removeChild(child:Component<Dynamic, Dynamic>):Component<Dynamic, Dynamic> {
+    public function removeChild(child:Component):Component {
         if (child == null || child.parent != this)
             return null;
 
@@ -142,7 +142,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param index Позиция удаления.
      * @return Удалённый элемент.
      */
-    public function removeChildAt(index:Int):Component<Dynamic, Dynamic> {
+    public function removeChildAt(index:Int):Component {
         if (index > numChildren-1)
             return null;
 
@@ -195,7 +195,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @return Возвращает `true`, если указанный элемент находится в списке или является им.
      */
     @:keep
-    public function contains(child:Component<Dynamic, Dynamic>):Bool {
+    public function contains(child:Component):Bool {
         if (child == null)
             return false;
         if (child.componentID == componentID)
@@ -235,7 +235,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param value Новый родитель.
      */
     @:noCompletion
-    override private function setParent(value:Container<Dynamic, Dynamic>):Void {
+    override private function setParent(value:Container):Void {
         var no = stage==null;
         super.setParent(value);
 
@@ -261,7 +261,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @return Список с дочерними компонентами.
      */
     @:noCompletion
-    private function getAllComponents():Array<Component<Dynamic, Dynamic>> {
+    private function getAllComponents():Array<Component> {
         var arr = [];
         var i = childrens.length;
         while (i-- != 0) {
@@ -279,7 +279,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param index Позиция сдвигаемого элемента.
      * @param to Позиция назначения.
      */
-    static private function moveChild(arr:Array<Component<Dynamic, Dynamic>>, index:Int, to:Int):Void {
+    static private function moveChild(arr:Array<Component>, index:Int, to:Int):Void {
         if (to > index) {
             // Вперёд
             var tmp = arr[index];

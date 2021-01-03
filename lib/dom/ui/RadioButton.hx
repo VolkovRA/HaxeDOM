@@ -7,7 +7,6 @@ import dom.utils.NativeJS;
 import js.Browser;
 import js.html.Event;
 import js.html.Element;
-import js.html.LabelElement;
 import js.html.InputElement;
 
 /**
@@ -19,7 +18,7 @@ import js.html.InputElement;
  * В DOM представлена тегом: `<label class="radio">`
  */
 @:dce
-class RadioButton extends UIInputComponent<RadioButton, LabelElement>
+class RadioButton extends UIInputComponent
 {
     /**
      * Создать новый экземпляр.
@@ -32,6 +31,8 @@ class RadioButton extends UIInputComponent<RadioButton, LabelElement>
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.RADIO;
         this.nodeInput.addEventListener("change", onInputChange);
+
+        this.onChange = new Dispatcher();
 
         if (label != null)
             this.label = label;
@@ -101,7 +102,7 @@ class RadioButton extends UIInputComponent<RadioButton, LabelElement>
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<RadioButton->Void> = new Dispatcher();
+    public var onChange(default, null):Dispatcher<RadioButton->Void>;
 
     /**
      * Обновить DOM для этого компонента.

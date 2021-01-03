@@ -11,7 +11,7 @@ import js.lib.Error;
  * Прогрессбар.  
  * В DOM представлен тегом: `<div class="progressbar">`
  */
-class Progressbar extends Component<Progressbar, DivElement>
+class Progressbar extends Component
 {
     /**
      * Создать новый экземпляр.  

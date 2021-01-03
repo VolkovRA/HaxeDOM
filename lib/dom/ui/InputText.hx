@@ -7,7 +7,6 @@ import dom.utils.NativeJS;
 import js.Browser;
 import js.html.Event;
 import js.html.Element;
-import js.html.LabelElement;
 import js.html.InputEvent;
 import js.html.InputElement;
 
@@ -17,7 +16,7 @@ import js.html.InputElement;
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce
-class InputText extends UIInputComponent<InputText, LabelElement>
+class InputText extends UIInputComponent
 {
     /**
      * Создать новый экземпляр.
@@ -31,7 +30,9 @@ class InputText extends UIInputComponent<InputText, LabelElement>
         this.nodeInput.type = InputType.TEXT;
         this.nodeInput.addEventListener("input", onNativeInput);
         this.nodeInput.addEventListener("change", onNativeChange);
-        this.node.appendChild(this.nodeInput);
+
+        this.onInput = new Dispatcher();
+        this.onChange = new Dispatcher();
 
         if (value != null)
             this.value = value;
@@ -107,7 +108,7 @@ class InputText extends UIInputComponent<InputText, LabelElement>
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<InputText->Void> = new Dispatcher();
+    public var onChange(default, null):Dispatcher<InputText->Void>;
 
     /**
      * Событие ввода данных.
@@ -118,7 +119,7 @@ class InputText extends UIInputComponent<InputText, LabelElement>
      * 
      * Не может быть: `null`
      */
-    public var onInput(default, null):Dispatcher<InputText->Void> = new Dispatcher();
+    public var onInput(default, null):Dispatcher<InputText->Void>;
 
     /**
      * Нативное событие ввода значения.

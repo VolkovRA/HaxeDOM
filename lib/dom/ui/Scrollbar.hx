@@ -7,7 +7,6 @@ import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
 import js.Browser;
 import js.html.ButtonElement;
-import js.html.DivElement;
 import js.html.PointerEvent;
 
 /**
@@ -15,7 +14,7 @@ import js.html.PointerEvent;
  * В DOM представлен тегом: `<div class="scrollbar">`
  */
 @:dce
-class Scrollbar extends Component<Scrollbar, DivElement>
+class Scrollbar extends Component
 {
     /**
      * Создать новый экземпляр.
@@ -35,23 +34,22 @@ class Scrollbar extends Component<Scrollbar, DivElement>
     }
 
     /**
-     * Смещение по X.  
+     * Захват по X.  
      * Используется внутренней реализацией для перетаскивания
      * ползунка скроллбара.
      * 
-     * 
      * По умолчанию: `0`
      */
-    private var offsetX:Float = 0;
+    private var dragX:Float = 0;
 
     /**
-     * Смещение по X.  
+     * Захват по X.  
      * Используется внутренней реализацией для перетаскивания
      * ползунка скроллбара.
      * 
      * По умолчанию: `0`
      */
-    private var offsetY:Float = 0;
+    private var dragY:Float = 0;
 
     /**
      * Значение скролла.  
@@ -264,7 +262,7 @@ class Scrollbar extends Component<Scrollbar, DivElement>
     /**
      * Удалениe со сцены.
      */
-    private function onTRemoved(s:Scrollbar):Void {
+    private function onTRemoved(s:Component):Void {
         onUp();
     }
 
@@ -345,8 +343,8 @@ class Scrollbar extends Component<Scrollbar, DivElement>
         Browser.window.addEventListener("pointercancel", onUp);
 
         var b = nodeThumb.getBoundingClientRect();
-        offsetX = e.clientX - b.left;
-        offsetY = e.clientY - b.top;
+        dragX = e.clientX - b.left;
+        dragY = e.clientY - b.top;
     }
 
     /**
@@ -363,12 +361,12 @@ class Scrollbar extends Component<Scrollbar, DivElement>
         if (orient == Orientation.HORIZONTAL) {
             var d = b1.width - b2.width;
             if (d > 0)
-                p = ((e.clientX - b1.left) - offsetX) / d;
+                p = ((e.clientX - b1.left) - dragX) / d;
         }
         else {
             var d = b1.height - b2.height;
             if (d > 0)
-                p = ((e.clientY - b1.top) - offsetY) / d;
+                p = ((e.clientY - b1.top) - dragY) / d;
         }
 
         // Устанавливаем новое значение

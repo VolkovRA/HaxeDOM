@@ -59,7 +59,7 @@ class Theme
      *   не зарегистрирована кастомизация методом: `Theme.add`
      * @param component Оформляемый компонент.
      */
-    public function apply(component:Component<Dynamic,Dynamic>):Void {
+    public function apply(component:Component):Void {
         if (component == null)      return;
         if (component.type == null) return;
 
@@ -77,7 +77,7 @@ class Theme
      * компонента на другое.
      * @param component 
      */
-    public function clean(component:Component<Dynamic,Dynamic>):Void {
+    public function clean(component:Component):Void {
         if (component == null)      return;
         if (component.type == null) return;
 

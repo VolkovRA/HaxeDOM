@@ -17,13 +17,13 @@ import js.html.SpanElement;
  * класс, а один из его потомков.*
  */
 @:dce
-class UIInputComponent<T:UIInputComponent<T,E>, E:Element> extends UIComponent<T, E>
+class UIInputComponent extends UIComponent
 {
     /**
      * Создать новый экземпляр.
      * @param node Используемый DOM узел для этого экземпляра.
      */
-    public function new(node:E) {
+    public function new(node:Element) {
         super(node);
     }
 

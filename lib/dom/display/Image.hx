@@ -3,14 +3,13 @@ package dom.display;
 import dom.utils.Dispatcher;
 import js.Browser;
 import js.lib.Error;
-import js.html.ImageElement;
 
 /**
  * Простая картинка.  
  * В DOM представлена тегом: `<img>`
  */
 @:dce
-class Image extends Component<Image, ImageElement>
+class Image extends Component
 {
     /**
      * Создать новый экземпляр.
@@ -33,7 +32,7 @@ class Image extends Component<Image, ImageElement>
             return value;
 
         src = value;
-        node.src = value;
+        untyped node.src = value;
         return value;
     }
 
@@ -44,16 +43,15 @@ class Image extends Component<Image, ImageElement>
      * 
      * Не может быть: `null`
      */
-    public var onLoad(get, null):Dispatcher<Error->Void>;
-    @:noCompletion
-    function get_onLoad():Dispatcher<Error->Void> {
+    public var onLoad(get, null):Dispatcher<Image->Error->Void>;
+    function get_onLoad():Dispatcher<Image->Error->Void> {
         if (onLoad == null) {
             onLoad = new Dispatcher();
             this.node.addEventListener("load", function(e) {
-                onLoad.emit(null);
+                onLoad.emit(this, null);
             });
             this.node.addEventListener("error", function() {
-                onLoad.emit(new Error("Ошибка загрузки изображения: " + src));
+                onLoad.emit(this, new Error("Ошибка загрузки изображения: " + src));
             });
         }
         return onLoad;

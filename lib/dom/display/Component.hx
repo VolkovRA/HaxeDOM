@@ -17,7 +17,7 @@ import js.html.Element;
  * Может использоваться самостоятельно или как базовый класс.
  */
 @:dce
-class Component<T:Component<T,E>, E:Element>
+class Component
 {
     /**
      * Авто-ID для всех новых компонентов.  
@@ -31,11 +31,16 @@ class Component<T:Component<T,E>, E:Element>
      * @param node Используемый DOM узел для этого экземпляра.
      * @throws Error HTML Элемент не должен быть: `null`
      */
-    public function new(node:E) {
+    public function new(node:Element) {
         if (node == null)
-            throw new Error("HTML Элемент компонента не может быть null");
+            throw new Error("HTML Элемент не должен быть null");
 
         this.node = NativeJS.setNodeID(node);
+
+        this.onAdded = new Dispatcher<Component->Void>();
+        this.onRemoved = new Dispatcher<Component->Void>();
+        this.onAddedToStage = new Dispatcher<Component->Void>();
+        this.onRemovedFromStage = new Dispatcher<Component->Void>();
     }
 
 
@@ -64,7 +69,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * Не может быть: `null`
      */
-    public var node(default, null):E;
+    public var node(default, null):Element;
 
     /**
      * Тип компонента.  
@@ -110,14 +115,17 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * По умолчанию: `false` *(Компонент активен)*
      */
-    public var disabled(default, set):Bool = false;
+    public var disabled(get, set):Bool;
+    function get_disabled():Bool {
+        return untyped NativeJS.dnot(node.disabled);
+    }
     function set_disabled(value:Bool):Bool {
         if (value) {
-            disabled = true;
+            untyped node.disabled = true;
             node.classList.add(CSSClass.DISABLED);
         }
         else {
-            disabled = false;
+            untyped node.disabled = false;
             node.classList.remove(CSSClass.DISABLED);
         }
         return value;
@@ -143,7 +151,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * По умолчанию: `null`
      */
-    public var parent(default, null):Container<Dynamic, Dynamic> = null;
+    public var parent(default, null):Container = null;
 
     /**
      * Основная сцена.  
@@ -152,7 +160,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * По умолчанию: `null`
      */
-    public var stage(default, null):Stage<Dynamic> = null;
+    public var stage(default, null):Stage = null;
 
 
 
@@ -182,7 +190,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * Не может быть: `null`
      */
-    public var onAdded(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var onAdded(default, null):Dispatcher<Component->Void>;
 
     /**
      * Удаление из родительского контейнера. (Событие)  
@@ -190,7 +198,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * Не может быть: `null`
      */
-    public var onRemoved(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var onRemoved(default, null):Dispatcher<Component->Void>;
 
     /**
      * Добавление на сцену. (Событие)  
@@ -199,7 +207,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * Не может быть: `null`
      */
-    public var onAddedToStage(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var onAddedToStage(default, null):Dispatcher<Component->Void>;
 
     /**
      * Удаление со сцены. (Событие)  
@@ -208,7 +216,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * Не может быть: `null`
      */
-    public var onRemovedFromStage(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var onRemovedFromStage(default, null):Dispatcher<Component->Void>;
 
 
 
@@ -228,7 +236,7 @@ class Component<T:Component<T,E>, E:Element>
      * @param value Новый родитель.
      */
     @:noCompletion
-    private function setParent(value:Container<Dynamic, Dynamic>):Void {
+    private function setParent(value:Container):Void {
         if (parent == value)
             return;
 

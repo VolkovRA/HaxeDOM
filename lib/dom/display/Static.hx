@@ -8,7 +8,7 @@ import js.html.Element;
  * В DOM представлен тегом: `<div>`. *(По умолчанию)*
  */
 @:dce
-class Static extends Component<Static, Element>
+class Static extends Component
 {
     /**
      * Создать новый экземпляр.

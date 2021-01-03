@@ -17,13 +17,13 @@ import js.html.SpanElement;
  * класс, а один из его потомков.*
  */
 @:dce
-class UIComponent<T:UIComponent<T,E>, E:Element> extends Component<T, E>
+class UIComponent extends Component
 {
     /**
      * Создать новый экземпляр.
      * @param node Используемый DOM узел для этого экземпляра.
      */
-    public function new(node:E) {
+    public function new(node:Element) {
         super(node);
     }
 

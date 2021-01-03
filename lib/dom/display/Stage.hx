@@ -11,16 +11,17 @@ import js.html.Element;
  * работы событий: `onAddedToStage`, `onRemovedFromStage` и `onResize`
  */
 @:dce
-class Stage<E:Element> extends Container<Stage<E>, E>
+class Stage extends Container
 {
     /**
      * Создать новый экземпляр.
      * @param node DOM Элемент, представляющий корень сцены.
      */
-    public function new(node:E) {
+    public function new(node:Element) {
         super(node);
 
-        stage = this;
+        this.onResize = new Dispatcher();
+        this.stage = this;
 
         // Событие ресайзинга:
         ResizeObserver.on(node, function(element) {
@@ -42,7 +43,7 @@ class Stage<E:Element> extends Container<Stage<E>, E>
      * 
      * Не может быть: `null`
      */
-    public var onResize(default, null):Dispatcher<Stage<Dynamic>->Void> = new Dispatcher();
+    public var onResize(default, null):Dispatcher<Stage->Void>;
 
     /**
      * Получить текстовое описание объекта.

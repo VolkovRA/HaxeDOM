@@ -7,7 +7,6 @@ import dom.utils.NativeJS;
 import js.Browser;
 import js.html.Event;
 import js.html.Element;
-import js.html.LabelElement;
 import js.html.InputElement;
 
 /**
@@ -19,7 +18,7 @@ import js.html.InputElement;
  * В DOM представлен тегом: `<label class="checkbox">`
  */
 @:dce
-class CheckBox extends UIInputComponent<CheckBox, LabelElement>
+class CheckBox extends UIInputComponent
 {
     /**
      * Создать новый экземпляр.
@@ -32,6 +31,8 @@ class CheckBox extends UIInputComponent<CheckBox, LabelElement>
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.CHECKBOX;
         this.nodeInput.addEventListener("change", onInputChange);
+
+        this.onChange = new Dispatcher();
 
         if (label != null)
             this.label = label;
@@ -91,7 +92,7 @@ class CheckBox extends UIInputComponent<CheckBox, LabelElement>
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<CheckBox->Void> = new Dispatcher();
+    public var onChange(default, null):Dispatcher<CheckBox->Void>;
 
     /**
      * Обновить DOM для этого компонента.
