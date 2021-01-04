@@ -1,12 +1,13 @@
 package dom.geom;
 
 /**
- * Вектор 2D.  
+ * Вектор.  
  * Описывает скорость и направление движения в
- * двумерном, евклидовом пространстве.
+ * двумерном, евклидовом пространстве.  
+ * п.с. Также может выступать в качестве точки: `dom.geom.Point`
  */
 @:dce
-class Vec2 
+class Vec 
 {
     /**
      * Создать вектор.  
@@ -32,10 +33,10 @@ class Vec2
 
     /**
      * Получить копию вектора.  
-     * @return Возвращает копию исходного вектора.
+     * @return Возвращает копию исходного объекта.
      */
-    public function copy():Vec2 {
-        return new Vec2(x, y);
+    public function copy():Vec {
+        return new Vec(x, y);
     }
 
     /**
@@ -50,9 +51,9 @@ class Vec2
      * Нормализовать вектор.  
      * Приводит длину вектора к единице.
      * - Вызов игнорируется, если текущий вектор равен: `x=0 && y=0`
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function nrm():Vec2 {
+    public function nrm():Vec {
         if (x == 0 && y == 0)
             return this;
         var len = Math.sqrt(x*x + y*y);
@@ -65,23 +66,23 @@ class Vec2
      * Задать вектор.  
      * @param x Ось X.
      * @param y Ось Y.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function set(x:Float, y:Float):Vec2 {
+    public function set(x:Float, y:Float):Vec {
         this.x = x;
         this.y = y;
         return this;
     }
 
     /**
-     * Установить параметры текущего вектора в соответствии с переданным.  
-     * Копирует в текущий вектор значения `x` и `y` из указанного вектора.
-     * @param vec Сторонний вектор.
-     * @return Текущий вектор для записи операций в одну строку.
+     * Скопировать параметры из другого объекта.  
+     * Копирует в этот вектор все значения из указанного объекта.
+     * @param obj Другой вектор или объект.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function setFrom(vec:Vec2):Vec2 {
-        x = vec.x;
-        y = vec.y;
+    public function setFrom(obj:Dynamic):Vec {
+        x = obj.x==null?0:obj.x;
+        y = obj.y==null?0:obj.y;
         return this;
     }
 
@@ -91,9 +92,9 @@ class Vec2
      * x = |x|
      * y = |y|
      * ```
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function abs():Vec2 {
+    public function abs():Vec {
         if (x < 0) x = -x;
         if (y < 0) y = -y;
         return this;
@@ -106,9 +107,9 @@ class Vec2
      * y + v
      * ```
      * @param v Добавляемое значение.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function add(v:Float):Vec2 {
+    public function add(v:Float):Vec {
         this.x += v;
         this.y += v;
         return this;
@@ -121,9 +122,9 @@ class Vec2
      * y - v
      * ```
      * @param v Вычитаемое значение.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function sub(v:Float):Vec2 {
+    public function sub(v:Float):Vec {
         this.x -= v;
         this.y -= v;
         return this;
@@ -136,9 +137,9 @@ class Vec2
      * y * v
      * ```
      * @param v Скалярное значение.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function mul(v:Float):Vec2 {
+    public function mul(v:Float):Vec {
         this.x *= v;
         this.y *= v;
         return this;
@@ -151,9 +152,9 @@ class Vec2
      * y / v
      * ```
      * @param v Скалярное значение.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function div(v:Float):Vec2 {
+    public function div(v:Float):Vec {
         this.x /= v;
         this.y /= v;
         return this;
@@ -166,12 +167,12 @@ class Vec2
      * x + x2
      * y + y2
      * ```
-     * @param vec2 Добавляемый вектор.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @param vec Добавляемый вектор.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function addVec(vec2:Vec2):Vec2 {
-        x += vec2.x;
-        y += vec2.y;
+    public function addVec(vec:Point):Vec {
+        x += vec.x;
+        y += vec.y;
         return this;
     }
 
@@ -182,12 +183,12 @@ class Vec2
      * x - x2
      * y - y2
      * ```
-     * @param vec2 Вычитаемый вектор.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @param vec Вычитаемый вектор.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function subVec(vec2:Vec2):Vec2 {
-        x -= vec2.x;
-        y -= vec2.y;
+    public function subVec(vec:Point):Vec {
+        x -= vec.x;
+        y -= vec.y;
         return this;
     }
 
@@ -198,12 +199,12 @@ class Vec2
      * x * x2
      * y * y2
      * ```
-     * @param vec2 Второй вектор.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @param vec Второй вектор.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function mulVec(vec2:Vec2):Vec2 {
-        x *= vec2.x;
-        y *= vec2.y;
+    public function mulVec(vec:Point):Vec {
+        x *= vec.x;
+        y *= vec.y;
         return this;
     }
 
@@ -214,12 +215,12 @@ class Vec2
      * x / x2
      * y / y2
      * ```
-     * @param vec2 Второй вектор.
-     * @return Текущий вектор для записи операций в одну строку.
+     * @param vec Второй вектор.
+     * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function divVec(vec2:Vec2):Vec2 {
-        x /= vec2.x;
-        y /= vec2.y;
+    public function divVec(vec:Point):Vec {
+        x /= vec.x;
+        y /= vec.y;
         return this;
     }
 
@@ -230,6 +231,6 @@ class Vec2
     @:keep
     @:noCompletion
     public function toString():String {
-        return "[Vec2 x=" + x + " y=" + y + "]";
+        return "[Vec x=" + x + " y=" + y + "]";
     }
 }
