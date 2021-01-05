@@ -29,7 +29,7 @@ class Scrollbar extends Component
         this.nodeThumb.classList.add(CSSClass.THUMB);
         this.nodeThumb.addEventListener("pointerdown", onTDown);
 
-        this.onRemovedFromStage.on(onTRemoved);
+        this.evRemovedFromStage.on(onTRemoved);
         updateDOM();
     }
 
@@ -210,7 +210,7 @@ class Scrollbar extends Component
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<Scrollbar->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Scrollbar->Void> = new Dispatcher();
 
     /**
      * Увеличить значение ползунка на один шаг.
@@ -326,7 +326,7 @@ class Scrollbar extends Component
             return;
 
         value = v;
-        onChange.emit(this);
+        evChange.emit(this);
     }
 
     /**
@@ -381,7 +381,7 @@ class Scrollbar extends Component
             return;
 
         value = v;
-        onChange.emit(this);
+        evChange.emit(this);
     }
 
     /**

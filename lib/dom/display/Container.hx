@@ -239,20 +239,20 @@ class Container extends Component
         var no = stage==null;
         super.setParent(value);
 
-        // Рассылка события: "onAddedToStage"
+        // Рассылка события: "evAddedToStage"
         if (no && stage != null) {
             var arr = getAllComponents();
             var i = arr.length;
             while (i-- != 0)
-                arr[i].onAddedToStage.emit(arr[i]);
+                arr[i].evAddedToStage.emit(arr[i]);
         }
 
-        // Рассылка события: "onRemovedFromStage"
+        // Рассылка события: "evRemovedFromStage"
         if (!no && stage == null) {
             var arr = getAllComponents();
             var i = arr.length;
             while (i-- != 0)
-                arr[i].onRemovedFromStage.emit(arr[i]);
+                arr[i].evRemovedFromStage.emit(arr[i]);
         }
     }
 

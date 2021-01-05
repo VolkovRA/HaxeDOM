@@ -28,11 +28,8 @@ class InputText extends UIInputComponent
 
         this.nodeInput = NativeJS.setNodeID(Browser.document.createInputElement());
         this.nodeInput.type = InputType.TEXT;
-        this.nodeInput.addEventListener("input", onNativeInput);
-        this.nodeInput.addEventListener("change", onNativeChange);
-
-        this.onInput = new Dispatcher();
-        this.onChange = new Dispatcher();
+        this.nodeInput.addEventListener("input", onInput);
+        this.nodeInput.addEventListener("change", onChange);
 
         if (value != null)
             this.value = value;
@@ -99,7 +96,7 @@ class InputText extends UIInputComponent
     public var nodeInput(default, null):InputElement;
 
     /**
-     * Событие изменения введённых данных.
+     * Событие изменения введённых данных.  
      * - Посылается при завершении ввода данных в поле. Например,
      *   при потере фокуса после окончания ввода.
      * - Это событие не посылается при ручном изменении данных:
@@ -108,10 +105,10 @@ class InputText extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<InputText->Void>;
+    public var evChange(default, never):Dispatcher<InputText->Void> = new Dispatcher();
 
     /**
-     * Событие ввода данных.
+     * Событие ввода данных.  
      * - Посылается каждый раз, когда вводится новый символ.
      * - Это событие не посылается при ручном изменении данных:
      *   `value="Hello"`
@@ -119,24 +116,24 @@ class InputText extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var onInput(default, null):Dispatcher<InputText->Void>;
+    public var evInput(default, never):Dispatcher<InputText->Void> = new Dispatcher();
 
     /**
      * Нативное событие ввода значения.
      * @param e Событие.
      */
-    private function onNativeInput(e:InputEvent):Void {
+    private function onInput(e:InputEvent):Void {
         if (!disabled)
-            onInput.emit(this);
+            evInput.emit(this);
     }
 
     /**
      * Нативное событие изменения значения.
      * @param e Событие.
      */
-    private function onNativeChange(e:Event):Void {
+    private function onChange(e:Event):Void {
         if (!disabled)
-            onChange.emit(this);
+            evChange.emit(this);
     }
 
     /**

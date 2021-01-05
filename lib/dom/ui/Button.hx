@@ -19,8 +19,7 @@ class Button extends UIComponent
     public function new(?label:String) {
         super(Browser.document.createButtonElement());
         this.node.classList.add(CSSClass.BUTTON);
-        this.node.addEventListener("click", onButtonClick);
-        this.onClick = new Dispatcher();
+        this.node.addEventListener("click", onClick);
 
         if (label != null)
             this.label = label;
@@ -35,15 +34,15 @@ class Button extends UIComponent
      * 
      * Не может быть: `null`
      */
-    public var onClick(default, null):Dispatcher<Button->Void>;
+    public var evClick(default, never):Dispatcher<Button->Void> = new Dispatcher();
 
     /**
      * Нативное событие клика.
      * @param e Событие.
      */
-    private function onButtonClick(e:MouseEvent):Void {
+    private function onClick(e:MouseEvent):Void {
         if (!disabled)
-            onClick.emit(this);
+            evClick.emit(this);
     }
 
     /**

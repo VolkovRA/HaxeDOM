@@ -1,6 +1,5 @@
 package dom.ui;
 
-import js.html.PointerEvent;
 import dom.enums.CSSClass;
 import dom.enums.InputType;
 import dom.utils.Cross;
@@ -13,6 +12,7 @@ import js.html.Element;
 import js.html.Event;
 import js.html.InputElement;
 import js.html.InputEvent;
+import js.html.PointerEvent;
 
 /**
  * Обычная кнопка.  
@@ -31,8 +31,8 @@ class Stepper extends UIInputComponent
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.NUMBER;
-        this.nodeInput.addEventListener("input", onNativeInput);
-        this.nodeInput.addEventListener("change", onNativeChange);
+        this.nodeInput.addEventListener("input", onInput);
+        this.nodeInput.addEventListener("change", onChange);
 
         this.nodeDecrement = Browser.document.createButtonElement();
         this.nodeDecrement.classList.add(CSSClass.DECREMENT);
@@ -43,9 +43,6 @@ class Stepper extends UIInputComponent
         this.nodeIncrement.classList.add(CSSClass.INCREMENT);
         this.nodeIncrement.addEventListener("pointerdown", onIncDown);
         this.nodeIncrement.textContent = "+";
-
-        this.onInput = new Dispatcher();
-        this.onChange = new Dispatcher();
 
         updateDOM();
     }
@@ -155,10 +152,10 @@ class Stepper extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<Stepper->Void>;
+    public var evChange(default, never):Dispatcher<Stepper->Void> = new Dispatcher();
 
     /**
-     * Событие ввода данных.
+     * Событие ввода данных.  
      * - Посылается каждый раз, когда вводится новый символ. (Цифра)
      * - Это событие не посылается при ручном изменении значения
      *   в: `value`
@@ -167,7 +164,7 @@ class Stepper extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var onInput(default, null):Dispatcher<Stepper->Void>;
+    public var evInput(default, never):Dispatcher<Stepper->Void> = new Dispatcher();
 
     /**
      * Обновить DOM для этого компонента.
@@ -185,18 +182,18 @@ class Stepper extends UIInputComponent
      * Нативное событие ввода значения.
      * @param e Событие.
      */
-    private function onNativeInput(e:InputEvent):Void {
+    private function onInput(e:InputEvent):Void {
         if (!disabled)
-            onInput.emit(this);
+            evInput.emit(this);
     }
 
     /**
      * Нативное событие изменения значения.
      * @param e Событие.
      */
-    private function onNativeChange(e:Event):Void {
+    private function onChange(e:Event):Void {
         if (!disabled)
-            onChange.emit(this);
+            evChange.emit(this);
     }
 
     /**

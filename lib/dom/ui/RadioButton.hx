@@ -30,9 +30,7 @@ class RadioButton extends UIInputComponent
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.RADIO;
-        this.nodeInput.addEventListener("change", onInputChange);
-
-        this.onChange = new Dispatcher();
+        this.nodeInput.addEventListener("change", onChange);
 
         if (label != null)
             this.label = label;
@@ -102,7 +100,7 @@ class RadioButton extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<RadioButton->Void>;
+    public var evChange(default, never):Dispatcher<RadioButton->Void> = new Dispatcher();
 
     /**
      * Обновить DOM для этого компонента.
@@ -120,8 +118,8 @@ class RadioButton extends UIInputComponent
      * Ввод пользователем в элемент.
      * @param e Событие.
      */
-    private function onInputChange(e:Event):Void {
-        onChange.emit(this);
+    private function onChange(e:Event):Void {
+        evChange.emit(this);
     }
 
     override function set_disabled(value:Bool):Bool {

@@ -30,9 +30,7 @@ class CheckBox extends UIInputComponent
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.CHECKBOX;
-        this.nodeInput.addEventListener("change", onInputChange);
-
-        this.onChange = new Dispatcher();
+        this.nodeInput.addEventListener("change", onChange);
 
         if (label != null)
             this.label = label;
@@ -92,7 +90,7 @@ class CheckBox extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var onChange(default, null):Dispatcher<CheckBox->Void>;
+    public var evChange(default, never):Dispatcher<CheckBox->Void> = new Dispatcher();
 
     /**
      * Обновить DOM для этого компонента.
@@ -110,8 +108,8 @@ class CheckBox extends UIInputComponent
      * Ввод пользователем в элемент.
      * @param e Событие.
      */
-    private function onInputChange(e:Event):Void {
-        onChange.emit(this);
+    private function onChange(e:Event):Void {
+        evChange.emit(this);
     }
 
     override function set_disabled(value:Bool):Bool {

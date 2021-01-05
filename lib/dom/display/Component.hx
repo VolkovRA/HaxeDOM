@@ -37,11 +37,6 @@ class Component
             throw new Error("HTML Элемент не должен быть null");
 
         this.node = NativeJS.setNodeID(node);
-
-        this.onAdded = new Dispatcher<Component->Void>();
-        this.onRemoved = new Dispatcher<Component->Void>();
-        this.onAddedToStage = new Dispatcher<Component->Void>();
-        this.onRemovedFromStage = new Dispatcher<Component->Void>();
     }
 
 
@@ -218,38 +213,39 @@ class Component
     /////////////////
 
     /**
-     * Добавление в родительский контейнер. (Событие)  
-     * Посылается при добалении этого компонента в контейнер: `parent`
+     * Событие добавления в родительский контейнер.  
+     * Посылается при добалении этого компонента в контейнер.  
      * 
      * Не может быть: `null`
      */
-    public var onAdded(default, null):Dispatcher<Component->Void>;
+    public var evAdded(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
     /**
-     * Удаление из родительского контейнера. (Событие)  
-     * Посылается при удалении этого компонента из контейнера: `parent`
+     * Событие удаления из родительского контейнера.  
+     * Посылается при удалении этого компонента из
+     * родительского контейнера.
      * 
      * Не может быть: `null`
      */
-    public var onRemoved(default, null):Dispatcher<Component->Void>;
+    public var evRemoved(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
     /**
-     * Добавление на сцену. (Событие)  
-     * Посылается при добалении этого компонента в корневой DOM контейнер
-     * Stage, отдельно или в качестве дочернего узла добавленного контейнера.
+     * Событие добавления на сцену.  
+     * Посылается при добавлении этого компонента или одного
+     * из его родителей на сцену. (Добавлен в DOM)
      * 
      * Не может быть: `null`
      */
-    public var onAddedToStage(default, null):Dispatcher<Component->Void>;
+    public var evAddedToStage(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
     /**
-     * Удаление со сцены. (Событие)  
-     * Посылается при удалении этого компонента из корневого узла отдельно,
-     * или в качестве дочернего элемента удалённого контейнера.
+     * Событие удаления со сцены.  
+     * Посылается при удалении этого компонента или одного из
+     * его родителей со сцены. (Удалён из DOM)
      * 
      * Не может быть: `null`
      */
-    public var onRemovedFromStage(default, null):Dispatcher<Component->Void>;
+    public var evRemovedFromStage(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
 
 
@@ -281,8 +277,8 @@ class Component
             parent = null;
             stage = null;
 
-            if (e1) onRemoved.emit(this);
-            if (e2) onRemovedFromStage.emit(this);
+            if (e1) evRemoved.emit(this);
+            if (e2) evRemovedFromStage.emit(this);
 
             return;
         }
@@ -296,8 +292,8 @@ class Component
             parent = value;
             stage = value.stage;
 
-            onAdded.emit(this);
-            if (e1) onAddedToStage.emit(this);
+            evAdded.emit(this);
+            if (e1) evAddedToStage.emit(this);
         }
         else {
             // Смена родителя:
@@ -306,10 +302,10 @@ class Component
             parent = value;
             stage = value.stage;
 
-            onRemoved.emit(this);
-            onAdded.emit(this);
-            if (e1) onRemovedFromStage.emit(this);
-            if (e2) onAddedToStage.emit(this);
+            evRemoved.emit(this);
+            evAdded.emit(this);
+            if (e1) evRemovedFromStage.emit(this);
+            if (e2) evAddedToStage.emit(this);
         }
     }
 }

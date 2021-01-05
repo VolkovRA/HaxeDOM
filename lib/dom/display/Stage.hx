@@ -8,7 +8,7 @@ import js.html.Element;
  * Корневой узел.  
  * Этот объект должен использоваться как самый верхний элемент в
  * иерархии отображения всех компонентов. Он нужен для правильной
- * работы событий: `onAddedToStage`, `onRemovedFromStage` и `onResize`
+ * работы событий: `evAddedToStage`, `evRemovedFromStage` и `evResize`
  */
 @:dce
 class Stage extends Container
@@ -20,12 +20,12 @@ class Stage extends Container
     public function new(node:Element) {
         super(node);
 
-        this.onResize = new Dispatcher();
+        this.evResize = new Dispatcher();
         this.stage = this;
 
         // Событие ресайзинга:
         ResizeObserver.on(node, function(element) {
-            onResize.emit(this);
+            evResize.emit(this);
         });
     }
 
@@ -39,11 +39,12 @@ class Stage extends Container
 
     /**
      * Событие ресайза сцены.  
-     * Посылается при изменений размеров элемента в node, к которому прикреплён этот Stage.
+     * Посылается при изменений размеров элемента в node, к
+     * которому прикреплён этот Stage.
      * 
      * Не может быть: `null`
      */
-    public var onResize(default, null):Dispatcher<Stage->Void>;
+    public var evResize(default, null):Dispatcher<Stage->Void>;
 
     /**
      * Получить текстовое описание объекта.

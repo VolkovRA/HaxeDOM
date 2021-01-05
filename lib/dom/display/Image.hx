@@ -20,6 +20,9 @@ class Image extends Component
 
         if (src != null)
             this.src = src;
+
+        node.addEventListener("load", onLoad);
+        node.addEventListener("error", onError);
     }
 
     /**
@@ -43,18 +46,20 @@ class Image extends Component
      * 
      * Не может быть: `null`
      */
-    public var onLoad(get, null):Dispatcher<Image->Error->Void>;
-    function get_onLoad():Dispatcher<Image->Error->Void> {
-        if (onLoad == null) {
-            onLoad = new Dispatcher();
-            this.node.addEventListener("load", function(e) {
-                onLoad.emit(this, null);
-            });
-            this.node.addEventListener("error", function() {
-                onLoad.emit(this, new Error("Ошибка загрузки изображения: " + src));
-            });
-        }
-        return onLoad;
+    public var evLoad(default, never):Dispatcher<Image->Error->Void> = new Dispatcher();
+
+    /**
+     * Картинка загружена.
+     */
+    private function onLoad():Void {
+        evLoad.emit(this, null);
+    }
+
+    /**
+     * Ошибка загрузки изображения.
+     */
+    private function onError():Void {
+        evLoad.emit(this, new Error("Ошибка загрузки изображения: " + src));
     }
 
     /**
