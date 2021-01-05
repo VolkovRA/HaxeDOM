@@ -62,6 +62,28 @@ class Acceleration
     public var delay:Float = 300;
 
     /**
+     * Акселерация выключена.  
+     * Свойство позволяет временно отключить поведение.
+     * - Если `true`, метод: `get()` всегда возвращает
+     *   нулевой вектор, а метод: `add()` не сохраняет
+     *   историю перемещения.
+     * - При выключении вся история очищается.
+     * 
+     * По умолчанию: `false`
+     */
+    public var disabled(default, set):Bool = false;
+    function set_disabled(value:Bool):Bool {
+        if (value == disabled)
+            return value;
+
+        disabled = value;
+        if (value)
+            clear();
+
+        return value;
+    }
+
+    /**
      * Добавить новую точку.  
      * На основе добавленных точек в дальнейшем при вызове
      * метода: `get()` будет расчитано итоговое ускорение.
@@ -69,6 +91,8 @@ class Acceleration
      * @param y Позиция по Y.
      */
     public function add(x:Float, y:Float):Void {
+        if (disabled)
+            return;
         arr[len++] = { x:x, y:y, t:NativeJS.stamp() };
     }
 

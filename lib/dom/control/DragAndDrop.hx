@@ -265,7 +265,7 @@ class DragAndDrop
             return value;
 
         disabled = value;
-        if (!value)
+        if (value)
             stop();
 
         return value;

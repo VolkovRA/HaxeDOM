@@ -43,6 +43,22 @@ class AnchorRuler
     }
 
     /**
+     * Якоря выключены.  
+     * Свойство позволяет временно отключить поведение.
+     * - Если `true`, методы: `testPoint()` и `testMove()`
+     *   не возвращают якоря.
+     * 
+     * По умолчанию: `false`
+     */
+    public var disabled(default, set):Bool = false;
+    function set_disabled(value:Bool):Bool {
+        if (value == disabled)
+            return value;
+        disabled = value;
+        return value;
+    }
+
+    /**
      * Якоря для прилипания.  
      * Не может быть: `null`
      */
@@ -122,7 +138,7 @@ class AnchorRuler
     public function testPoint(point:Float):Anchor {
         if (dirty)
             upd();
-        if (point == null || arr.length == 0)
+        if (point == null || arr.length == 0 || disabled)
             return null;
 
         return testPointByIndex(point, search(point, arr));
@@ -183,7 +199,7 @@ class AnchorRuler
     public function testMove(from:Float, to:Float):Anchor {
         if (dirty)
             upd();
-        if (from == null || to == null || arr.length == 0)
+        if (from == null || to == null || arr.length == 0 || disabled)
             return null;
 
         // Проверка начальной позиции:
