@@ -40,7 +40,7 @@ class Scrollbar extends Component
      * 
      * По умолчанию: `0`
      */
-    private var dragX:Float = 0;
+    private var clickX:Float = 0;
 
     /**
      * Захват по X.  
@@ -49,7 +49,7 @@ class Scrollbar extends Component
      * 
      * По умолчанию: `0`
      */
-    private var dragY:Float = 0;
+    private var clickY:Float = 0;
 
     /**
      * Значение скролла.  
@@ -343,8 +343,8 @@ class Scrollbar extends Component
         Browser.window.addEventListener("pointercancel", onUp);
 
         var b = nodeThumb.getBoundingClientRect();
-        dragX = e.clientX - b.left;
-        dragY = e.clientY - b.top;
+        clickX = e.clientX - b.left;
+        clickY = e.clientY - b.top;
     }
 
     /**
@@ -361,12 +361,12 @@ class Scrollbar extends Component
         if (orient == Orientation.HORIZONTAL) {
             var d = b1.width - b2.width;
             if (d > 0)
-                p = ((e.clientX - b1.left) - dragX) / d;
+                p = ((e.clientX - b1.left) - clickX) / d;
         }
         else {
             var d = b1.height - b2.height;
             if (d > 0)
-                p = ((e.clientY - b1.top) - dragY) / d;
+                p = ((e.clientY - b1.top) - clickY) / d;
         }
 
         // Устанавливаем новое значение
