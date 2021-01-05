@@ -1,6 +1,7 @@
 package dom.display;
 
 import dom.enums.CSSClass;
+import dom.geom.Rect;
 import dom.theme.Theme;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
@@ -167,6 +168,38 @@ class Component
     ////////////////
     //   МЕТОДЫ   //
     ////////////////
+
+    /**
+     * Получить границы элемента.  
+     * Метод вычисляет габариты элемента на странице и возвращает
+     * стандартизированный объект - прямоугольник, который
+     * содержит описание размеров и его положение относительно
+     * **окна просмотра**.
+     * @param rect Объект для записи. Если не передан - создаётся новый.
+     * @return Прямоугольник с описанием размеров элемента.
+     * @see Размер элемента: [getBoundingClientRect](https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect)
+     */
+    public function getBounds(?rect:Rect):Rect {
+        if (rect == null)
+            rect = new Rect();
+        
+        var r = node.getBoundingClientRect();
+        rect.x = r.left;
+        rect.y = r.top;
+
+        // Кроссбраузерно, width может не быть, но он предпочтительнее
+        // из-за отсутствия доп. вычислений с плавающей точкой:
+        if (r.width == null) {
+            rect.w = r.right-r.left;
+            rect.h = r.bottom-r.top;
+        }
+        else {
+            rect.w = r.width;
+            rect.h = r.height;
+        }
+
+        return rect;
+    }
 
     /**
      * Получить текстовое описание объекта.
