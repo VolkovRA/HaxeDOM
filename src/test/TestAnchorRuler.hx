@@ -1,6 +1,6 @@
 package test;
 
-import dom.geom.AnchorRuler;
+import dom.control.AnchorRuler;
 
 /**
  * Автоматическое тестирование класса: AnchorRuler.  

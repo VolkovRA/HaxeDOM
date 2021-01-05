@@ -1,10 +1,10 @@
-package dom.geom;
+package dom.control;
 
 import haxe.DynamicAccess;
 import dom.utils.NativeJS;
 
 /**
- * Якорная линейка.   
+ * Контроллер якорей. (Точки привязки)  
  * Используется как вспомогательный класс для определения
  * "прилипания" точки к заранее заданным координатам.
  * 
