@@ -232,7 +232,7 @@ class DragAndDrop
      * - `position: absolute` Для управления `left` и `top` координатами.
      * - `touchAction: none` Для отключения базовых жестов на объекте.
      * 
-     * По умолчанию: `null`
+     * По умолчанию: `null` *(Перетаскиваемый элемент не задан)*
      */
     public var target(default, set):Element = null;
     function set_target(value:Element):Element {
@@ -247,6 +247,27 @@ class DragAndDrop
             value.style.touchAction = "none";
             value.addEventListener("pointerdown", onDown);
         }
+        return value;
+    }
+
+    /**
+     * Перетаскивание выключено.  
+     * Свойство позволяет временно отключить перетаскивание.
+     * - Если при выключении перетаскивается объект, перетаскивание
+     *   прерывается, как при взове метода: `stop()`
+     * - События не посылаются.
+     * 
+     * По умолчанию: `false`
+     */
+    public var disabled(default, set):Bool = false;
+    function set_disabled(value:Bool):Bool {
+        if (value == disabled)
+            return value;
+
+        disabled = value;
+        if (!value)
+            stop();
+
         return value;
     }
 
@@ -318,6 +339,8 @@ class DragAndDrop
      * @param e Нативное событие.
      */
     private function onDown(e:PointerEvent):Void {
+        if (disabled)
+            return;
         e.preventDefault();
         e.stopImmediatePropagation();
 
