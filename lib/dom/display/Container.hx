@@ -5,20 +5,20 @@ import js.lib.Error;
 import js.html.Element;
 
 /**
- * Контейнер для компонентов.  
- * Используется для реализации "дерева отображения", позволяющее
- * использовать дополнительные возможности библиотеки, такие как:
- * - События добавления/удаления в родительский контейнер.
- * - События добавления/удаления в корневой DOM. (Stage)
+ * Контейнер.  
+ * Представляет узел, который может содержать дочерние элементы.
+ * 
+ * В DOM по умолчанию представлен тегом: `<div>`
  */
 @:dce
 class Container extends Component
 {
     /**
      * Создать новый экземпляр.
-     * @param node Используемый DOM узел для этого экземпляра.
+     * @param node DOM Элемент, представляющий этот контейнер.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(node:Element) {
+    public function new(?node:Element) {
         super(node);
     }
 
@@ -36,7 +36,7 @@ class Container extends Component
     public var numChildren(default, null):Int = 0;
 
     /**
-     * Это контейнер.  
+     * Это контейнер!  
      * Используется для быстрой проверки типа в рантайме.
      */
     @:keep
@@ -127,7 +127,7 @@ class Container extends Component
      * - Вызов игнорируется, если передан `null`
      * - Вызов игнорируется, если переданный элемент не содержится в этом контейнере.
      * - Элемент удаляется из DOM дерева.
-     * @param child 
+     * @param child Удаляемый элемент.
      */
     public function removeChild(child:Component):Component {
         if (child == null || child.parent != this)

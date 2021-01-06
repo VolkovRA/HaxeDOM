@@ -1,6 +1,5 @@
 package dom.display;
 
-import js.Browser;
 import js.html.Element;
 
 /**
@@ -16,7 +15,7 @@ class Static extends Component
      * @param node HTML DOM Элемент, представляющий этот объект. *(По умолчанию: `<div>`)*
      */
     public function new(?html:String, ?node:Element) {
-        super(node==null?Browser.document.createDivElement():node);
+        super(node);
 
         if (html != null)
             this.html = html;

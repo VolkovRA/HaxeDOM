@@ -5,7 +5,8 @@ import js.html.Element;
 
 /**
  * Нативный JS.  
- * Статический класс с нативными JavaScript функциями.
+ * Статический класс с нативным JavaScript. Помогает там, где
+ * стандартный Haxe не очень могёт.
  */
 @:dce
 class NativeJS

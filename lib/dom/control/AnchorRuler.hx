@@ -31,9 +31,9 @@ class AnchorRuler
      * к одному из якорей.
      * - Это значение не может быть меньше: `0`
      * 
-     * По умолчанию: `4`
+     * По умолчанию: `2`
      */
-    public var dist(default, set):Float = 4;
+    public var dist(default, set):Float = 2;
     function set_dist(value:Float):Float {
         if (value > 0)
             dist = value;

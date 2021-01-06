@@ -5,17 +5,22 @@ import dom.geom.Rect;
 import dom.theme.Theme;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
+import js.Browser;
 import js.lib.Error;
 import js.html.Element;
 
 /**
- * HTML Компонент.  
- * Компоненты используются для добавления дополнительных возможностей
- * обычным html элементам:
- * - Событие добавления/удаления в родительский контейнер.
- * - Событие добавления/удаления на страницу (DOM).
+ * Компонент.  
+ * Это конечный узел дерева отображения, который
+ * представляет какой-то, конкретный элемент UI.
+ * Это может быть кнопка, текстовое поле, скроллбар
+ * или т.п.
  * 
- * Может использоваться самостоятельно или как базовый класс.
+ * Компонент используется для добавления дополнительных
+ * возможностей стандартному DOM API. Может
+ * использоваться самостоятельно или как базовый класс.
+ * 
+ * В DOM по умолчанию представлен тегом: `<div>`
  */
 @:dce
 class Component
@@ -29,14 +34,11 @@ class Component
 
     /**
      * Создать новый экземпляр.
-     * @param node Используемый DOM узел для этого экземпляра.
-     * @throws Error HTML Элемент не должен быть: `null`
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(node:Element) {
-        if (node == null)
-            throw new Error("HTML Элемент не должен быть null");
-
-        this.node = NativeJS.setNodeID(node);
+    public function new(?node:Element) {
+        this.node = NativeJS.setNodeID(node==null?Browser.document.createDivElement():node);
     }
 
 
