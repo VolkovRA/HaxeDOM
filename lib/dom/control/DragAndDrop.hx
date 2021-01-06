@@ -1,6 +1,7 @@
 package dom.control;
 
 import dom.utils.Dispatcher;
+import dom.utils.NativeJS;
 import js.Browser;
 import js.html.Element;
 import js.html.PointerEvent;
@@ -42,28 +43,36 @@ class DragAndDrop
     }
 
     /**
-     * Локальные координаты точки захвата по оси X. (px)  
-     * По умолчанию: `0`
-     */
-    private var lx(default, null):Float = 0;
-
-    /**
-     * Локальные координаты точки захвата по оси Y. (px)  
-     * По умолчанию: `0`
-     */
-    private var ly(default, null):Float = 0;
-
-    /**
-     * Точка первого клика по оси X. (px)  
+     * Кешированное значение по оси X. (px)  
      * По умолчанию: `0`
      */
     private var cx(default, null):Float = 0;
 
     /**
-     * Точка первого клика по оси Y. (px)  
+     * Кешированное значение по оси Y. (px)  
      * По умолчанию: `0`
      */
     private var cy(default, null):Float = 0;
+
+    /**
+     * Координаты элемента на оси X. (px)  
+     * Содержит последние координаты, заданные объекту при
+     * его перетаскиваний. Обновляются только при
+     * перетаскивании.
+     * 
+     * По умолчанию: `0`
+     */
+    public var x(default, null):Float = 0;
+
+    /**
+     * Координаты элемента на оси Y. (px)  
+     * Содержит последние координаты, заданные объекту при
+     * его перетаскиваний. Обновляются только при
+     * перетаскивании.
+     * 
+     * По умолчанию: `0`
+     */
+    public var y(default, null):Float = 0;
 
     /**
      * Перетаскивание активно.  
@@ -228,10 +237,6 @@ class DragAndDrop
      * - Если задать `null`, имеющийся объект будет отключен.
      * - Никакие событие не посылаются.
      * 
-     * Устанавливаемые свойства CSS:
-     * - `position: absolute` Для управления `left` и `top` координатами.
-     * - `touchAction: none` Для отключения базовых жестов на объекте.
-     * 
      * По умолчанию: `null` *(Перетаскиваемый элемент не задан)*
      */
     public var target(default, set):Element = null;
@@ -242,11 +247,8 @@ class DragAndDrop
         if (target != null)
             target = null;
         target = value;
-        if (value != null) {
-            value.style.position = "absolute";
-            value.style.touchAction = "none";
+        if (value != null)
             value.addEventListener("pointerdown", onDown);
-        }
         return value;
     }
 
@@ -348,11 +350,8 @@ class DragAndDrop
         Browser.window.addEventListener("pointerup", onUp);
         Browser.window.addEventListener("pointercancel", onCancel);
 
-        var b = target.getBoundingClientRect();
         cx = e.clientX;
         cy = e.clientY;
-        lx = cx - b.left;
-        ly = cy - b.top;
     }
 
     /**
@@ -367,17 +366,30 @@ class DragAndDrop
         if (!isDrag) {
             var dx = cx - e.clientX;
             var dy = cy - e.clientY;
-
             if (Math.sqrt(dx*dx + dy*dy) < sensitive)
                 return;
 
-            isDrag = true;
+            // Запоминаем исходную точку, чтоб от неё позицианироваться:
+            cx = e.clientX - target.offsetLeft;
+            cy = e.clientY - target.offsetTop;
             es = true;
+            isDrag = true;
+
+            // Поправка на margin, если не учесть - точка съезжает:
+            var s = Browser.window.getComputedStyle(target);
+            var mt = NativeJS.parseFloat(s.marginTop);
+            var ml = NativeJS.parseFloat(s.marginLeft);
+            if (mt > 0 || mt < 0)
+                cx += mt;
+            if (ml > 0 || ml < 0)
+                cy += ml;
         }
 
-        // Драгаем:
-        var x = e.clientX - lx;
-        var y = e.clientY - ly;
+        // Расчитываем новые координаты:
+        x = e.clientX - cx;
+        y = e.clientY - cy;
+
+        // Ограничения и натяжения:
         tugX = 0;
         tugY = 0;
         if (maxX != null) {
