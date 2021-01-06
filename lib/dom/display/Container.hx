@@ -1,34 +1,33 @@
 package dom.display;
 
+import dom.utils.NativeJS;
 import js.lib.Error;
 import js.html.Element;
-import dom.utils.NativeJS;
 
 /**
- * Контейнер для компонентов.  
- * Используется для реализации "дерева отображения", позволяющее
- * использовать дополнительные возможности библиотеки, такие как:
- * - События добавления/удаления в родительский контейнер.
- * - События добавления/удаления в корневой DOM. (Stage)
+ * Контейнер.  
+ * Представляет узел, который может содержать дочерние элементы.
+ * 
+ * В DOM по умолчанию представлен тегом: `<div>`
  */
-class Container<T:Container<T,E>, E:Element> extends Component<T,E>
+@:dce
+class Container extends Component
 {
     /**
-     * Создать контейнер для компонентов.  
-     * @param node Корневой узел, в котором будут отображаться страницы.
+     * Создать новый экземпляр.
+     * @param node DOM Элемент, представляющий этот контейнер.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(node:E) {
+    public function new(?node:Element) {
         super(node);
-
-        node.classList.add("container");
     }
 
     /**
      * Список дочерних узлов.  
-     * Не может быть `null`
+     * Не может быть: `null`
      */
     @:noCompletion
-    private var childrens:Array<Component<Dynamic, Dynamic>> = new Array();
+    private var childrens:Array<Component> = new Array();
 
     /**
      * Количество дочерних узлов.  
@@ -37,7 +36,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
     public var numChildren(default, null):Int = 0;
 
     /**
-     * Это контейнер.  
+     * Это контейнер!  
      * Используется для быстрой проверки типа в рантайме.
      */
     @:keep
@@ -55,29 +54,29 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param index Позиция индекса дочернего объекта.
      * @return Дочерний экранный объект в заданной позиции индекса.
      */
-    inline public function getChildAt(index:Int):Component<Dynamic, Dynamic> {
+    inline public function getChildAt(index:Int):Component {
         return childrens[index];
     }
 
     /**
      * Добавить дочерний узел в список отображения.   
-     * - Вызов игнорируется, если передан `null`.
+     * - Вызов игнорируется, если передан `null`
      * - Если узел уже содержится в списке, он перемещается в конец по иерархии DOM.
      * - Новый элемент добавляется в конец списка DOM.
      * @param child Экземпляр для добавления.
      */
-    inline public function addChild(child:Component<Dynamic, Dynamic>):Void {
+    inline public function addChild(child:Component):Void {
         addChildAt(child, numChildren);
     }
 
     /**
      * Добавить дочерний узел в список отображения в указанный индекс.
-     * - Вызов игнорируется, если передан `null`.
+     * - Вызов игнорируется, если передан `null`
      * - Дочерний узел вставляется в указанную позицию в DOM.
      * @param child Экземпляр для добавления.
      * @param index Позиция индекса.
      */
-    public function addChildAt(child:Component<Dynamic, Dynamic>, index:Int):Void {
+    public function addChildAt(child:Component, index:Int):Void {
         if (child == null)
             return;
         if (child.componentID == componentID)
@@ -125,12 +124,12 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
 
     /**
      * Удалить дочерний узел.  
-     * - Вызов игнорируется, если передан `null`.
+     * - Вызов игнорируется, если передан `null`
      * - Вызов игнорируется, если переданный элемент не содержится в этом контейнере.
      * - Элемент удаляется из DOM дерева.
-     * @param child 
+     * @param child Удаляемый элемент.
      */
-    public function removeChild(child:Component<Dynamic, Dynamic>):Component<Dynamic, Dynamic> {
+    public function removeChild(child:Component):Component {
         if (child == null || child.parent != this)
             return null;
 
@@ -143,7 +142,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param index Позиция удаления.
      * @return Удалённый элемент.
      */
-    public function removeChildAt(index:Int):Component<Dynamic, Dynamic> {
+    public function removeChildAt(index:Int):Component {
         if (index > numChildren-1)
             return null;
 
@@ -159,8 +158,8 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
 
     /**
      * Удалить все дочерние элементы.  
-     * @param full Если `true`, полностью очищает ноду: `innerHTML=""`.
-     *             Иначе удаляет только дочерние экземпляры `dom.display.Component`.
+     * @param full Если `true`, полностью очищает ноду: `innerHTML=""`
+     *             Иначе удаляет только дочерние экземпляры `dom.display.Component`
      */
     public function removeChildren(full:Bool = false):Void {
         var old = childrens;
@@ -191,12 +190,12 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * Определяет, является ли указанный объект дочерним объектом экземпляра
      * Container или самим экземпляром. Область поиска охватывает весь список
      * отображения, включая данный экземпляр Container. Нижестоящие элементы
-     * второго, третьего и последующих уровней возвращают значение `true`.
+     * второго, третьего и последующих уровней возвращают значение `true`
      * @param child Проверяемый элемент.
      * @return Возвращает `true`, если указанный элемент находится в списке или является им.
      */
     @:keep
-    public function contains(child:Component<Dynamic, Dynamic>):Bool {
+    public function contains(child:Component):Bool {
         if (child == null)
             return false;
         if (child.componentID == componentID)
@@ -215,16 +214,6 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
         }
     }
 
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Container " + NativeJS.constructorName(node) + "]";
-    }
-
 
 
     ////////////////
@@ -236,24 +225,24 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param value Новый родитель.
      */
     @:noCompletion
-    override private function setParent(value:Container<Dynamic, Dynamic>):Void {
+    override private function setParent(value:Container):Void {
         var no = stage==null;
         super.setParent(value);
 
-        // Рассылка события: "onAddedToStage"
+        // Рассылка события: "evAddedToStage"
         if (no && stage != null) {
             var arr = getAllComponents();
             var i = arr.length;
             while (i-- != 0)
-                arr[i].onAddedToStage.emit(arr[i]);
+                arr[i].evAddedToStage.emit(arr[i]);
         }
 
-        // Рассылка события: "onRemovedFromStage"
+        // Рассылка события: "evRemovedFromStage"
         if (!no && stage == null) {
             var arr = getAllComponents();
             var i = arr.length;
             while (i-- != 0)
-                arr[i].onRemovedFromStage.emit(arr[i]);
+                arr[i].evRemovedFromStage.emit(arr[i]);
         }
     }
 
@@ -262,7 +251,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @return Список с дочерними компонентами.
      */
     @:noCompletion
-    private function getAllComponents():Array<Component<Dynamic, Dynamic>> {
+    private function getAllComponents():Array<Component> {
         var arr = [];
         var i = childrens.length;
         while (i-- != 0) {
@@ -280,7 +269,7 @@ class Container<T:Container<T,E>, E:Element> extends Component<T,E>
      * @param index Позиция сдвигаемого элемента.
      * @param to Позиция назначения.
      */
-    static private function moveChild(arr:Array<Component<Dynamic, Dynamic>>, index:Int, to:Int):Void {
+    static private function moveChild(arr:Array<Component>, index:Int, to:Int):Void {
         if (to > index) {
             // Вперёд
             var tmp = arr[index];

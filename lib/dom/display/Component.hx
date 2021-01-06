@@ -1,39 +1,44 @@
 package dom.display;
 
-import js.lib.Error;
-import js.html.Element;
+import dom.enums.CSSClass;
+import dom.geom.Rect;
+import dom.theme.Theme;
 import dom.utils.Dispatcher;
 import dom.utils.NativeJS;
+import js.Browser;
+import js.lib.Error;
+import js.html.Element;
 
 /**
- * HTML Компонент.  
- * Компоненты используются для добавления дополнительных возможностей
- * обычным html элементам:
- * - Позицианирование элементов по `x` и `y` координатам.
- * - Событие добавления/удаления в родительский контейнер.
- * - Событие добавления/удаления на страницу (DOM).
+ * Компонент.  
+ * Это конечный узел дерева отображения, который
+ * представляет какой-то, конкретный элемент UI.
+ * Это может быть кнопка, текстовое поле, скроллбар
+ * или т.п.
  * 
- * Может использоваться самостоятельно или как базовый класс.
+ * Компонент используется для добавления дополнительных
+ * возможностей стандартному DOM API. Может
+ * использоваться самостоятельно или как базовый класс.
+ * 
+ * В DOM по умолчанию представлен тегом: `<div>`
  */
-class Component<T:Component<T,E>, E:Element>
+@:dce
+class Component
 {
     /**
-     * Авто-ID для всех новых компонентов.
+     * Авто-ID для всех новых компонентов.  
+     * Автоматически увеличивается на 1 при создании нового компонента.
      */
     @:noCompletion
-    static private var AUTO_ID:Int = 0;
+    static private var autoID(default, null):Int = 0;
 
     /**
-     * Создать HTML компонент.
-     * @param node HTML DOM Узел, представляющий этот компонент.
-     * @throws Error HTML Элемент не должен быть null.
+     * Создать новый экземпляр.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(node:E) {
-        if (node == null)
-            throw new Error("HTML Элемент не должен быть null");
-
-        this.node = node;
-        this.node.classList.add("component");
+    public function new(?node:Element) {
+        this.node = NativeJS.setNodeID(node==null?Browser.document.createDivElement():node);
     }
 
 
@@ -44,122 +49,96 @@ class Component<T:Component<T,E>, E:Element>
 
     /**
      * ID Компонента.  
-     * Уникальный ключ, однозначно идентифицирующий этот экземпляр.
+     * Уникальный ключ, однозначно идентифицирующий этот экземпляр
+     * объекта в рамках Haxe приложения.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
+     */
+    public var componentID(default, null):Int = ++autoID;
+
+    /**
+     * Корневой узел этого компонента.  
+     * Используется для представления этого компонента в DOM.
+     * - Может содержать произвольное количество дочерних узлов,
+     *   управляемых автоматически.
+     * - Создаётся вместе с компонентом и никогда не удаляется.
+     * - Вы можете добавлять в него собственные узлы без страха
+     *   их удаления или перезаписи.
+     * 
+     * Не может быть: `null`
+     */
+    public var node(default, null):Element;
+
+    /**
+     * Тип компонента.  
+     * Используется для дополнительной стилизации.
+     * 
+     * По умолчанию: `null` *(Дополнительное декорирование не используется)*
+     * 
+     * @see Темы оформления: `dom.theme.Theme`
+     */
+    public var type(default, set):String = null;
+    function set_type(value:String):String {
+        if (theme != null) {
+            theme.clean(this);
+            theme = null;
+        }
+        type = value;
+        if (value != null && Theme.current != null) {
+            theme = Theme.current;
+            theme.apply(this);
+        }
+        return value;
+    }
+
+    /**
+     * Используемая тема оформления.  
+     * Свойство используется для автоматической очистки
+     * дополнительной стилизации. (См.: `type`)
+     * 
+     * По умолчанию: `null`
      */
     @:noCompletion
-    private var componentID(default, null):Int = ++AUTO_ID;
+    private var theme:Theme;
 
     /**
-     * HTML Элемент, представляющий этот компонент.  
-     * Не может быть `null`
-     */
-    public var node(default, null):E;
-
-    /**
-     * Позиция элемента по оси X. (px)  
-     * Позволяет позицианировать этот компонент в ручном режиме.
-     * - Если задано, html компоненту устанавливается CSS свойство: `left: {x}px`.
-     * - Если передано `null`, у компонента удаляется CSS свойство: `left`.
+     * Компонент выключен.  
+     * Переключение этого свойства может влиять на работу некоторых
+     * UI компонентов.
+     * - Если `true`, компонент в DOM будет помечен классом: `class="disabled"`
+     *   Это также влияет на срабатывания событий некоторых компонентов, например,
+     *   не будут посылаться события нажатия на кнопку.
+     * - Если `false`, в DOM разметке будет удалён класс `class="disabled"` (Если есть).
+     *   Компонент будет работать как обычно.
      * 
-     * *п.с. Устанавливаемое CSS значение может округляться в зависимости от
-     * значения свойства `pixelSnapping`.*
-     * 
-     * По умолчанию: `null` (Не задано)
+     * По умолчанию: `false` *(Компонент активен)*
      */
-    public var x(default, set):Float = null;
-    function set_x(value:Float):Float {
-        if (value == x)
-            return value;
-
-        x = value;
-        updateCSS_x();
+    public var disabled(get, set):Bool;
+    function get_disabled():Bool {
+        return untyped NativeJS.dnot(node.disabled);
+    }
+    function set_disabled(value:Bool):Bool {
+        if (value) {
+            untyped node.disabled = true;
+            node.classList.add(CSSClass.DISABLED);
+        }
+        else {
+            untyped node.disabled = false;
+            node.classList.remove(CSSClass.DISABLED);
+        }
         return value;
     }
 
     /**
-     * Позиция элемента по оси Y. (px)  
-     * Позволяет позицианировать этот компонент в ручном режиме.
-     * - Если задано, html компоненту устанавливается CSS свойство: `top: {x}px`.
-     * - Если передано `null`, у компонента удаляется CSS свойство: `top`.
+     * Имя компонента.  
+     * Вы можете задать произвольное имя вашему компоненту.
+     * Больше никак не используется.
      * 
-     * *п.с. Устанавливаемое CSS значение может округляться в зависимости от
-     * значения свойства `pixelSnapping`.*
-     * 
-     * По умолчанию: `null` (Не задано)
+     * По умолчанию: `null`
      */
-    public var y(default, set):Float = null;
-    function set_y(value:Float):Float {
-        if (value == y)
-            return value;
-
-        y = value;
-        updateCSS_y();
-        return value;
-    }
-
-    /**
-     * Ширина элемента. (px)  
-     * При указании значения добавляет соответствующее CSS свойство.  
-     * Позволяет жёстко задать размер.
-     * - Если задано, html компоненту устанавливается CSS свойство: `width: {width}px`.
-     * - Если передано `null`, у компонента удаляется CSS свойство: `width`.
-     * 
-     * *п.с. Устанавливаемое CSS значение может округляться в зависимости от
-     * значения свойства `pixelSnapping`.*
-     * 
-     * По умолчанию: `null` (Не задано)
-     */
-    public var width(default, set):Float = null;
-    function set_width(value:Float):Float {
-        if (value == width)
-            return value;
-
-        width = value;
-        updateCSS_width();
-        return value;
-    }
-
-    /**
-     * Высота элемента. (px)  
-     * При указании значения добавляет соответствующее CSS свойство.  
-     * Позволяет жёстко задать размер.
-     * - Если задано, html компоненту устанавливается CSS свойство: `height: {height}px`.
-     * - Если передано `null`, у компонента удаляется CSS свойство: `height`.
-     * 
-     * *п.с. Устанавливаемое CSS значение может округляться в зависимости от
-     * значения свойства `pixelSnapping`.*
-     * 
-     * По умолчанию: `null` (Не задано)
-     */
-    public var height(default, set):Float = null;
-    function set_height(value:Float):Float {
-        if (value == height)
-            return value;
-
-        height = value;
-        updateCSS_height();
-        return value;
-    }
-
-    /**
-     * Привязка позиции компонента к ближайшему пикселю.  
-     * Это значение используется для округления устанавливаемого CSS значения
-     * для: `x`, `y`, `width` и `height`, чтобы изображение не размывалось.
-     * 
-     * По умолчанию: `true` (Округлять)
-     */
-    public var pixelSnapping(default, set):Bool = true;
-    function set_pixelSnapping(value:Bool):Bool {
-        if (value == pixelSnapping)
-            return value;
-
-        pixelSnapping = value;
-        updateCSS_x();
-        updateCSS_y();
-        updateCSS_width();
-        updateCSS_height();
+    public var name(default, set):String = null;
+    function set_name(value:String):String {
+        name = value;
         return value;
     }
 
@@ -170,7 +149,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * По умолчанию: `null`
      */
-    public var parent(default, null):Container<Dynamic, Dynamic> = null;
+    public var parent(default, null):Container = null;
 
     /**
      * Основная сцена.  
@@ -179,7 +158,7 @@ class Component<T:Component<T,E>, E:Element>
      * 
      * По умолчанию: `null`
      */
-    public var stage(default, null):Stage<Dynamic> = null;
+    public var stage(default, null):Stage = null;
 
 
 
@@ -188,12 +167,35 @@ class Component<T:Component<T,E>, E:Element>
     ////////////////
 
     /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
+     * Получить границы элемента.  
+     * Метод вычисляет габариты элемента на странице и возвращает
+     * стандартизированный объект - прямоугольник, который
+     * содержит описание размеров и его положение относительно
+     * **окна просмотра**.
+     * @param rect Объект для записи. Если не передан - создаётся новый.
+     * @return Прямоугольник с описанием размеров элемента.
+     * @see Размер элемента: [getBoundingClientRect](https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect)
      */
-    @:keep
-    public function toString():String {
-        return "[Component " + NativeJS.constructorName(node) + "]";
+    public function getBounds(?rect:Rect):Rect {
+        if (rect == null)
+            rect = new Rect();
+        
+        var r = node.getBoundingClientRect();
+        rect.x = r.left;
+        rect.y = r.top;
+
+        // Кроссбраузерно, width может не быть, но он предпочтительнее
+        // из-за отсутствия доп. вычислений с плавающей точкой:
+        if (r.width == null) {
+            rect.w = r.right-r.left;
+            rect.h = r.bottom-r.top;
+        }
+        else {
+            rect.w = r.width;
+            rect.h = r.height;
+        }
+
+        return rect;
     }
 
 
@@ -203,38 +205,39 @@ class Component<T:Component<T,E>, E:Element>
     /////////////////
 
     /**
-     * Добавление в родительский контейнер. (Событие)  
-     * Посылается при добалении этого компонента в контейнер: `parent`.
+     * Событие добавления в родительский контейнер.  
+     * Посылается при добалении этого компонента в контейнер.  
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
-    public var onAdded(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var evAdded(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
     /**
-     * Удаление из родительского контейнера. (Событие)  
-     * Посылается при удалении этого компонента из контейнера: `parent`.
+     * Событие удаления из родительского контейнера.  
+     * Посылается при удалении этого компонента из
+     * родительского контейнера.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
-    public var onRemoved(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var evRemoved(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
     /**
-     * Добавление на сцену. (Событие)  
-     * Посылается при добалении этого компонента в корневой DOM контейнер
-     * Stage, отдельно или в качестве дочернего узла добавленного контейнера.
+     * Событие добавления на сцену.  
+     * Посылается при добавлении этого компонента или одного
+     * из его родителей на сцену. (Добавлен в DOM)
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
-    public var onAddedToStage(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var evAddedToStage(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
     /**
-     * Удаление со сцены. (Событие)  
-     * Посылается при удалении этого компонента из корневого узла отдельно,
-     * или в качестве дочернего элемента удалённого контейнера.
+     * Событие удаления со сцены.  
+     * Посылается при удалении этого компонента или одного из
+     * его родителей со сцены. (Удалён из DOM)
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
-    public var onRemovedFromStage(default, null):Dispatcher<T->Void> = new Dispatcher();
+    public var evRemovedFromStage(default, never):Dispatcher<Component->Void> = new Dispatcher();
 
 
 
@@ -250,55 +253,11 @@ class Component<T:Component<T,E>, E:Element>
     private var parentIndex:Int = -1;
 
     /**
-     * Обновить значение CSS свойства для переменной `x`.
-     */
-    @:noCompletion
-    private function updateCSS_x():Void {
-        if (x == null)
-            node.style.left = "";
-        else
-            node.style.left = (pixelSnapping?Math.round(x):x) + "px";
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной `y`.
-     */
-    @:noCompletion
-    private function updateCSS_y():Void {
-        if (y == null)
-            node.style.top = "";
-        else
-            node.style.top = (pixelSnapping?Math.round(y):y) + "px";
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной `width`.
-     */
-    @:noCompletion
-    private function updateCSS_width():Void {
-        if (width == null)
-            node.style.width = "";
-        else
-            node.style.width = (pixelSnapping?Math.round(width):width) + "px";
-    }
-
-    /**
-     * Обновить значение CSS свойства для переменной `height`.
-     */
-    @:noCompletion
-    private function updateCSS_height():Void {
-        if (height == null)
-            node.style.height = "";
-        else
-            node.style.height = (pixelSnapping?Math.round(height):height) + "px";
-    }
-
-    /**
      * Установка нового родителя.
      * @param value Новый родитель.
      */
     @:noCompletion
-    private function setParent(value:Container<Dynamic, Dynamic>):Void {
+    private function setParent(value:Container):Void {
         if (parent == value)
             return;
 
@@ -310,8 +269,8 @@ class Component<T:Component<T,E>, E:Element>
             parent = null;
             stage = null;
 
-            if (e1) onRemoved.emit(this);
-            if (e2) onRemovedFromStage.emit(this);
+            if (e1) evRemoved.emit(this);
+            if (e2) evRemovedFromStage.emit(this);
 
             return;
         }
@@ -325,8 +284,8 @@ class Component<T:Component<T,E>, E:Element>
             parent = value;
             stage = value.stage;
 
-            onAdded.emit(this);
-            if (e1) onAddedToStage.emit(this);
+            evAdded.emit(this);
+            if (e1) evAddedToStage.emit(this);
         }
         else {
             // Смена родителя:
@@ -335,10 +294,10 @@ class Component<T:Component<T,E>, E:Element>
             parent = value;
             stage = value.stage;
 
-            onRemoved.emit(this);
-            onAdded.emit(this);
-            if (e1) onRemovedFromStage.emit(this);
-            if (e2) onAddedToStage.emit(this);
+            evRemoved.emit(this);
+            evAdded.emit(this);
+            if (e1) evRemovedFromStage.emit(this);
+            if (e2) evAddedToStage.emit(this);
         }
     }
 }

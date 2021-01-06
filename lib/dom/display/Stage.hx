@@ -1,35 +1,39 @@
 package dom.display;
 
-import js.html.Element;
 import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
 import dom.utils.ResizeObserver;
+import js.html.Element;
 
 /**
  * Корневой узел.  
- * Этот объект должен использоваться как самый верхний элемент в
- * иерархии отображения всех компонентов. Он нужен для правильной
- * работы событий: `onAddedToStage`, `onRemovedFromStage` и `onResize`.
+ * Этот объект должен использоваться как самый верхний
+ * элемент в иерархии отображения всех компонентов. Он
+ * нужен для правильной работы событий: `evAddedToStage`
+ * и `evRemovedFromStage`
+ * 
+ * Вы можете привязать корень сцены к уже существующему
+ * DOM элементу (Например `<body>`), или создать новый.
+ * 
+ * В DOM по умолчанию представлен тегом: `<div>`
  */
-class Stage<E:Element> extends Container<Stage<E>, E>
+@:dce
+class Stage extends Container
 {
     /**
-     * Создать корневой узел отображения.
-     * @param node HTML Элемент, представляющий корень сцены.
+     * Создать новый экземпляр.
+     * @param node DOM Элемент, представляющий корень сцены.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(node:E) {
+    public function new(?node:Element) {
         super(node);
 
-        stage = this;
-        node.classList.add("stage");
+        this.evResize = new Dispatcher();
+        this.stage = this;
 
         // Событие ресайзинга:
-        if (NativeJS.isResizeObserverSupported()) {
-            var observer = new ResizeObserver(function(entries, observer){
-                onResize.emit(this);
-            });
-            observer.observe(node);
-        }
+        ResizeObserver.on(node, function(element) {
+            evResize.emit(this);
+        });
     }
 
     /**
@@ -42,19 +46,10 @@ class Stage<E:Element> extends Container<Stage<E>, E>
 
     /**
      * Событие ресайза сцены.  
-     * Посылается при изменений размеров элемента в node, к которому прикреплён этот Stage.
+     * Посылается при изменений размеров элемента в свойстве: `node`,
+     * к которому прикреплён этот Stage.
      * 
-     * Не может быть `null`
+     * Не может быть: `null`
      */
-    public var onResize(default, null):Dispatcher<Stage<Dynamic>->Void> = new Dispatcher();
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Stage " + NativeJS.constructorName(node) + "]";
-    }
+    public var evResize(default, null):Dispatcher<Stage->Void>;
 }

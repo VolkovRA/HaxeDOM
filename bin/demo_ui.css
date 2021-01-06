@@ -1,0 +1,129 @@
+/* Отмена дефолтных стилей агента */
+button {
+    margin: 0;
+    padding: 0;
+}
+
+/* Кастомизация UI */
+/* Кнопка */
+.button {
+    margin: 10px;
+    padding: 4px;
+    min-width: 100px;
+    min-height: 20px;
+    display: block;
+}
+
+/* Ввод текста */
+.input_text {
+    margin: 10px;
+    display: block;
+}
+
+/* Радио */
+.radio {
+    margin: 10px;
+    display: block;
+}
+
+/* Чекбокс */
+.checkbox {
+    margin: 10px;
+    display: block;
+}
+
+/* Степпер */
+.stepper {
+    margin: 10px;
+    width: 100%;
+    max-width: 100px;
+    height: 20px;
+    touch-action: none;
+}
+.stepper input {
+    height: inherit;
+    width: calc(100% - 20px * 2);
+}
+.stepper button {
+    width: 20px;
+    height: inherit;
+}
+
+/* Прогрессбар */
+.progressbar {
+    margin: 10px;
+    display: block;
+    width: 200px;
+    height: 20px;
+    background-color: gray;
+}
+.progressbar .fill {
+    height: inherit;
+    background-color:darkgray;
+}
+
+/* Скроллбар */
+.scrollbar {
+    margin: 10px;
+    background-color: #bbbbbb;
+    position: relative;
+    touch-action: none;
+}
+.thumb {
+    appearance: none;
+    background-color: #eeeeee;
+    position: absolute;
+}
+.scrollbar.hor {
+    width: 200px;
+    height: 14px;
+}
+.scrollbar.hor .thumb {
+    width: 100px;
+    height: inherit;
+}
+.scrollbar.vert {
+    width: 14px;
+    height: 200px;
+}
+.scrollbar.vert .thumb {
+    width: inherit;
+    height: 100px;
+}
+
+/* Скроллер */
+.scroller {
+    position: relative;
+    background-color: #EEEEEE;
+    width: 80%;
+    height: 140px;
+    margin-left: 10%;
+    border: 1px solid red;
+    overflow: hidden;
+    touch-action: none;
+}
+.scroller .content {
+    position: absolute;
+    width: auto;
+    white-space: nowrap;
+}
+.scroller .scrollbar.hor {
+    position: absolute;
+    margin: 0;
+    width: 100%;
+    bottom: 0px;
+}
+.scroller .scrollbar.vert {
+    position: absolute;
+    margin: 0;
+    height: 100%;
+    right: 0px;
+}
+.scroller.vert.hor .scrollbar.hor {
+    width: calc(100% - 14px);
+    min-width: 0%;
+}
+.scroller.vert.hor .scrollbar.vert {
+    height: calc(100% - 14px);
+    min-height: 0%;
+}

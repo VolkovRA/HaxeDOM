@@ -1,29 +1,31 @@
 # Haxe DOM API фреймворк
 
-Описание
+Зачем это надо
 ------------------------------
 
-Это крошечный Haxe [DOM API](https://developer.mozilla.org/ru/docs/DOM/DOM_Reference) фреймворк для добавления дополнительных возможностей при работе с стандартным DOM API.  
-Он добавляет:
-- События добавления и удаления элемента с html страницы. Это полезно, когда вам нужно знать, отображается элемент или нет. (Добавлен в DOM) Это реализация событий: `onAddedToStage` и `onRemovedFromStage`. (Возможно, вам это знакомо)
-- События добавления элемента в контейнер: `onAdded` и `onRemoved`.
-- Событие ресайза: `onResize`. Используется реализация без циклов и опросов DOM, на основе [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
-- Возможность управления: `x`, `y`, `width` и `height` свойствами обычных DOM элементов, через чуть более удобный интерфейс. Чтоб не писать каждый раз `px` и не парсить стили. (Опционально, по желанию.)
-- Использовать чуть более высокоуровневое API для создания приложения, но не более. (Сцены, дисплей-листы)
+Этот репозиторий содержит небольшой фреймворк для разработки клиентской части динамических web приложений. Он расширяет стандартный DOM API, добавляя новые инструменты, такие как:
+- Собственное дерево отображения (не виртуальное), для реализации событий добавления объекта на сцену (В DOM). Это очень похоже на события: `onAddedToStage` и `onRemovedFromStage` из других сред. (Возможно, вы о них слышали)
+- Готовые UI компоненты.
+- Большое количество вспомогательных утилит: для перетаскивания, определения точек соприкосновения, определения изменения размеров элемента и т.п. (Эти утилиты используются собственными классами фреймворка)
+- Кроссплатформенный код, который заботится за вас об всех нюансах поддержки в различных средах.
+- Простой и лёгкий фреймворк без багов и лишнего геммороя.
 
-Больше этот фреймворк ничего не делает. Не используемый код выпиливается из JS. (Haxe dce)
+При создании этой библиотеки я старался сделать её как можно более кастомизируемой. Поэтому, CSS свойства назначаются DOM элементам по минимуму. Всю кастомизацию вы должны производить с помощью CSS стилей самостоятельно.  
+Неиспользуемый код удаляется из проекта с помощью Haxe dce.
+
+Больше этот фреймворк ничего не делает!
 
 Как использовать
 ------------------------------
 ```
 var stage = new Stage(Browser.document.body);
-var child1 = new Container(Browser.document.createDivElement());
+var child1 = new Container();
 var child2 = new Component(Browser.document.createSpanElement());
-var child3 = new Component(Browser.document.createButtonElement());
+var child3 = new Component(Browser.document.createDivElement());
 
-child1.node.innerText = "1";
-child2.node.innerText = "2";
-child3.node.innerText = "3";
+child1.node.textContent = "1";
+child2.node.textContent = "2";
+child3.node.textContent = "3";
 
 stage.addChild(child1);
 stage.addChild(child2);
@@ -35,7 +37,7 @@ trace(child1);
 trace(child2);
 ```
 
-Добавление библиотеки
+Добавление фреймворка
 ------------------------------
 
 1. Установите haxelib себе на локальную машину, чтобы вы могли использовать библиотеки Haxe.
@@ -48,7 +50,7 @@ haxelib git dom https://github.com/VolkovRA/HaxeDOM master
 haxelib git [project-name] [git-clone-path] [branch]
 haxelib git minject https://github.com/massiveinteractive/minject.git         # Use HTTP git path.
 haxelib git minject git@github.com:massiveinteractive/minject.git             # Use SSH git path.
-haxelib git minject git@github.com:massiveinteractive/minject.git v2          # Checkout branch or tag `v2`.
+haxelib git minject git@github.com:massiveinteractive/minject.git v2          # Checkout branch or tag `v2`
 ```
 3. Добавьте библиотеку dom в ваш Haxe проект.
 
