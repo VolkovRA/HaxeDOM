@@ -52,14 +52,4 @@ class Stage extends Container
      * Не может быть: `null`
      */
     public var evResize(default, null):Dispatcher<Stage->Void>;
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Stage]";
-    }
 }

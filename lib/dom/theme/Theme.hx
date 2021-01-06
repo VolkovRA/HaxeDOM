@@ -101,16 +101,6 @@ class Theme
 
         map[type] = { decorator:decorator, clean:clean==null?null:clean } ;
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[Theme]";
-    }
 }
 
 /**

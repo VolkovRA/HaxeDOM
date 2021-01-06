@@ -35,14 +35,4 @@ class Static extends Component
         node.innerHTML = value;
         return value;
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Static]";
-    }
 }

@@ -91,14 +91,4 @@ class UIComponent extends Component
         if (nodeLabel != null)  arr.push(nodeLabel);
         NativeJS.set(node, arr);
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[UIComponent]";
-    }
 }

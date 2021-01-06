@@ -61,14 +61,4 @@ class Image extends Component
     private function onError():Void {
         evLoad.emit(this, new Error("Ошибка загрузки изображения: " + src));
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Image]";
-    }
 }

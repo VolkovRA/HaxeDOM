@@ -141,16 +141,6 @@ class Acceleration
     public function clear():Void {
         len = 0;
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[Acceleration]";
-    }
 }
 
 /**

@@ -157,16 +157,6 @@ class Dispatcher<T:Function>
             listeners[i] = null;
         }
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[Dispatcher]";
-    }
 }
 
 /**

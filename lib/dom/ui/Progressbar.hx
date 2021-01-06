@@ -121,14 +121,4 @@ class Progressbar extends Component
         nodeProgress.style.width = p + "%";
         NativeJS.set(node, [nodeProgress]);
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Progressbar]";
-    }
 }

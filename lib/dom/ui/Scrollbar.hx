@@ -401,14 +401,4 @@ class Scrollbar extends Component
 
         return super.set_disabled(value);
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Scrollbar]";
-    }
 }

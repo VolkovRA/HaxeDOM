@@ -477,14 +477,4 @@ class DragAndDrop
             evDrop.emit(this);
         evStop.emit(this);
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[DragAndDrop]";
-    }
 }

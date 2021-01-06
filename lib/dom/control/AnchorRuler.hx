@@ -287,16 +287,6 @@ class AnchorRuler
         }
         return i-1;
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[AnchorRuler]";
-    }
 }
 
 /**

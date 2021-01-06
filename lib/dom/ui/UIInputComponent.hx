@@ -179,14 +179,4 @@ class UIInputComponent extends UIComponent
         if (incorrect && nodeError != null)     arr.push(nodeError);
         NativeJS.set(node, arr);
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[UIInputComponent]";
-    }
 }

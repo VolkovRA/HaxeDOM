@@ -163,14 +163,4 @@ class Rect
 
         return true;
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[Rect x=" + x + " y=" + y + " w=" + w + " h=" + h + "]";
-    }
 }

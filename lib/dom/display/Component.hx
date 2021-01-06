@@ -198,16 +198,6 @@ class Component
         return rect;
     }
 
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[Component]";
-    }
-
 
 
     /////////////////

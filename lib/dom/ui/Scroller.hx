@@ -606,14 +606,4 @@ class Scroller extends Container implements IAnimated
         scrollH.getBounds(sizeSH);
         Ticker.global.add(this);
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    override public function toString():String {
-        return "[Scroller]";
-    }
 }

@@ -224,14 +224,4 @@ class Vec
         y /= vec.y;
         return this;
     }
-
-    /**
-     * Получить текстовое описание объекта.
-     * @return Возвращает текстовое представление этого экземпляра.
-     */
-    @:keep
-    @:noCompletion
-    public function toString():String {
-        return "[Vec x=" + x + " y=" + y + "]";
-    }
 }
