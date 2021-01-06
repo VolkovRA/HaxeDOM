@@ -57,22 +57,16 @@ enum abstract CSSClass(String) to String from String
     var PROGRESSBAR = "progressbar";
 
     /**
-     * Список.  
-     * Используется в: `dom.ui.List`
-     */
-    var LIST = "list";
-
-    /**
-     * Элемент списка.  
-     * Используется в: `dom.ui.List.ListItem`
-     */
-    var LIST_ITEM = "list_item";
-
-    /**
      * Скроллбар.  
      * Используется в: `dom.ui.List.Scrollbar`
      */
     var SCROLLBAR = "scrollbar";
+
+    /**
+     * Скроллер.  
+     * Используется в: `dom.ui.List.Scroller`
+     */
+    var SCROLLER = "scroller";
 
 
 
@@ -107,13 +101,13 @@ enum abstract CSSClass(String) to String from String
      * Горизонтальный.  
      * Используется для обозначения направления. Например, ползунка.
      */
-    var HORIZONTAL = "h";
+    var HORIZONTAL = "hor";
 
     /**
      * Вертикальный.  
      * Используется для обозначения направления. Например, ползунка.
      */
-    var VERTICAL = "v";
+    var VERTICAL = "vert";
 
 
 
@@ -173,4 +167,10 @@ enum abstract CSSClass(String) to String from String
      * Используется в скроллбарах.
      */
     var THUMB = "thumb";
+
+    /**
+     * Содержимое.  
+     * Используется в скроллере.
+     */
+    var CONTENT = "content";
 }
