@@ -147,16 +147,6 @@ class Dispatcher<T:Function>
 
         return false;
     }
-
-    /**
-     * Удалить все слушатели.
-     */
-    public function clear():Void {
-        var i:Int = listeners.length;
-        while (i-- > 0) {
-            listeners[i] = null;
-        }
-    }
 }
 
 /**
