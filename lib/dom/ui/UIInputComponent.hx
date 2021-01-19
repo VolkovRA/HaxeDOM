@@ -1,7 +1,7 @@
 package dom.ui;
 
 import dom.enums.CSSClass;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.html.Element;
 import js.html.SpanElement;
@@ -177,6 +177,6 @@ class UIInputComponent extends UIComponent
         if (nodeLabel != null)                  arr.push(nodeLabel);
         if (required && nodeRequire != null)    arr.push(nodeRequire);
         if (incorrect && nodeError != null)     arr.push(nodeError);
-        NativeJS.set(node, arr);
+        DOM.set(node, arr);
     }
 }

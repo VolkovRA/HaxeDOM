@@ -2,7 +2,7 @@ package dom.ui;
 
 import dom.display.Component;
 import dom.enums.CSSClass;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.html.Element;
 import js.html.SpanElement;
@@ -89,6 +89,6 @@ class UIComponent extends Component
         var arr:Array<Element> = [];
         if (ico != null)        arr.push(ico);
         if (nodeLabel != null)  arr.push(nodeLabel);
-        NativeJS.set(node, arr);
+        DOM.set(node, arr);
     }
 }

@@ -1,6 +1,8 @@
 package dom.utils;
 
 import js.html.InputElement;
+import tools.NativeJS;
+import tools.Utils;
 
 /**
  * Класс для кросс-браузерных решений.  
@@ -25,7 +27,7 @@ class Cross
             var m = NativeJS.parseFloat(element.max);
             var s = NativeJS.parseFloat(element.step);
             var v = NativeJS.parseFloat(element.value);
-            var n = NativeJS.dec(element.step);
+            var n = Utils.dec(untyped element.step);
             if (NativeJS.isNaN(m)) m = null;
             if (NativeJS.isNaN(s)) s = 1;
             if (NativeJS.isNaN(v)) v = 0;
@@ -50,7 +52,7 @@ class Cross
             var m = NativeJS.parseFloat(element.min);
             var s = NativeJS.parseFloat(element.step);
             var v = NativeJS.parseFloat(element.value);
-            var n = NativeJS.dec(element.step);
+            var n = Utils.dec(untyped element.step);
             if (NativeJS.isNaN(m)) m = null;
             if (NativeJS.isNaN(s)) s = 1;
             if (NativeJS.isNaN(v)) v = 0;

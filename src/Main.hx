@@ -15,7 +15,6 @@ import dom.ui.RadioButton;
 import dom.ui.Scrollbar;
 import dom.ui.Scroller;
 import dom.ui.Stepper;
-import test.TestAnchorRuler;
 import js.Browser;
 
 class Main

@@ -7,5 +7,8 @@
     "version": "3.0.0",
     "releasenote": "Release",
     "contributors": ["VolkovRA"],
-    "classPath": "lib"
+    "classPath": "lib",
+    "dependencies" : {
+        "tools": "git:https://github.com/VolkovRA/HaxeTools.git"
+    }
 }

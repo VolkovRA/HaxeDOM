@@ -2,7 +2,7 @@ package dom.ui;
 
 import dom.display.Component;
 import dom.enums.CSSClass;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.html.DivElement;
 import js.lib.Error;
@@ -119,6 +119,6 @@ class Progressbar extends Component
         if (max > min)
             p = (value / (max - min)) * 100;
         nodeProgress.style.width = p + "%";
-        NativeJS.set(node, [nodeProgress]);
+        DOM.set(node, [nodeProgress]);
     }
 }

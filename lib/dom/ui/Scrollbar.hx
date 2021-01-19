@@ -3,11 +3,11 @@ package dom.ui;
 import dom.display.Component;
 import dom.enums.CSSClass;
 import dom.enums.Orientation;
-import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.html.ButtonElement;
 import js.html.PointerEvent;
+import tools.Dispatcher;
 
 /**
  * Скроллбар.  
@@ -255,7 +255,7 @@ class Scrollbar extends Component
      * Обновить DOM этого компонента.
      */
     private function updateDOM():Void {
-        NativeJS.set(node, [nodeThumb]);
+        DOM.set(node, [nodeThumb]);
         updateThumb();
     }
 

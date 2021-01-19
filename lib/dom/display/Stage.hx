@@ -1,8 +1,8 @@
 package dom.display;
 
-import dom.utils.Dispatcher;
 import dom.utils.ResizeObserver;
 import js.html.Element;
+import tools.Dispatcher;
 
 /**
  * Корневой узел.  

@@ -1,9 +1,9 @@
 package dom.ui;
 
 import dom.enums.CSSClass;
-import dom.utils.Dispatcher;
 import js.Browser;
 import js.html.MouseEvent;
+import tools.Dispatcher;
 
 /**
  * Обычная кнопка.  

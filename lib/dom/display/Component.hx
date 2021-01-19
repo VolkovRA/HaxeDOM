@@ -3,11 +3,12 @@ package dom.display;
 import dom.enums.CSSClass;
 import dom.geom.Rect;
 import dom.theme.Theme;
-import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.lib.Error;
 import js.html.Element;
+import tools.Dispatcher;
+import tools.NativeJS;
 
 /**
  * Компонент.  
@@ -38,7 +39,7 @@ class Component
      *             Если не указан, будет создан новый: `<div>`
      */
     public function new(?node:Element) {
-        this.node = NativeJS.setNodeID(node==null?Browser.document.createDivElement():node);
+        this.node = DOM.setNodeID(node==null?Browser.document.createDivElement():node);
     }
 
 
