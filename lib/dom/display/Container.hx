@@ -19,6 +19,7 @@ class Container extends Component
      */
     public function new(?node:Element) {
         super(node);
+        this.isContainer = true;
     }
 
     /**
@@ -33,14 +34,6 @@ class Container extends Component
      * По умолчанию: `0`
      */
     public var numChildren(default, null):Int = 0;
-
-    /**
-     * Это контейнер!  
-     * Используется для быстрой проверки типа в рантайме.
-     */
-    @:keep
-    @:noCompletion
-    public var isContainer(default, null):Bool = true;
 
 
 
@@ -218,49 +211,6 @@ class Container extends Component
     ////////////////
     //   ПРИВАТ   //
     ////////////////
-    
-    /**
-     * Установка нового родителя.
-     * @param value Новый родитель.
-     */
-    @:noCompletion
-    override private function setParent(value:Container):Void {
-        var no = stage==null;
-        super.setParent(value);
-
-        // Рассылка события: "evAddedToStage"
-        if (no && stage != null) {
-            var arr = getAllComponents();
-            var i = arr.length;
-            while (i-- != 0)
-                arr[i].evAddedToStage.emit(arr[i]);
-        }
-
-        // Рассылка события: "evRemovedFromStage"
-        if (!no && stage == null) {
-            var arr = getAllComponents();
-            var i = arr.length;
-            while (i-- != 0)
-                arr[i].evRemovedFromStage.emit(arr[i]);
-        }
-    }
-
-    /**
-     * Получить все дочерние компоненты.
-     * @return Список с дочерними компонентами.
-     */
-    @:noCompletion
-    private function getAllComponents():Array<Component> {
-        var arr = [];
-        var i = childrens.length;
-        while (i-- != 0) {
-            if (untyped childrens[i].isContainer)
-                arr = arr.concat(untyped childrens[i].getAllComponents());
-            else
-                arr.push(childrens[i]);
-        }
-        return arr;
-    }
 
     /**
      * Передвинуть дочерний элемент.

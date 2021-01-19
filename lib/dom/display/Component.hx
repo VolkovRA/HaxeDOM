@@ -58,6 +58,20 @@ class Component
     public var componentID(default, null):Int = ++autoID;
 
     /**
+     * Это контейнер!  
+     * Используется для быстрой проверки типа в рантайме.  
+     * Истина, если это экземпляр: `Container`
+     */
+    public var isContainer(default, null):Bool = false;
+
+    /**
+     * Это корневой узел.  
+     * Используется для быстрой проверки типа в рантайме.
+     * Истина, если это экземпляр: `Stage`
+     */
+    public var isStage(default, null):Bool = false;
+
+    /**
      * Корневой узел этого компонента.  
      * Используется для представления этого компонента в DOM.
      * - Может содержать произвольное количество дочерних узлов,
@@ -262,16 +276,18 @@ class Component
         if (parent == value)
             return;
 
+        // Этот метод может быть вызван для контейнера.
         // Удаление из родителя:
         if (value == null) {
             var e1 = parent != null;
             var e2 = stage != null;
+            var tree = getTree(this, []);
 
             parent = null;
-            stage = null;
+            treeStage(tree, null);
 
             if (e1) evRemoved.emit(this);
-            if (e2) evRemovedFromStage.emit(this);
+            if (e2) treeRemovedFromStage(tree);
 
             return;
         }
@@ -281,23 +297,83 @@ class Component
 
         if (parent == null) {
             // Добавление в родителя:
+            var e2 = value.stage!=null;
+            var tree = getTree(this, []);
+
             parent = value;
-            stage = value.stage;
+            treeStage(tree, value.stage);
 
             evAdded.emit(this);
-            evAddedToStage.emit(this);
+            if (e2) treeAddedToStage(tree);
         }
         else {
             // Смена родителя:
             var e1 = stage!=null&&value.stage==null;
             var e2 = stage==null&&value.stage!=null;
+            var tree = getTree(this, []);
+
             parent = value;
-            stage = value.stage;
+            treeStage(tree, value.stage);
 
             evRemoved.emit(this);
             evAdded.emit(this);
-            if (e1) evRemovedFromStage.emit(this);
-            if (e2) evAddedToStage.emit(this);
+            if (e1) treeRemovedFromStage(tree);
+            if (e2) treeAddedToStage(tree);
+        }
+    }
+
+    /**
+     * Получить список всех детей узла и его самого.  
+     * Собирает в массив все дочерние узлы указанного
+     * элемента.
+     * @param child Искомый узел.
+     * @param to Массив для вывода результата.
+     */
+    static private function getTree(child:Component, to:Array<Component>):Array<Component> {
+        to.push(child);
+        if (child.isContainer) {
+            var len = untyped child.childrens.length;
+            var i = 0;
+            while (i < len)
+                getTree(untyped child.childrens[i++], to);
+        }
+        return to;
+    }
+
+    /**
+     * Установить свойство stage указанному дереву.
+     * @param arr Дерево.
+     * @param stage Стейдж.
+     */
+    static private function treeStage(arr:Array<Component>, stage:Stage):Void {
+        var i = arr.length;
+        while (i-- != 0)
+            arr[i].stage = stage;
+    }
+
+    /**
+     * Вызвать событие добавления на стейдж у всех элементов дерева.
+     * @param arr Дерево элементов.
+     */
+    static private function treeAddedToStage(arr:Array<Component>):Void {
+        var l = arr.length;
+        var i = 0;
+        while (i < l) {
+            arr[i].evAddedToStage.emit(arr[i]);
+            i ++;
+        }
+    }
+
+    /**
+     * Вызвать событие удаления со стейджа у всех элементов дерева.
+     * @param arr Дерево элементов.
+     */
+    static private function treeRemovedFromStage(arr:Array<Component>):Void {
+        var l = arr.length;
+        var i = 0;
+        while (i < l) {
+            arr[i].evRemovedFromStage.emit(arr[i]);
+            i ++;
         }
     }
 }
