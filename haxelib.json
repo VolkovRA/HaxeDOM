@@ -4,7 +4,7 @@
     "license": "MIT",
     "tags": ["dom", "ui", "gui", "web", "html", "html5", "onAddedToStage"],
     "description": "Небольшой фреймворк для работы с DOM API",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "releasenote": "Release",
     "contributors": ["VolkovRA"],
     "classPath": "lib",
