@@ -1,6 +1,5 @@
 package dom.display;
 
-import dom.utils.NativeJS;
 import js.lib.Error;
 import js.html.Element;
 
@@ -106,7 +105,7 @@ class Container extends Component
             // Новый элемент:
             if (index < numChildren) {
                 // Вставка в произвольное место:
-                NativeJS.arrInsert(childrens, index, child);
+                childrens.insert(index, child);
                 var i = ++numChildren;
                 while (i-- > index) childrens[i].parentIndex = i; // Обновление индексов для актуализации.
                 node.insertBefore(child.node, childrens[index+1].node);
@@ -147,7 +146,7 @@ class Container extends Component
             return null;
 
         var child = childrens[index];
-        NativeJS.arrRemove(childrens, index);
+        childrens.splice(index, 1);
         var i = --numChildren;
         while (i-- > index) childrens[i].parentIndex = i; // Обновление индексов для актуализации.
         if (child.node.parentNode == node)

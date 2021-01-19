@@ -1,10 +1,10 @@
 package dom.control;
 
-import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
 import js.Browser;
 import js.html.Element;
 import js.html.PointerEvent;
+import tools.Dispatcher;
+import tools.NativeJS;
 
 /**
  * Контроллер перетаскивания.  

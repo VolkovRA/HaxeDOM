@@ -3,6 +3,7 @@ package dom.utils;
 import js.Browser;
 import js.Syntax;
 import js.html.PointerEvent;
+import tools.NativeJS;
 
 /**
  * Утилиты для отложенных вызовов.  

@@ -1,7 +1,7 @@
 package dom.control;
 
 import haxe.DynamicAccess;
-import dom.utils.NativeJS;
+import tools.NativeJS;
 
 /**
  * Контроллер якорей. (Точки привязки)  

@@ -2,12 +2,12 @@ package dom.ui;
 
 import dom.enums.CSSClass;
 import dom.enums.InputType;
-import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.html.Event;
 import js.html.Element;
 import js.html.InputElement;
+import tools.Dispatcher;
 
 /**
  * Радио-кнопка.  
@@ -111,7 +111,7 @@ class RadioButton extends UIInputComponent
         if (nodeLabel != null)                  arr.push(nodeLabel);
         if (required && nodeRequire != null)    arr.push(nodeRequire);
         if (incorrect && nodeError != null)     arr.push(nodeError);
-        NativeJS.set(node, arr);
+        DOM.set(node, arr);
     }
 
     /**

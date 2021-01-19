@@ -1,8 +1,8 @@
 package dom.display;
 
-import dom.utils.Dispatcher;
 import js.Browser;
 import js.lib.Error;
+import tools.Dispatcher;
 
 /**
  * Простая картинка.  

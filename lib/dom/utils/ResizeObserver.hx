@@ -3,6 +3,7 @@ package dom.utils;
 import js.Browser;
 import js.Syntax;
 import js.html.Element;
+import tools.NativeJS;
 
 /**
  * Класс для наблюдения за изменением размеров DOM элементов.  
@@ -71,9 +72,9 @@ class ResizeObserver
             return;
 
         // Индексация элемента чтоб быстро искать:
-        var id = NativeJS.getNodeID(element);
+        var id = DOM.getNodeID(element);
         if (id == null)
-            id = NativeJS.getNodeID(NativeJS.setNodeID(element));
+            id = DOM.getNodeID(DOM.setNodeID(element));
 
         // Запись отслеживаемого объекта:
         var p:ResizeObserverItem = map[id];
@@ -127,7 +128,7 @@ class ResizeObserver
             return false;
 
         // Индекс элемента:
-        var id = NativeJS.getNodeID(element);
+        var id = DOM.getNodeID(element);
         if (id == null)
             return false;
 

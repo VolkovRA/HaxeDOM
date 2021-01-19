@@ -2,13 +2,13 @@ package dom.ui;
 
 import dom.enums.CSSClass;
 import dom.enums.InputType;
-import dom.utils.Dispatcher;
-import dom.utils.NativeJS;
+import dom.utils.DOM;
 import js.Browser;
 import js.html.Event;
 import js.html.Element;
 import js.html.InputEvent;
 import js.html.InputElement;
+import tools.Dispatcher;
 
 /**
  * Поле для ввода однострочного текста.  
@@ -26,7 +26,7 @@ class InputText extends UIInputComponent
         super(Browser.document.createLabelElement());
         this.node.classList.add(CSSClass.INPUT_TEXT);
 
-        this.nodeInput = NativeJS.setNodeID(Browser.document.createInputElement());
+        this.nodeInput = DOM.setNodeID(Browser.document.createInputElement());
         this.nodeInput.type = InputType.TEXT;
         this.nodeInput.addEventListener("input", onInput);
         this.nodeInput.addEventListener("change", onChange);
@@ -146,7 +146,7 @@ class InputText extends UIInputComponent
                                                 arr.push(nodeInput);
         if (required && nodeRequire != null)    arr.push(nodeRequire);
         if (incorrect && nodeError != null)     arr.push(nodeError);
-        NativeJS.set(node, arr);
+        DOM.set(node, arr);
     }
 
     override function set_disabled(value:Bool):Bool {

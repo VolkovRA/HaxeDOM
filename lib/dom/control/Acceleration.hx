@@ -1,7 +1,7 @@
 package dom.control;
 
 import dom.geom.Vec;
-import dom.utils.NativeJS;
+import tools.NativeJS;
 
 /**
  * Контроллер для расчёта ускорения.  
@@ -93,7 +93,7 @@ class Acceleration
     public function add(x:Float, y:Float):Void {
         if (disabled)
             return;
-        arr[len++] = { x:x, y:y, t:NativeJS.stamp() };
+        arr[len++] = { x:x, y:y, t:NativeJS.now() };
     }
 
     /**
@@ -117,7 +117,7 @@ class Acceleration
         if (len == 0)
             return vec;
 
-        var t = NativeJS.stamp() - delay;
+        var t = NativeJS.now() - delay;
         var p = arr[--len];
         var dx = p.x;
         var dy = p.y;

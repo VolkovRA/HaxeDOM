@@ -12,10 +12,10 @@ import dom.geom.Rect;
 import dom.geom.Vec;
 import dom.ticker.IAnimated;
 import dom.ticker.Ticker;
-import dom.utils.NativeJS;
 import dom.utils.ResizeObserver;
 import js.Browser;
 import js.html.Element;
+import tools.NativeJS;
 
 /**
  * Скроллер.  

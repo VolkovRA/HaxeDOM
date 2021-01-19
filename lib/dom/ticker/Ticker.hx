@@ -1,7 +1,7 @@
 package dom.ticker;
 
-import dom.utils.NativeJS;
 import js.Browser;
+import tools.NativeJS;
 
 /**
  * Тикер для анимаций.  
@@ -88,7 +88,7 @@ class Ticker
         items[len] = object;
 
         if (animationID == 0) {
-            stamp = NativeJS.stamp();
+            stamp = NativeJS.now();
             animationID = Browser.window.requestAnimationFrame(update);
         }
     }
@@ -114,7 +114,7 @@ class Ticker
      */
     private function update(time:Float):Void {
         var next = false;
-        var now = NativeJS.stamp();
+        var now = NativeJS.now();
         var dt = ((now - stamp) * speed) / 1000;
         if (dt > dtMax) dt = dtMax;
         if (dt < dtMin) dt = dtMin;

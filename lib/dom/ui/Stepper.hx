@@ -3,9 +3,8 @@ package dom.ui;
 import dom.enums.CSSClass;
 import dom.enums.InputType;
 import dom.utils.Cross;
-import dom.utils.Dispatcher;
+import dom.utils.DOM;
 import dom.utils.LongCall;
-import dom.utils.NativeJS;
 import js.Browser;
 import js.html.ButtonElement;
 import js.html.Element;
@@ -13,6 +12,8 @@ import js.html.Event;
 import js.html.InputElement;
 import js.html.InputEvent;
 import js.html.PointerEvent;
+import tools.Dispatcher;
+import tools.NativeJS;
 
 /**
  * Обычная кнопка.  
@@ -175,7 +176,7 @@ class Stepper extends UIInputComponent
         if (nodeLabel != null)                  arr.push(nodeLabel);
         if (required && nodeRequire != null)    arr.push(nodeRequire);
         if (incorrect && nodeError != null)     arr.push(nodeError);
-        NativeJS.set(node, arr);
+        DOM.set(node, arr);
     }
 
     /**
