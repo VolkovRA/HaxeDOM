@@ -29,6 +29,7 @@ class Stage extends Container
 
         this.evResize = new Dispatcher();
         this.stage = this;
+        this.isStage = true;
 
         // Событие ресайзинга:
         ResizeObserver.on(node, function(element) {
@@ -36,13 +37,7 @@ class Stage extends Container
         });
     }
 
-    /**
-     * Это корневой узел.  
-     * Используется для быстрой проверки типа в рантайме.
-     */
-    @:keep
-    @:noCompletion
-    public var isStage(default, null):Bool = true;
+
 
     /**
      * Событие ресайза сцены.  
