@@ -280,12 +280,11 @@ class Component
 
         if (parent == null) {
             // Добавление в родителя:
-            var e1 = stage != value.stage;
             parent = value;
             stage = value.stage;
 
             evAdded.emit(this);
-            if (e1) evAddedToStage.emit(this);
+            evAddedToStage.emit(this);
         }
         else {
             // Смена родителя:
