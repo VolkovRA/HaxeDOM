@@ -8,7 +8,7 @@ package dom.enums;
  * Тут их можно посмотреть или изменить, если нужно.
  */
 @:dce
-enum abstract CSSClass(String) to String from String
+enum abstract Style(String) to String from String
 {
     ///////////////////////
     //   UI КОМПОНЕНТЫ   //
@@ -68,11 +68,29 @@ enum abstract CSSClass(String) to String from String
      */
     var SCROLLER = "scroller";
 
+    /**
+     * Меню с закладками.  
+     * Используется в: `dom.ui.MenuTabs`
+     */
+    var MENU_TABS = "menu_tabs";
+
 
 
     ///////////////////
     //   СОСТОЯНИЯ   //
     ///////////////////
+
+    /**
+     * Активный элемент.  
+     * Используется для обозначения активного элемента.
+     */
+    var ACTIVE = "active";
+
+    /**
+     * Выбранный элемент.  
+     * Используется для обозначения выбранного элемента.
+     */
+    var SELECTED = "selected";
 
     /**
      * Обязательный элемент.  
@@ -164,7 +182,7 @@ enum abstract CSSClass(String) to String from String
 
     /**
      * Кнопка ползунка.  
-     * Используется в скроллбарах.
+     * Используется в скроллбарах и меню.
      */
     var THUMB = "thumb";
 

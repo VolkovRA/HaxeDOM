@@ -1,7 +1,7 @@
 package dom.ui;
 
 import dom.display.Component;
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.enums.Orientation;
 import dom.utils.DOM;
 import js.Browser;
@@ -24,11 +24,11 @@ class Scrollbar extends Component
      */
     public function new(?node:Element) {
         super(node);
-        this.node.classList.add(CSSClass.SCROLLBAR, CSSClass.HORIZONTAL);
+        this.node.classList.add(Style.SCROLLBAR, Style.HORIZONTAL);
         this.node.addEventListener("pointerdown", onBDown);
 
         this.nodeThumb = Browser.document.createButtonElement();
-        this.nodeThumb.classList.add(CSSClass.THUMB);
+        this.nodeThumb.classList.add(Style.THUMB);
         this.nodeThumb.addEventListener("pointerdown", onTDown);
 
         this.evRemovedFromStage.on(onTRemoved);
@@ -175,13 +175,13 @@ class Scrollbar extends Component
 
         if (value == Orientation.HORIZONTAL) {
             orient = value;
-            node.classList.remove(CSSClass.VERTICAL);
-            node.classList.add(CSSClass.HORIZONTAL);
+            node.classList.remove(Style.VERTICAL);
+            node.classList.add(Style.HORIZONTAL);
         }
         else {
             orient = value;
-            node.classList.remove(CSSClass.HORIZONTAL);
-            node.classList.add(CSSClass.VERTICAL);
+            node.classList.remove(Style.HORIZONTAL);
+            node.classList.add(Style.VERTICAL);
         }
 
         nodeThumb.style.width = null;

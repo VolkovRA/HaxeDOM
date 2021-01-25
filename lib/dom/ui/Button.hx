@@ -1,6 +1,6 @@
 package dom.ui;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import js.Browser;
 import js.html.Element;
 import js.html.MouseEvent;
@@ -21,7 +21,7 @@ class Button extends UIComponent
      */
     public function new(?label:String, ?node:Element) {
         super(node==null?Browser.document.createButtonElement():node);
-        this.node.classList.add(CSSClass.BUTTON);
+        this.node.classList.add(Style.BUTTON);
         this.node.addEventListener("click", onClick);
 
         if (label != null)

@@ -1,6 +1,6 @@
 package dom.ui;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.enums.InputType;
 import dom.utils.DOM;
 import js.Browser;
@@ -28,7 +28,7 @@ class CheckBox extends UIInputComponent
      */
     public function new(?label:String, ?node:Element) {
         super(node==null?Browser.document.createLabelElement():node);
-        this.node.classList.add(CSSClass.CHECKBOX);
+        this.node.classList.add(Style.CHECKBOX);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.CHECKBOX;

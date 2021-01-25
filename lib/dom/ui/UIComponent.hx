@@ -1,7 +1,7 @@
 package dom.ui;
 
 import dom.display.Component;
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.Element;
@@ -66,7 +66,7 @@ class UIComponent extends Component
         else {
             if (nodeLabel == null) {
                 nodeLabel = Browser.document.createSpanElement();
-                nodeLabel.classList.add(CSSClass.LABEL);
+                nodeLabel.classList.add(Style.LABEL);
             }
             nodeLabel.textContent = value;
         }

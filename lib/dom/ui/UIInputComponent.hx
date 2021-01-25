@@ -1,6 +1,6 @@
 package dom.ui;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.Element;
@@ -51,7 +51,7 @@ class UIInputComponent extends UIComponent
         else {
             if (nodeError == null) {
                 nodeError = Browser.document.createSpanElement();
-                nodeError.classList.add(CSSClass.ERROR);
+                nodeError.classList.add(Style.ERROR);
             }
             nodeError.textContent = value;
         }
@@ -82,7 +82,7 @@ class UIInputComponent extends UIComponent
         else {
             if (nodeRequire == null) {
                 nodeRequire = Browser.document.createSpanElement();
-                nodeRequire.classList.add(CSSClass.REQUIRE);
+                nodeRequire.classList.add(Style.REQUIRE);
             }
             nodeRequire.textContent = value;
         }
@@ -103,9 +103,9 @@ class UIInputComponent extends UIComponent
             return value;
         required = value;
         if (value)
-            node.classList.add(CSSClass.REQUIRED);
+            node.classList.add(Style.REQUIRED);
         else
-            node.classList.remove(CSSClass.REQUIRED);
+            node.classList.remove(Style.REQUIRED);
         updateDOM();
         return value;
     }
@@ -129,9 +129,9 @@ class UIInputComponent extends UIComponent
             return value;
         incorrect = value;
         if (value)
-            node.classList.add(CSSClass.INCORRECT);
+            node.classList.add(Style.INCORRECT);
         else
-            node.classList.remove(CSSClass.INCORRECT);
+            node.classList.remove(Style.INCORRECT);
         updateDOM();
         return value;
     }

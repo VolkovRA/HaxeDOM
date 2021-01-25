@@ -1,6 +1,6 @@
 package dom.ui;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.enums.InputType;
 import dom.utils.Cross;
 import dom.utils.DOM;
@@ -30,7 +30,7 @@ class Stepper extends UIInputComponent
      */
     public function new(?node:Element) {
         super(node);
-        this.node.classList.add(CSSClass.STEPPER);
+        this.node.classList.add(Style.STEPPER);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.NUMBER;
@@ -38,12 +38,12 @@ class Stepper extends UIInputComponent
         this.nodeInput.addEventListener("change", onChange);
 
         this.nodeDecrement = Browser.document.createButtonElement();
-        this.nodeDecrement.classList.add(CSSClass.DECREMENT);
+        this.nodeDecrement.classList.add(Style.DECREMENT);
         this.nodeDecrement.addEventListener("pointerdown", onDecDown);
         this.nodeDecrement.textContent = "-";
 
         this.nodeIncrement = Browser.document.createButtonElement();
-        this.nodeIncrement.classList.add(CSSClass.INCREMENT);
+        this.nodeIncrement.classList.add(Style.INCREMENT);
         this.nodeIncrement.addEventListener("pointerdown", onIncDown);
         this.nodeIncrement.textContent = "+";
 
