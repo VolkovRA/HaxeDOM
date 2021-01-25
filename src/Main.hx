@@ -15,6 +15,7 @@ import dom.ui.RadioButton;
 import dom.ui.Scrollbar;
 import dom.ui.Scroller;
 import dom.ui.Stepper;
+import dom.ui.MenuTabs;
 import js.Browser;
 
 class Main
@@ -113,6 +114,17 @@ class Main
         drg.maxX = 300;
         drg.outTop = 100;
         drg.outRight = 100;
+
+        // Меню с вкладками:
+        var mt = new MenuTabs([
+            { label: "Раздел", selected: true},
+            { label: "Средний раздел" },
+            { label: "Очень длинный раздел" },
+        ]);
+        mt.evChange.on(function(item:Dynamic){
+            trace(item);
+        });
+        stage.addChild(mt);
     }
 
     static private function addBoxex(container:Container, num:Int):Void {

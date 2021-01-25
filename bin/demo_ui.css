@@ -127,3 +127,24 @@ button {
     height: calc(100% - 14px);
     min-height: 0%;
 }
+
+/* Меню с вкладками */
+.menu_tabs {
+    position: relative;
+    display: flex;
+    padding: 0;
+    list-style-type: none;
+}
+.menu_tabs>li {
+    margin: 5px 10px;
+    cursor: pointer;
+    user-select: none;
+}
+.menu_tabs>.thumb {
+    position: absolute;
+    bottom: 0px;
+    height: 2px;
+    background-color: black;
+    transition: all 0.2s ease-in-out;
+    transition-property: left, width;
+}
