@@ -12,7 +12,8 @@ class Static extends Component
     /**
      * Создать новый экземпляр.
      * @param content HTML Контент.
-     * @param node HTML DOM Элемент, представляющий этот объект. *(По умолчанию: `<div>`)*
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
     public function new(?content:String, ?node:Element) {
         super(node);

@@ -2,6 +2,7 @@ package dom.ui;
 
 import dom.enums.CSSClass;
 import js.Browser;
+import js.html.Element;
 import js.html.MouseEvent;
 import tools.Dispatcher;
 
@@ -15,9 +16,11 @@ class Button extends UIComponent
     /**
      * Создать новый экземпляр.
      * @param label Текст на кнопке.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<button>`
      */
-    public function new(?label:String) {
-        super(Browser.document.createButtonElement());
+    public function new(?label:String, ?node:Element) {
+        super(node==null?Browser.document.createButtonElement():node);
         this.node.classList.add(CSSClass.BUTTON);
         this.node.addEventListener("click", onClick);
 

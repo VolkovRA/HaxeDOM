@@ -6,6 +6,7 @@ import dom.enums.Orientation;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.ButtonElement;
+import js.html.Element;
 import js.html.PointerEvent;
 import tools.Dispatcher;
 
@@ -18,10 +19,11 @@ class Scrollbar extends Component
 {
     /**
      * Создать новый экземпляр.
-     * @param label Текст на кнопке.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new() {
-        super(Browser.document.createDivElement());
+    public function new(?node:Element) {
+        super(node);
         this.node.classList.add(CSSClass.SCROLLBAR, CSSClass.HORIZONTAL);
         this.node.addEventListener("pointerdown", onBDown);
 
