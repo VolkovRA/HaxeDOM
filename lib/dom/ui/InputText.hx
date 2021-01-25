@@ -21,9 +21,11 @@ class InputText extends UIInputComponent
     /**
      * Создать новый экземпляр.
      * @param value Введённый текст.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<label>`
      */
-    public function new(?value:String) {
-        super(Browser.document.createLabelElement());
+    public function new(?value:String, ?node:Element) {
+        super(node==null?Browser.document.createLabelElement():node);
         this.node.classList.add(CSSClass.INPUT_TEXT);
 
         this.nodeInput = DOM.setNodeID(Browser.document.createInputElement());

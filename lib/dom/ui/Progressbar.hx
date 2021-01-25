@@ -5,6 +5,7 @@ import dom.enums.CSSClass;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.DivElement;
+import js.html.Element;
 import js.lib.Error;
 
 /**
@@ -16,9 +17,11 @@ class Progressbar extends Component
     /**
      * Создать новый экземпляр.  
      * @param value Отображаемое значение. *(По умолчанию: `0`, от `0` до `100`)*
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(?value:Float) {
-        super(Browser.document.createDivElement());
+    public function new(?value:Float, ?node:Element) {
+        super(node);
         this.node.classList.add(CSSClass.PROGRESSBAR);
 
         this.nodeProgress = Browser.document.createDivElement();

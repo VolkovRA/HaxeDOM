@@ -21,9 +21,10 @@ class UIInputComponent extends UIComponent
 {
     /**
      * Создать новый экземпляр.
-     * @param node Используемый DOM узел для этого экземпляра.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(node:Element) {
+    public function new(?node:Element) {
         super(node);
     }
 

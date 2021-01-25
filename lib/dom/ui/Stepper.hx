@@ -25,9 +25,11 @@ class Stepper extends UIInputComponent
     /**
      * Создать новый экземпляр.
      * @param label Текст на кнопке.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new() {
-        super(Browser.document.createDivElement());
+    public function new(?node:Element) {
+        super(node);
         this.node.classList.add(CSSClass.STEPPER);
 
         this.nodeInput = Browser.document.createInputElement();

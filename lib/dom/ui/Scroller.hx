@@ -31,9 +31,11 @@ class Scroller extends Container implements IAnimated
     /**
      * Создать новый экземпляр.
      * @param content Контейнер с содержимым.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<div>`
      */
-    public function new(?content:Container) {
-        super(Browser.document.createDivElement());
+    public function new(?content:Container, ?node:Element) {
+        super(node);
         this.node.classList.add(CSSClass.SCROLLER);
 
         // Контент:

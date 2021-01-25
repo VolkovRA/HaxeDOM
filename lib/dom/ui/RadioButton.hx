@@ -23,9 +23,11 @@ class RadioButton extends UIInputComponent
     /**
      * Создать новый экземпляр.
      * @param label Отображаемый текст.
+     * @param node DOM Элемент, представляющий этот компонент.
+     *             Если не указан, будет создан новый: `<label>`
      */
-    public function new(?label:String) {
-        super(Browser.document.createLabelElement());
+    public function new(?label:String, ?node:Element) {
+        super(node==null?Browser.document.createLabelElement():node);
         this.node.classList.add(CSSClass.RADIO);
 
         this.nodeInput = Browser.document.createInputElement();
