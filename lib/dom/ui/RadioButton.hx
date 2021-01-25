@@ -1,6 +1,6 @@
 package dom.ui;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.enums.InputType;
 import dom.utils.DOM;
 import js.Browser;
@@ -28,7 +28,7 @@ class RadioButton extends UIInputComponent
      */
     public function new(?label:String, ?node:Element) {
         super(node==null?Browser.document.createLabelElement():node);
-        this.node.classList.add(CSSClass.RADIO);
+        this.node.classList.add(Style.RADIO);
 
         this.nodeInput = Browser.document.createInputElement();
         this.nodeInput.type = InputType.RADIO;

@@ -1,6 +1,6 @@
 package dom.display;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.geom.Rect;
 import dom.theme.Theme;
 import dom.utils.DOM;
@@ -136,11 +136,11 @@ class Component
     function set_disabled(value:Bool):Bool {
         if (value) {
             untyped node.disabled = true;
-            node.classList.add(CSSClass.DISABLED);
+            node.classList.add(Style.DISABLED);
         }
         else {
             untyped node.disabled = false;
-            node.classList.remove(CSSClass.DISABLED);
+            node.classList.remove(Style.DISABLED);
         }
         return value;
     }

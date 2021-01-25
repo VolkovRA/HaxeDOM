@@ -1,7 +1,7 @@
 package dom.ui;
 
 import dom.display.Component;
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.DivElement;
@@ -22,10 +22,10 @@ class Progressbar extends Component
      */
     public function new(?value:Float, ?node:Element) {
         super(node);
-        this.node.classList.add(CSSClass.PROGRESSBAR);
+        this.node.classList.add(Style.PROGRESSBAR);
 
         this.nodeProgress = Browser.document.createDivElement();
-        this.nodeProgress.classList.add(CSSClass.FILL);
+        this.nodeProgress.classList.add(Style.FILL);
 
         if (value == null)
             this.value = 0;

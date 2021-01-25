@@ -5,7 +5,7 @@ import dom.control.AnchorRuler;
 import dom.control.DragAndDrop;
 import dom.display.Component;
 import dom.display.Container;
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.enums.Orientation;
 import dom.enums.Overflow;
 import dom.geom.Rect;
@@ -36,13 +36,13 @@ class Scroller extends Container implements IAnimated
      */
     public function new(?content:Container, ?node:Element) {
         super(node);
-        this.node.classList.add(CSSClass.SCROLLER);
+        this.node.classList.add(Style.SCROLLER);
 
         // Контент:
         if (content == null)
             content = new Container(Browser.document.createDivElement());
         this.content = content;
-        this.content.node.classList.add(CSSClass.CONTENT);
+        this.content.node.classList.add(Style.CONTENT);
         addChild(content);
 
         // Перетаскивание:
@@ -334,8 +334,8 @@ class Scroller extends Container implements IAnimated
 
         // Показываем или скрываем скроллбары:
         if (sy) {
-            if (!node.classList.contains(CSSClass.VERTICAL))
-                node.classList.add(CSSClass.VERTICAL);
+            if (!node.classList.contains(Style.VERTICAL))
+                node.classList.add(Style.VERTICAL);
             if (scrollV.parent == null)
                 addChildAt(scrollV, 1);
             scrollV.min = 0;
@@ -343,14 +343,14 @@ class Scroller extends Container implements IAnimated
             scrollV.part = scrollV.max*(ph/sizeC.h);
         }
         else {
-            if (node.classList.contains(CSSClass.VERTICAL))
-                node.classList.remove(CSSClass.VERTICAL);
+            if (node.classList.contains(Style.VERTICAL))
+                node.classList.remove(Style.VERTICAL);
             if (scrollV.parent == this)
                 removeChild(scrollV);
         }
         if (sx) {
-            if (!node.classList.contains(CSSClass.HORIZONTAL))
-                node.classList.add(CSSClass.HORIZONTAL);
+            if (!node.classList.contains(Style.HORIZONTAL))
+                node.classList.add(Style.HORIZONTAL);
             if (scrollH.parent == null)
                 addChildAt(scrollH, sy?1:2); // Чтоб всегда шли в одном порядке в DOM
             scrollH.min = 0;
@@ -358,8 +358,8 @@ class Scroller extends Container implements IAnimated
             scrollH.part = scrollH.max*(pw/sizeC.w);
         }
         else {
-            if (node.classList.contains(CSSClass.HORIZONTAL))
-                node.classList.remove(CSSClass.HORIZONTAL);
+            if (node.classList.contains(Style.HORIZONTAL))
+                node.classList.remove(Style.HORIZONTAL);
             if (scrollH.parent == this)
                 removeChild(scrollH);
         }

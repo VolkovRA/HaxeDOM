@@ -1,6 +1,6 @@
 package dom.ui;
 
-import dom.enums.CSSClass;
+import dom.enums.Style;
 import dom.enums.InputType;
 import dom.utils.DOM;
 import js.Browser;
@@ -26,7 +26,7 @@ class InputText extends UIInputComponent
      */
     public function new(?value:String, ?node:Element) {
         super(node==null?Browser.document.createLabelElement():node);
-        this.node.classList.add(CSSClass.INPUT_TEXT);
+        this.node.classList.add(Style.INPUT_TEXT);
 
         this.nodeInput = DOM.setNodeID(Browser.document.createInputElement());
         this.nodeInput.type = InputType.TEXT;

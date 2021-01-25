@@ -8,7 +8,7 @@ package dom.enums;
  * Тут их можно посмотреть или изменить, если нужно.
  */
 @:dce
-enum abstract CSSClass(String) to String from String
+enum abstract Style(String) to String from String
 {
     ///////////////////////
     //   UI КОМПОНЕНТЫ   //
@@ -67,6 +67,12 @@ enum abstract CSSClass(String) to String from String
      * Используется в: `dom.ui.List.Scroller`
      */
     var SCROLLER = "scroller";
+
+    /**
+     * Меню с закладками.  
+     * Используется в: `dom.ui.MenuTabs`
+     */
+    var MENU_TABS = "menu_tabs";
 
 
 
