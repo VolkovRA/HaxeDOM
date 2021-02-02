@@ -33,6 +33,12 @@ enum abstract Style(String) to String from String
     var INPUT_TEXT = "input_text";
 
     /**
+     * Поле ввода многострочного текста.  
+     * Используется для обозначения экземпляра: `dom.ui.Textarea`
+     */
+    var TEXTAREA = "textarea";
+
+    /**
      * Радио-кнопка.  
      * Используется для обозначения экземпляра: `dom.ui.RadioButton`
      */
