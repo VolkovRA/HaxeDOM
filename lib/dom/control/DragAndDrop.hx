@@ -343,7 +343,6 @@ class DragAndDrop
     private function onDown(e:PointerEvent):Void {
         if (disabled)
             return;
-        e.preventDefault();
         e.stopImmediatePropagation();
 
         Browser.window.addEventListener("pointermove", onMove);
