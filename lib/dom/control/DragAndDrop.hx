@@ -243,12 +243,19 @@ class DragAndDrop
     function set_target(value:Element):Element {
         if (value == target)
             return value;
+
         stop();
-        if (target != null)
+
+        if (target != null) {
+            target.removeEventListener("pointerdown", onDown);
             target = null;
-        target = value;
-        if (value != null)
+        }
+
+        if (value != null) {
             value.addEventListener("pointerdown", onDown);
+            target = value;
+        }
+
         return value;
     }
 
@@ -327,7 +334,6 @@ class DragAndDrop
         if (target == null)
             return;
 
-        target.removeEventListener("pointerdown", onDown);
         Browser.window.removeEventListener("pointermove", onMove);
         Browser.window.removeEventListener("pointerup", onUp);
         Browser.window.removeEventListener("pointercancel", onCancel);
@@ -343,7 +349,6 @@ class DragAndDrop
     private function onDown(e:PointerEvent):Void {
         if (disabled)
             return;
-        e.preventDefault();
         e.stopImmediatePropagation();
 
         Browser.window.addEventListener("pointermove", onMove);
