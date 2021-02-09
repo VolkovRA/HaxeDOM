@@ -146,6 +146,74 @@ class Component
     }
 
     /**
+     * Отображение компонента.  
+     * Это свойство управляет CSS свойством: `display: none`,
+     * для удобного показа/сокрытия элемента на странице, не
+     * удаляя его из DOM.
+     * 
+     * Возможные значения:
+     * - Если: `false`, DOM элементу устанавливается: `display: none`
+     * - Если: `true`, у DOM элемента очищается CSS свойство: `display`
+     * 
+     * *п.с. Разница между свойствами: **display** и **visible** состоит
+     * в том, что в первом случае компонент удаляется из
+     * потока визуализации DOM. Во втором случае, скрытый элемент по
+     * прежнему занимает место на странице.*
+     * 
+     * По умолчанию: `true` *(Отображается)*
+     */
+    public var display(default, set):Bool = true;
+    function set_display(value:Bool):Bool {
+        if (value == display)
+            return value;
+
+        if (value) {
+            display = true;
+            node.style.display = null;
+        }
+        else {
+            display = false;
+            node.style.display = "none";
+        }
+
+        return value;
+    }
+
+    /**
+     * Визуализация компонента.  
+     * Это свойство управляет CSS свойством: `visibility: hidden`,
+     * для удобного показа/сокрытия элемента на странице, не
+     * удаляя его из DOM.
+     * 
+     * Возможные значения:
+     * - Если: `false`, DOM элементу устанавливается: `visibility: hidden`
+     * - Если: `true`, у DOM элемента очищается CSS свойство: `visibility`
+     * 
+     * *п.с. Разница между свойствами: **display** и **visible** состоит
+     * в том, что в первом случае компонент удаляется из
+     * потока визуализации DOM. Во втором случае, скрытый элемент по
+     * прежнему занимает место на странице.*
+     * 
+     * По умолчанию: `true` *(Отображается)*
+     */
+    public var visible(default, set):Bool = true;
+    function set_visible(value:Bool):Bool {
+        if (value == visible)
+            return value;
+
+        if (value) {
+            visible = true;
+            node.style.visibility = null;
+        }
+        else {
+            visible = false;
+            node.style.visibility = "hidden";
+        }
+
+        return value;
+    }
+
+    /**
      * Имя компонента.  
      * Вы можете задать произвольное имя вашему компоненту.
      * Больше никак не используется.
