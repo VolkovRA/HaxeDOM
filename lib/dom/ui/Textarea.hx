@@ -41,10 +41,10 @@ class Textarea extends UIInputComponent
      */
     public var value(get, set):String;
     inline function get_value():String {
-        return nodeInput.textContent;
+        return nodeInput.value;
     }
     inline function set_value(value:String):String {
-        nodeInput.textContent = value;
+        nodeInput.value = value;
         return value;
     }
 
