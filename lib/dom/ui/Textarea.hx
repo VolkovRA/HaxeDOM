@@ -2,9 +2,9 @@ package dom.ui;
 
 import dom.enums.Style;
 import dom.utils.DOM;
+import dom.ui.base.InputUI;
 import js.Browser;
 import js.html.Event;
-import js.html.Element;
 import js.html.TextAreaElement;
 import js.html.InputEvent;
 import tools.Dispatcher;
@@ -15,7 +15,7 @@ import tools.Dispatcher;
  * @see Документация: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea
  */
 @:dce
-class Textarea extends UIInputComponent
+class Textarea extends InputUI
 {
     /**
      * Создать новый экземпляр.
@@ -81,7 +81,7 @@ class Textarea extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evChange(default, never):Dispatcher<Textarea->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Событие ввода данных.  
@@ -92,15 +92,14 @@ class Textarea extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evInput(default, never):Dispatcher<Textarea->Void> = new Dispatcher();
+    public var evInput(default, never):Dispatcher<InputEvent->Void> = new Dispatcher();
 
     /**
      * Нативное событие ввода значения.
      * @param e Событие.
      */
     private function onInput(e:InputEvent):Void {
-        if (!disabled)
-            evInput.emit(this);
+        evInput.emit(e);
     }
 
     /**
@@ -108,30 +107,52 @@ class Textarea extends UIInputComponent
      * @param e Событие.
      */
     private function onChange(e:Event):Void {
-        if (!disabled)
-            evChange.emit(this);
+        evChange.emit();
     }
 
     /**
-     * Обновить DOM этого компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    override private function updateDOM():Void {
-        var arr:Array<Element> = [];
-        if (ico != null)                        arr.push(ico);
-        if (nodeLabel != null)                  arr.push(nodeLabel);
-                                                arr.push(nodeInput);
-        if (required && nodeRequire != null)    arr.push(nodeRequire);
-        if (incorrect && nodeError != null)     arr.push(nodeError);
-        DOM.set(node, arr);
+    override public function updateDOM():Void {
+        DOM.setChilds(node, [
+            ico==null?                        null:ico,
+            nodeLabel==null?                  null:nodeLabel,
+            nodeInput,
+            (nodeRequire==null || !required)? null:nodeRequire,
+            (nodeError==null || !wrong)?      null:nodeError,
+        ]);
     }
 
     override function set_disabled(value:Bool):Bool {
-        nodeInput.disabled = value;
-        return super.set_disabled(value);
+        if (disabled == value)
+            return value;
+
+        if (value) {
+            super.disabled = true;
+            nodeInput.disabled = true;
+        }
+        else {
+            super.disabled = false;
+            nodeInput.disabled = false;
+        }
+        return value;
     }
 
     override function set_required(value:Bool):Bool {
-        nodeInput.required = value;
+        if (required == value)
+            return value;
+
+        if (value) {
+            super.required = true;
+            nodeInput.required = true;
+        }
+        else {
+            super.required = false;
+            nodeInput.required = false;
+        }
         return value;
     }
 }

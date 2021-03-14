@@ -1,9 +1,9 @@
 package dom.ui;
 
-import dom.display.Component;
 import dom.enums.Style;
 import dom.enums.Orientation;
 import dom.utils.DOM;
+import dom.ui.base.UI;
 import js.Browser;
 import js.html.ButtonElement;
 import js.html.Element;
@@ -15,7 +15,7 @@ import tools.Dispatcher;
  * В DOM представлен тегом: `<div class="scrollbar">`
  */
 @:dce
-class Scrollbar extends Component
+class Scrollbar extends UI
 {
     /**
      * Создать новый экземпляр.
@@ -212,7 +212,7 @@ class Scrollbar extends Component
      * 
      * Не может быть: `null`
      */
-    public var evChange(default, never):Dispatcher<Scrollbar->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Увеличить значение ползунка на один шаг.
@@ -254,17 +254,20 @@ class Scrollbar extends Component
     }
 
     /**
-     * Обновить DOM этого компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    private function updateDOM():Void {
-        DOM.set(node, [nodeThumb]);
+    override public function updateDOM():Void {
+        DOM.setChilds(node, [nodeThumb]);
         updateThumb();
     }
 
     /**
      * Удалениe со сцены.
      */
-    private function onTRemoved(s:Component):Void {
+    private function onTRemoved():Void {
         onUp();
     }
 
@@ -328,7 +331,7 @@ class Scrollbar extends Component
             return;
 
         value = v;
-        evChange.emit(this);
+        evChange.emit();
     }
 
     /**
@@ -383,7 +386,7 @@ class Scrollbar extends Component
             return;
 
         value = v;
-        evChange.emit(this);
+        evChange.emit();
     }
 
     /**

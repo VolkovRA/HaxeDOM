@@ -3,18 +3,19 @@ package dom.ui;
 import dom.control.Acceleration;
 import dom.control.AnchorRuler;
 import dom.control.DragAndDrop;
-import dom.display.Component;
 import dom.display.Container;
 import dom.enums.Style;
 import dom.enums.Orientation;
 import dom.enums.Overflow;
 import dom.geom.Rect;
-import dom.geom.Vec;
+import dom.geom.Vec2;
 import dom.ticker.IAnimated;
 import dom.ticker.Ticker;
 import dom.utils.ResizeObserver;
+import dom.ui.base.LabelUI;
 import js.Browser;
 import js.html.Element;
+import js.html.PointerEvent;
 import tools.NativeJS;
 
 /**
@@ -23,10 +24,16 @@ import tools.NativeJS;
  * содержимого. Может использоваться как базовый класс
  * для других компонентов с перетаскиваемым содержимым.
  * 
+ * Этот класс реализует собственное поведение для
+ * перетаскиваемого содержимого. Отличия от нативного
+ * скрола:
+ * - Более высокие задраты на рендеринг, натив быстрее.
+ * - Полная кастомизация скрола, в отличие от нативного.
+ * 
  * В DOM представлен тегом: `<div class="scroller">`
  */
 @:dce
-class Scroller extends Container implements IAnimated
+class Scroller extends LabelUI implements IAnimated
 {
     /**
      * Создать новый экземпляр.
@@ -143,7 +150,7 @@ class Scroller extends Container implements IAnimated
     /**
      * Объект для расчётов, чтоб не создавать каждый раз новый.  
      */
-    static private var VEC(default, never):Vec = new Vec();
+    static private var VEC(default, never):Vec2 = new Vec2();
 
     /**
      * Данные тикера.  
@@ -238,8 +245,8 @@ class Scroller extends Container implements IAnimated
      * 
      * Не может быть: `null`
      */
-    public var velocity(default, set):Vec = new Vec();
-    public function set_velocity(value:Vec):Vec {
+    public var velocity(default, set):Vec2 = new Vec2();
+    public function set_velocity(value:Vec2):Vec2 {
         if (value == null)
             velocity.set(0, 0);
         else
@@ -301,13 +308,12 @@ class Scroller extends Container implements IAnimated
      * Обновление.  
      * Метод вызывается каждый кадр и передаёт прошедшее
      * время для возможности создания эффекта анимации.
-     * @param dt Прошедшее время с последнего цикла обновления. (sec)
+     * @param t Прошедшее время с последнего цикла обновления. (sec)
      * @return Закончить анимацию. Передайте `true`, чтобы
      * удалить этот объект из последующих вызовов.
      */
-    public function tick(dt:Float):Bool {
+    public function tick(t:Float):Bool {
         var finish = true;
-        //trace(dt);
 
         // Обновление состояния:
         // 1. Передвинуть контент.
@@ -371,7 +377,7 @@ class Scroller extends Container implements IAnimated
 
         // Если нет времени - ничего не может произойти, даже мгновение.
         // Ждём следующий вызов.
-        if (dt == 0)
+        if (t == 0)
             return false;
 
         // Позиция контента:
@@ -383,7 +389,7 @@ class Scroller extends Container implements IAnimated
         // Торможение:
         var s = velocity.len(); // Скорость
         if (s > 0) {
-            s = s-dt*movementDemp*s;
+            s = s-t*movementDemp*s;
             if (s < movementMin)    s = movementMin;
             if (s <= movementStop)  s = 0;
             if (s > 0)              finish = false;
@@ -395,7 +401,7 @@ class Scroller extends Container implements IAnimated
             velocity.x = 0;
             var dx = x - drag.maxX;
             if (dx > 0.5) {
-                x -= dt*dragBackSpeed*dx;
+                x -= t*dragBackSpeed*dx;
                 if (x < drag.maxX)
                     x = drag.maxX;
                 else
@@ -409,7 +415,7 @@ class Scroller extends Container implements IAnimated
             velocity.x = 0;
             var dx = drag.minX - x;
             if (dx > 0.5) {
-                x += dt*dragBackSpeed*dx;
+                x += t*dragBackSpeed*dx;
                 if (x > drag.minX)
                     x = drag.minX;
                 else
@@ -420,7 +426,7 @@ class Scroller extends Container implements IAnimated
             }
         }
         else if (s > 0) {
-            var x1 = x+velocity.x*dt;
+            var x1 = x+velocity.x*t;
             if (anchorsCatchSpeed > 0 && s <= anchorsCatchSpeed) {
                 var a = anchorsX.testMove(-x, -x1);
                 if (a != null) {
@@ -447,7 +453,7 @@ class Scroller extends Container implements IAnimated
             velocity.y = 0;
             var dy = y - drag.maxY;
             if (dy > 0.5) {
-                y -= dt*dragBackSpeed*dy;
+                y -= t*dragBackSpeed*dy;
                 if (y < drag.maxY)
                     y = drag.maxY;
                 else
@@ -461,7 +467,7 @@ class Scroller extends Container implements IAnimated
             velocity.y = 0;
             var dy = drag.minY - y;
             if (dy > 0.5) {
-                y += dt*dragBackSpeed*dy;
+                y += t*dragBackSpeed*dy;
                 if (y > drag.minY)
                     y = drag.minY;
                 else
@@ -472,7 +478,7 @@ class Scroller extends Container implements IAnimated
             }
         }
         else if (s > 0) {
-            var y1 = y+velocity.y*dt;
+            var y1 = y+velocity.y*t;
             if (anchorsCatchSpeed > 0 && s <= anchorsCatchSpeed) {
                 var a = anchorsY.testMove(-y, -y1);
                 if (a != null) {
@@ -501,9 +507,9 @@ class Scroller extends Container implements IAnimated
     }
 
     /**
-     * Добавление на сцену. (evAddedToStage)
+     * Добавление на сцену.
      */
-    private function onAdded(s:Component):Void {
+    private function onAdded():Void {
         ResizeObserver.on(node, onRes);
         ResizeObserver.on(content.node, onResC);
         ResizeObserver.on(scrollV.node, onResSV);
@@ -518,9 +524,9 @@ class Scroller extends Container implements IAnimated
     }
 
     /**
-     * Удалениe со сцены. (evRemovedFromStage)
+     * Удалениe со сцены.
      */
-    private function onRemoved(s:Component):Void {
+    private function onRemoved():Void {
         drag.stop();
 
         ResizeObserver.off(node, onRes);
@@ -532,7 +538,7 @@ class Scroller extends Container implements IAnimated
     /**
      * Перетаскивание начато.
      */
-    private function onDragStart(o:DragAndDrop):Void {
+    private function onDragStart(o:PointerEvent):Void {
         acceleration.clear();
         velocity.mul(0);
     }
@@ -540,7 +546,7 @@ class Scroller extends Container implements IAnimated
     /**
      * Перетаскивание.
      */
-    private function onDragMove(o:DragAndDrop):Void {
+    private function onDragMove(o:PointerEvent):Void {
         acceleration.add(o.x, o.y);
         scrollH.value = -o.x;
         scrollV.value = -o.y;
@@ -549,14 +555,14 @@ class Scroller extends Container implements IAnimated
     /**
      * Перетаскивание брошено.
      */
-    private function onDragDrop(o:DragAndDrop):Void {
+    private function onDragDrop(o:PointerEvent):Void {
         velocity.setFrom(acceleration.get(VEC));
     }
 
     /**
      * Перетаскивание завершено.
      */
-    private function onDragStop(o:DragAndDrop):Void {
+    private function onDragStop(o:PointerEvent):Void {
         acceleration.clear();
         Ticker.global.add(this);
     }
@@ -564,16 +570,16 @@ class Scroller extends Container implements IAnimated
     /**
      * Скролл горизонтального ползунка.
      */
-    private function onScrollH(s:Scrollbar):Void {
-        content.node.style.left = -s.value + "px";
+    private function onScrollH():Void {
+        content.node.style.left = -scrollH.value + "px";
         velocity.mul(0);
     }
 
     /**
      * Скролл вертикального ползунка.
      */
-    private function onScrollV(s:Scrollbar):Void {
-        content.node.style.top = -s.value + "px";
+    private function onScrollV():Void {
+        content.node.style.top = -scrollV.value + "px";
         velocity.mul(0);
     }
 

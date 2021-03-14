@@ -2,6 +2,7 @@ package dom.ui;
 
 import dom.enums.Style;
 import dom.enums.InputType;
+import dom.ui.base.InputUI;
 import dom.utils.Cross;
 import dom.utils.DOM;
 import dom.utils.LongCall;
@@ -20,7 +21,7 @@ import tools.NativeJS;
  * В DOM представлена тегом: `<div class="stepper">`
  */
 @:dce
-class Stepper extends UIInputComponent
+class Stepper extends InputUI
 {
     /**
      * Создать новый экземпляр.
@@ -155,7 +156,7 @@ class Stepper extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evChange(default, never):Dispatcher<Stepper->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Событие ввода данных.  
@@ -167,18 +168,24 @@ class Stepper extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evInput(default, never):Dispatcher<Stepper->Void> = new Dispatcher();
+    public var evInput(default, never):Dispatcher<InputEvent->Void> = new Dispatcher();
 
     /**
-     * Обновить DOM для этого компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    override private function updateDOM():Void {
-        var arr:Array<Element> = [nodeDecrement, nodeInput, nodeIncrement];
-        if (ico != null)                        arr.push(ico);
-        if (nodeLabel != null)                  arr.push(nodeLabel);
-        if (required && nodeRequire != null)    arr.push(nodeRequire);
-        if (incorrect && nodeError != null)     arr.push(nodeError);
-        DOM.set(node, arr);
+    override public function updateDOM():Void {
+        DOM.setChilds(node, [
+            nodeDecrement,
+            nodeInput,
+            nodeIncrement,
+            ico==null?                        null:ico,
+            nodeLabel==null?                  null:nodeLabel,
+            (nodeRequire==null || !required)? null:nodeRequire,
+            (nodeError==null || !wrong)?      null:nodeError,
+        ]);
     }
 
     /**
@@ -186,8 +193,7 @@ class Stepper extends UIInputComponent
      * @param e Событие.
      */
     private function onInput(e:InputEvent):Void {
-        if (!disabled)
-            evInput.emit(this);
+        evInput.emit(e);
     }
 
     /**
@@ -195,8 +201,7 @@ class Stepper extends UIInputComponent
      * @param e Событие.
      */
     private function onChange(e:Event):Void {
-        if (!disabled)
-            evChange.emit(this);
+        evChange.emit();
     }
 
     /**
@@ -228,18 +233,36 @@ class Stepper extends UIInputComponent
     }
 
     override function set_disabled(value:Bool):Bool {
-        nodeInput.disabled = value;
-        nodeIncrement.disabled = value;
-        nodeDecrement.disabled = value;
+        if (disabled == value)
+            return value;
 
-        if (!value)
-            LongCall.stop(componentID);
-
-        return super.set_disabled(value);
+        if (value) {
+            super.disabled = true;
+            nodeInput.disabled = true;
+            nodeIncrement.disabled = true;
+            nodeDecrement.disabled = true;
+        }
+        else {
+            super.disabled = false;
+            nodeInput.disabled = false;
+            nodeIncrement.disabled = false;
+            nodeDecrement.disabled = false;
+        }
+        return value;
     }
 
     override function set_required(value:Bool):Bool {
-        nodeInput.required = value;
+        if (required == value)
+            return value;
+
+        if (value) {
+            super.required = true;
+            nodeInput.required = true;
+        }
+        else {
+            super.required = false;
+            nodeInput.required = false;
+        }
         return value;
     }
 }

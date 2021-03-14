@@ -2,6 +2,7 @@ package dom.ui;
 
 import dom.enums.Style;
 import dom.enums.InputType;
+import dom.ui.base.InputUI;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.Event;
@@ -18,7 +19,7 @@ import tools.Dispatcher;
  * В DOM представлен тегом: `<label class="checkbox">`
  */
 @:dce
-class CheckBox extends UIInputComponent
+class CheckBox extends InputUI
 {
     /**
      * Создать новый экземпляр.
@@ -92,18 +93,22 @@ class CheckBox extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evChange(default, never):Dispatcher<CheckBox->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Event->Void> = new Dispatcher();
 
     /**
-     * Обновить DOM для этого компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    override private function updateDOM():Void {
-        var arr:Array<Element> = [nodeInput];
-        if (ico != null)                        arr.push(ico);
-        if (nodeLabel != null)                  arr.push(nodeLabel);
-        if (required && nodeRequire != null)    arr.push(nodeRequire);
-        if (incorrect && nodeError != null)     arr.push(nodeError);
-        DOM.set(node, arr);
+    override public function updateDOM():Void {
+        DOM.setChilds(node, [
+            nodeInput,
+            ico==null?                        null:ico,
+            nodeLabel==null?                  null:nodeLabel,
+            (nodeRequire==null || !required)? null:nodeRequire,
+            (nodeError==null || !wrong)?      null:nodeError,
+        ]);
     }
 
     /**
@@ -111,16 +116,36 @@ class CheckBox extends UIInputComponent
      * @param e Событие.
      */
     private function onChange(e:Event):Void {
-        evChange.emit(this);
+        evChange.emit(e);
     }
 
     override function set_disabled(value:Bool):Bool {
-        nodeInput.disabled = value;
-        return super.set_disabled(value);
+        if (value == disabled)
+            return value;
+
+        if (value) {
+            super.disabled = true;
+            nodeInput.disabled = true;
+        }
+        else {
+            super.disabled = false;
+            nodeInput.disabled = false;
+        }
+        return value;
     }
 
     override function set_required(value:Bool):Bool {
-        nodeInput.required = value;
+        if (value == required)
+            return value;
+
+        if (value) {
+            super.required = true;
+            nodeInput.required = true;
+        }
+        else {
+            super.required = false;
+            nodeInput.required = false;
+        }
         return value;
     }
 }

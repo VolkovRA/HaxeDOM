@@ -1,7 +1,7 @@
 package dom.ui;
 
-import dom.display.Container;
 import dom.enums.Style;
+import dom.ui.base.LabelUI;
 import js.Browser;
 import js.html.DivElement;
 import js.html.Element;
@@ -12,7 +12,7 @@ import tools.Dispatcher;
  * Меню с вкладками.  
  * В DOM представлен тегами: `<ul class="menu_tabs">`
  */
-class MenuTabs extends Container
+class MenuTabs extends LabelUI
 {
     /**
      * Создать новый экземпляр.
@@ -76,14 +76,12 @@ class MenuTabs extends Container
 
     /**
      * Событие изменения выбранного пункта меню.  
-     * - Посылается при выборе пользователем нового
-     *   пунтка в меню.
-     * - Не посылается при ручном изменении значения:
-     *   `value`
+     * - Посылается при выборе пользователем нового пунтка в меню.
+     * - Не посылается при ручном изменении значения: `value`
      * 
      * Не может быть: `null`
      */
-    public var evChange(default, never):Dispatcher<MenuTabItem->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Получить элемент списка.
@@ -95,18 +93,40 @@ class MenuTabs extends Container
     }
 
     /**
-     * Добавить новый элемент в список.
+     * Добавить новый элемент в список.  
+     * - Вызов игнорируется, если передан: `null`
+     * - Вызов игнорируется, если переданный элемент уже
+     *   содержится в этом или любом другом списке.
      * @param item Новый элемент.
      */
     public function add(item:MenuTabItem):Void {
-        item.index = items.length;
-        item.evClick.on(onItemClick);
-        items.push(item);
-        addChild(item);
+        if (item == null)
+            return;
+
+        // Новый элемент:
+        if (item.index == -1) {
+            item.index = items.length;
+            items.push(item);
+            item.callback = function(e) {
+                if (value == item)
+                    return;
+                value = item;
+                evChange.emit();
+            }
+            item.evClick.on(item.callback);
+            addChild(item);
+            return;
+        }
+
+        // Уже есть в каком-то списке:
+        return;
     }
 
     /**
      * Удалить элемент из списка.
+     * - Возвращается: `false`, если был передан: `null`
+     * - Возвращается: `false`, если переданный элемент не
+     *   содержится в этом списке.
      * @param item Удаляемый элемент.
      * @return Элемент удалён.
      */
@@ -114,12 +134,14 @@ class MenuTabs extends Container
         if (item == null)
             return false;
 
+        // Поиск:
         var i = items.length;
         while (i-- > 0) {
             if (items[i] == item) {
-                item.evClick.off(onItemClick);
+                item.index = -1;
+                item.evClick.off(item.callback);
+                item.callback = null;
                 item.node.classList.remove(Style.SELECTED);
-
                 items.splice(i, 1);
 
                 // Восстанавливаем индексы справа:
@@ -132,6 +154,8 @@ class MenuTabs extends Container
                 return true;
             }
         }
+
+        // Не найдено:
         return false;
     }
 
@@ -139,17 +163,8 @@ class MenuTabs extends Container
      * Меню было добавлено на сцену.
      * @param o Объект.
      */
-    private function onAddedToStage(o:Dynamic):Void {
+    private function onAddedToStage():Void {
         updateThumb();
-    }
-
-    /**
-     * Клик по пункту меню.
-     * @param item Объект меню.
-     */
-    private function onItemClick(item:MenuTabItem):Void {
-        value = item;
-        evChange.emit(item);
     }
 
     /**
@@ -211,7 +226,7 @@ class MenuTabs extends Container
  * Закладка меню.  
  * В DOM представлен тегами: `<li>`
  */
-class MenuTabItem extends UIComponent
+class MenuTabItem extends LabelUI
 {
     /**
      * Создать новый экземпляр.
@@ -255,15 +270,27 @@ class MenuTabItem extends UIComponent
      * 
      * Не может быть: `null`
      */
-    public var evClick(default, never):Dispatcher<MenuTabItem->Void> = new Dispatcher();
+    public var evClick(default, never):Dispatcher<MouseEvent->Void> = new Dispatcher();
+
+    /**
+     * Обработчик клика по кнопке.  
+     * Задаётся родительским элементом: `MenuTabs` для
+     * хранения ссылки на актуальный обработчик. Необходим
+     * для корректной, внутренней работы подписки и отписки
+     * на события нажатия при добавлении и удалений элементов
+     * меню.
+     * 
+     * По умолчанию: `null`
+     */
+    @:allow(dom.ui.MenuTabs)
+    private var callback:MouseEvent->Void = null;
 
     /**
      * Нативное событие клика.
      * @param e Событие.
      */
     private function onClick(e:MouseEvent):Void {
-        if (!disabled)
-            evClick.emit(this);
+        evClick.emit(e);
     }
 }
 

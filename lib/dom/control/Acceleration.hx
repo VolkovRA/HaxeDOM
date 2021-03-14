@@ -1,6 +1,6 @@
 package dom.control;
 
-import dom.geom.Vec;
+import dom.geom.Vec2;
 import tools.NativeJS;
 
 /**
@@ -108,9 +108,9 @@ class Acceleration
      * @param vec Объект для записи результата. Если не передан, создаётся новый.
      * @return Итоговое ускорение.
      */
-    public function get(?vec:Vec):Vec {
+    public function get(?vec:Vec2):Vec2 {
         if (vec == null)
-            vec = new Vec(0, 0);
+            vec = new Vec2(0, 0);
         else
             vec.set(0, 0);
 
@@ -130,7 +130,7 @@ class Acceleration
             vec.x += dx - p.x;
             vec.y += dy - p.y;
         }
-        
+
         return vec;
     }
 

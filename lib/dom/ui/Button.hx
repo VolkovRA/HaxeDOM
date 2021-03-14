@@ -1,6 +1,8 @@
 package dom.ui;
 
+import dom.enums.ButtonType;
 import dom.enums.Style;
+import dom.ui.base.LabelUI;
 import js.Browser;
 import js.html.Element;
 import js.html.MouseEvent;
@@ -11,7 +13,7 @@ import tools.Dispatcher;
  * В DOM представлена тегом: `<button class="button">`
  */
 @:dce
-class Button extends UIComponent
+class Button extends LabelUI
 {
     /**
      * Создать новый экземпляр.
@@ -31,20 +33,39 @@ class Button extends UIComponent
     }
 
     /**
+     * Тип кнопки.  
+     * По умолчанию: `null` *(Кнопка используется для отправки формы)*
+     * @see https://developer.mozilla.org/ru/docs/Web/HTML/Element/button
+     */
+    public var type(default, set):ButtonType = null;
+    function set_type(value:ButtonType):ButtonType {
+        if (value == type)
+            return value;
+
+        type = value;
+        if (value == null)
+            node.removeAttribute("type");
+        else
+            node.setAttribute("type", value);
+
+        return value;
+    }
+
+    /**
      * Событие клика на кнопку.  
+     * Посылается при клике на кнопку 
      * - Диспетчерезируется при нажатии на кнопку пользователем.
      * - Это событие не посылается, если кнопка выключена: `Button.disabled=true`
      * 
      * Не может быть: `null`
      */
-    public var evClick(default, never):Dispatcher<Button->Void> = new Dispatcher();
+    public var evClick(default, never):Dispatcher<MouseEvent->Void> = new Dispatcher();
 
     /**
      * Нативное событие клика.
      * @param e Событие.
      */
     private function onClick(e:MouseEvent):Void {
-        if (!disabled)
-            evClick.emit(this);
+        evClick.emit(e);
     }
 }

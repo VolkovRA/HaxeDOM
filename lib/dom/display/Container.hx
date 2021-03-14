@@ -141,7 +141,7 @@ class Container extends Component
         var child = childrens[index];
         childrens.splice(index, 1);
         var i = --numChildren;
-        while (i-- > index) childrens[i].parentIndex = i; // Обновление индексов для актуализации.
+        while (i-- > index) childrens[i].parentIndex = i; // Обновление индексов для их актуализации.
         if (child.node.parentNode == node)
             node.removeChild(child.node);
         child.setParent(null);

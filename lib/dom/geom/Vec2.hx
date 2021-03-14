@@ -8,7 +8,7 @@ package dom.geom;
  * точки: `dom.geom.Point`
  */
 @:dce
-class Vec 
+class Vec2
 {
     /**
      * Создать вектор.  
@@ -36,8 +36,8 @@ class Vec
      * Получить копию вектора.  
      * @return Возвращает копию исходного объекта.
      */
-    public function copy():Vec {
-        return new Vec(x, y);
+    public function copy():Vec2 {
+        return new Vec2(x, y);
     }
 
     /**
@@ -54,7 +54,7 @@ class Vec
      * если его длина равна нулю. (`x=0 && y=0`)
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function nrm():Vec {
+    public function nrm():Vec2 {
         if (x == 0 && y == 0)
             return this;
         var len = Math.sqrt(x*x + y*y);
@@ -69,7 +69,7 @@ class Vec
      * @param y Ось Y.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function set(x:Float, y:Float):Vec {
+    public function set(x:Float, y:Float):Vec2 {
         this.x = x;
         this.y = y;
         return this;
@@ -81,7 +81,7 @@ class Vec
      * @param obj Другой вектор или объект.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function setFrom(obj:Dynamic):Vec {
+    public function setFrom(obj:Dynamic):Vec2 {
         x = obj.x==null?0:obj.x;
         y = obj.y==null?0:obj.y;
         return this;
@@ -95,7 +95,7 @@ class Vec
      * ```
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function abs():Vec {
+    public function abs():Vec2 {
         if (x < 0) x = -x;
         if (y < 0) y = -y;
         return this;
@@ -110,7 +110,7 @@ class Vec
      * @param v Добавляемое значение.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function add(v:Float):Vec {
+    public function add(v:Float):Vec2 {
         this.x += v;
         this.y += v;
         return this;
@@ -125,7 +125,7 @@ class Vec
      * @param v Вычитаемое значение.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function sub(v:Float):Vec {
+    public function sub(v:Float):Vec2 {
         this.x -= v;
         this.y -= v;
         return this;
@@ -140,7 +140,7 @@ class Vec
      * @param v Скалярное значение.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function mul(v:Float):Vec {
+    public function mul(v:Float):Vec2 {
         this.x *= v;
         this.y *= v;
         return this;
@@ -155,7 +155,7 @@ class Vec
      * @param v Скалярное значение.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function div(v:Float):Vec {
+    public function div(v:Float):Vec2 {
         this.x /= v;
         this.y /= v;
         return this;
@@ -171,7 +171,7 @@ class Vec
      * @param vec Добавляемый вектор.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function addVec(vec:Point):Vec {
+    public function addVec(vec:Point):Vec2 {
         x += vec.x;
         y += vec.y;
         return this;
@@ -187,7 +187,7 @@ class Vec
      * @param vec Вычитаемый вектор.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function subVec(vec:Point):Vec {
+    public function subVec(vec:Point):Vec2 {
         x -= vec.x;
         y -= vec.y;
         return this;
@@ -203,7 +203,7 @@ class Vec
      * @param vec Второй вектор.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function mulVec(vec:Point):Vec {
+    public function mulVec(vec:Point):Vec2 {
         x *= vec.x;
         y *= vec.y;
         return this;
@@ -219,7 +219,7 @@ class Vec
      * @param vec Второй вектор.
      * @return Текущий экземпляр для записи операций в одну строку.
      */
-    public function divVec(vec:Point):Vec {
+    public function divVec(vec:Point):Vec2 {
         x /= vec.x;
         y /= vec.y;
         return this;

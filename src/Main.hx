@@ -1,12 +1,11 @@
 package;
 
 import dom.control.DragAndDrop;
-import dom.enums.Orientation;
 import dom.display.Component;
 import dom.display.Container;
 import dom.display.Static;
 import dom.display.Stage;
-import dom.theme.Theme;
+import dom.enums.Orientation;
 import dom.ui.Button;
 import dom.ui.CheckBox;
 import dom.ui.InputText;
@@ -16,13 +15,12 @@ import dom.ui.Scrollbar;
 import dom.ui.Scroller;
 import dom.ui.Stepper;
 import dom.ui.MenuTabs;
+import dom.ui.Textarea;
 import js.Browser;
 
 class Main
 {
     static public function main() {
-        Theme.current = new MyTheme();
-
         var stage = new Stage(Browser.document.body);
 
         // Статика:
@@ -30,7 +28,14 @@ class Main
         stage.addChild(st);
 
         // Кнопка:
-        var bt = new Button("Привет");
+        var bt = new Button("Нажми меня!");
+        bt.disabled = true;
+        bt.disabled = false;
+        bt.display = false;
+        bt.display = true;
+        bt.evClick.on(function(e) {
+            trace(e);
+        });
         stage.addChild(bt);
 
         // Ввод текста:
@@ -40,7 +45,9 @@ class Main
         inputText.labelError = "Error msg";
         inputText.labelRequire = "Ну надо";
         inputText.placeholder = "Wy not?";
-        inputText.incorrect = true;
+        inputText.wrong = true;
+        inputText.autocomplete = true;
+        inputText.autofocus = true;
         inputText.required = true;
         stage.addChild(inputText);
 
@@ -68,6 +75,7 @@ class Main
         stp.step = 2.3;
         stp.max = 100;
         stp.min = -1;
+        stp.disabled = true;
         stage.addChild(stp);
 
         // Прогрессбар:
@@ -82,7 +90,6 @@ class Main
         sch.min = -1;
         sch.max = 3;
         sch.value = Math.random();
-        //sch.onChange.on(function(sc){ trace(sc.value); });
         stage.addChild(sch);
 
         // Скроллбар - вертикальный:
@@ -93,7 +100,6 @@ class Main
         scv.max = 5;
         scv.value = Math.random();
         //scv.disabled = true;
-        //scv.onChange.on(function(sc){ trace(sc.value); });
         stage.addChild(scv);
 
         // Скроллер:
@@ -121,10 +127,16 @@ class Main
             { label: "Средний раздел" },
             { label: "Очень длинный раздел" },
         ]);
-        mt.evChange.on(function(item:Dynamic){
-            trace(item);
+        mt.evChange.on(function(){
+            trace(mt.value.label);
         });
         stage.addChild(mt);
+
+        // Ввод текста:
+        var ta = new Textarea();
+        ta.label = "Введите текст";
+        ta.disabled = true;
+        stage.addChild(ta);
     }
 
     static private function addBoxex(container:Container, num:Int):Void {

@@ -110,8 +110,8 @@ class LongCall
      * @param p Параметры вызова.
      */
     static private function stopStepper(p:StepperCall):Void {
-        if (p.intervalID != 0)   Browser.window.clearInterval(p.intervalID);
-        if (p.timeoutID != 0)    Browser.window.clearTimeout(p.timeoutID);
+        if (p.intervalID != 0) Browser.window.clearInterval(p.intervalID);
+        if (p.timeoutID != 0)  Browser.window.clearTimeout(p.timeoutID);
         p.intervalID = 0;
         p.timeoutID = 0;
     }

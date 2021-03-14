@@ -7,7 +7,7 @@ import tools.NativeJS;
  * Тикер для анимаций.  
  * Используется для создания эффектов анимаций путём
  * вызова метода: `IAnimated.tick()` каждый кадр у всех
- * добавленных в него объектов.
+ * добавленных экземпляров.
  */
 @:dce
 class Ticker
@@ -22,7 +22,7 @@ class Ticker
      * Глобальный тикер.  
      * Не может быть: `null`
      */
-    static public var global(default, null):Ticker = new Ticker();
+    static public var global(default, never):Ticker = new Ticker();
 
     /**
      * Скорость воспроизведения.  
@@ -100,9 +100,9 @@ class Ticker
      * @param object Анимируемый объект.
      */
     public function remove(object:IAnimated):Void {
-        if (object == null)             return;
-        if (object.ticker == null)      return;
-        if (object.ticker.o != this)    return;
+        if (object == null)          return;
+        if (object.ticker == null)   return;
+        if (object.ticker.o != this) return;
         
         items[object.ticker.i] = null;
         object.ticker = null;

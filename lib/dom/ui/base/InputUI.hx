@@ -1,4 +1,4 @@
-package dom.ui;
+package dom.ui.base;
 
 import dom.enums.Style;
 import dom.utils.DOM;
@@ -13,11 +13,14 @@ import js.html.SpanElement;
  * пользователя. Он добавляет некоторые общие,
  * специфичные свойства и методы.
  * 
+ * Используется для инкапсулирования общего поведения всех
+ * компонентов в одном месте.
+ * 
  * *п.с.: Скорее всего, вам будет интересен не этот
  * класс, а один из его потомков.*
  */
 @:dce
-class UIInputComponent extends UIComponent
+class InputUI extends LabelUI
 {
     /**
      * Создать новый экземпляр.
@@ -29,26 +32,28 @@ class UIInputComponent extends UIComponent
     }
 
     /**
-     * Текст ошибки.  
+     * Текст ошибки ввода.  
      * Используется для отображения сообщения об ошибке,
      * например, при неверном заполнении формы.
      * 
      * Чтобы текст с ошибкой был показан, необходимо:
      * - Указать текст ошибки.
-     * - Задать свойство: `incorrect=true`
+     * - Задать свойство: `wrong=true`
      * 
      * По умолчанию: `null` *(Без текста ошибки)*
      */
-    public var labelError(get, set):String;
-    function get_labelError():String {
-        return nodeError==null?null:nodeError.textContent;
-    }
+    public var labelError(default, set):String = null;
     function set_labelError(value:String):String {
+        if (value == labelError)
+            return value;
+
         if (value == null) {
+            labelError = null;
             if (nodeError != null)
                 nodeError = null;
         }
         else {
+            labelError = value;
             if (nodeError == null) {
                 nodeError = Browser.document.createSpanElement();
                 nodeError.classList.add(Style.ERROR);
@@ -70,16 +75,18 @@ class UIInputComponent extends UIComponent
      * 
      * По умолчанию: `null` *(Без текста требования)*
      */
-    public var labelRequire(get, set):String;
-    function get_labelRequire():String {
-        return nodeRequire==null?null:nodeRequire.textContent;
-    }
+    public var labelRequire(default, set):String = null;
     function set_labelRequire(value:String):String {
+        if (value == labelRequire)
+            return value;
+
         if (value == null) {
+            labelRequire = null;
             if (nodeRequire != null)
                 nodeRequire = null;
         }
         else {
+            labelRequire = value;
             if (nodeRequire == null) {
                 nodeRequire = Browser.document.createSpanElement();
                 nodeRequire.classList.add(Style.REQUIRE);
@@ -101,37 +108,45 @@ class UIInputComponent extends UIComponent
     function set_required(value:Bool):Bool {
         if (value == required)
             return value;
-        required = value;
-        if (value)
-            node.classList.add(Style.REQUIRED);
-        else
-            node.classList.remove(Style.REQUIRED);
+
+        if (value) {
+            required = true;
+            node.setAttribute("required", "");
+        }
+        else {
+            required = false;
+            node.removeAttribute("required");
+        }
         updateDOM();
         return value;
     }
 
     /**
-     * Некорректное заполнение.  
-     * Свойство используется для отображения ошибок.
-     * - Если `true`, корневой DOM элемент помечается классом:
-     *   `incorrect`. Так же показывается сообщение об ошибке,
-     *   если задано свойство: `labelError`
-     * - Если `false`, класс с ошибкой удаляется вместе с
-     *   сообщением об ошибки.
+     * Некорректное содержимое.  
+     * Свойство используется для отображения ошибок ввода.
+     * - Если `true`, компонент помечается CSS классом: `wrong`,
+     *   указываеющего на ошибки ввода. Так же показывается
+     *   сообщение об ошибке: `labelError`. (Если указано)
+     * - Если `false`, у компонента удаляется CSS класс: `wrong`,
+     *   сообщение об ошибке ввода скрывается.
      * - Это значение каждый раз автоматически изменяется при
      *   вызове метода: `validate()`
      * 
-     * По умолчанию: `false` *(Всё хорошо)*
+     * По умолчанию: `false` *(Ошибок нет)*
      */
-    public var incorrect(default, set):Bool = false;
-    function set_incorrect(value:Bool):Bool {
-        if (value == incorrect)
+    public var wrong(default, set):Bool = false;
+    function set_wrong(value:Bool):Bool {
+        if (value == wrong)
             return value;
-        incorrect = value;
-        if (value)
-            node.classList.add(Style.INCORRECT);
-        else
-            node.classList.remove(Style.INCORRECT);
+
+        if (value) {
+            wrong = true;
+            node.classList.add(Style.WRONG);
+        }
+        else {
+            wrong = false;
+            node.classList.remove(Style.WRONG);
+        }
         updateDOM();
         return value;
     }
@@ -158,26 +173,29 @@ class UIInputComponent extends UIComponent
 
     /**
      * Провести валидацию компонента.  
-     * - Возвращает: `true`, если с компонентом всё хорошо. *(Заполнен верно)*
-     * - Возвращает: `false`, если есть какие либо ошибки.
-     * - Вызов этого метода автоматически переключает свойство: `incorrect`
-     *   Задаёт: `incorrect=true`, если есть ошибки, иначе: `incorrect=false`
+     * - Возвращает: `true`, если компонент заполнен верно.
+     * - Возвращает: `false`, если есть какие либо ошибки ввода.
+     * - Вызов этого метода автоматически переключает свойство: `wrong`
+     *   Задаёт: `wrong=true`, если есть ошибки, иначе: `wrong=false`
      * @return Поле заполнено корректно.
      */
     public function validate():Bool {
-        incorrect = false;
+        wrong = false;
         return true;
     }
 
     /**
-     * Обновить DOM этого компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    override private function updateDOM():Void {
-        var arr:Array<Element> = [];
-        if (ico != null)                        arr.push(ico);
-        if (nodeLabel != null)                  arr.push(nodeLabel);
-        if (required && nodeRequire != null)    arr.push(nodeRequire);
-        if (incorrect && nodeError != null)     arr.push(nodeError);
-        DOM.set(node, arr);
+    override public function updateDOM():Void {
+        DOM.setChilds(node, [
+            ico==null?                        null:ico,
+            nodeLabel==null?                  null:nodeLabel,
+            (nodeRequire==null || !required)? null:nodeRequire,
+            (nodeError==null || !wrong)?      null:nodeError,
+        ]);
     }
 }

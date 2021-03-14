@@ -2,6 +2,7 @@ package dom.ui;
 
 import dom.enums.Style;
 import dom.enums.InputType;
+import dom.ui.base.InputUI;
 import dom.utils.DOM;
 import js.Browser;
 import js.html.Event;
@@ -16,7 +17,7 @@ import tools.Dispatcher;
  * @see Документация: https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
  */
 @:dce
-class InputText extends UIInputComponent
+class InputText extends InputUI
 {
     /**
      * Создать новый экземпляр.
@@ -32,6 +33,7 @@ class InputText extends UIInputComponent
         this.nodeInput.type = InputType.TEXT;
         this.nodeInput.addEventListener("input", onInput);
         this.nodeInput.addEventListener("change", onChange);
+        this.autocomplete = true;
 
         if (value != null)
             this.value = value;
@@ -49,6 +51,64 @@ class InputText extends UIInputComponent
     }
     inline function set_value(value:String):String {
         nodeInput.value = value;
+        return value;
+    }
+
+    /**
+     * Авто-заполнение поля браузером.  
+     * Если не не указано, тогда браузер использует атрибут
+     * `autocomplete` формы, которая является родительской
+     * для данного компонента.
+     * - Если: `null`, авто-заполнение по умолчанию используется.
+     * - Если: `true`, авто-заполнение принудительно используется.
+     * - Если: `false`, авто-заполнение принудительно выключено.
+     * 
+     * По умолчанию: `null` *(Авто-заполнение включено по умолчанию)*
+     * 
+     * @see https://developer.mozilla.org/ru/docs/Web/HTML/Element/Input
+     */
+    public var autocomplete(default, set):Bool = null;
+    function set_autocomplete(value:Bool):Bool {
+        if (value == autocomplete)
+            return value;
+
+        if (value == null) {
+            autocomplete = null;
+            nodeInput.removeAttribute("autocomplete");
+        }
+        else if (value) {
+            autocomplete = true;
+            nodeInput.setAttribute("autocomplete", "on");
+        }
+        else {
+            autocomplete = false;
+            nodeInput.setAttribute("autocomplete", "off");
+        }
+        return value;
+    }
+
+    /**
+     * Автоматический фокус на это поле.  
+     * Позволяет указать браузеру, что это поле должно
+     * иметь фокус по умолчанию для ввода на странице.
+     * - Только один элемент на старнице должен иметь авто-фокус.
+     * - Авто-фокус нельзя указать для скрытых элементов ввода. 
+     * 
+     * По умолчанию: `false` *(Авто-фокус не задан)*
+     */
+    public var autofocus(default, set):Bool = false;
+    function set_autofocus(value:Bool):Bool {
+        if (value == autofocus)
+            return value;
+
+        if (value) {
+            autocomplete = true;
+            nodeInput.autofocus = true;
+        }
+        else {
+            autocomplete = false;
+            nodeInput.removeAttribute("autofocus");
+        }
         return value;
     }
 
@@ -107,7 +167,7 @@ class InputText extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evChange(default, never):Dispatcher<InputText->Void> = new Dispatcher();
+    public var evChange(default, never):Dispatcher<Event->Void> = new Dispatcher();
 
     /**
      * Событие ввода данных.  
@@ -118,15 +178,14 @@ class InputText extends UIInputComponent
      * 
      * Не может быть: `null`
      */
-    public var evInput(default, never):Dispatcher<InputText->Void> = new Dispatcher();
+    public var evInput(default, never):Dispatcher<InputEvent->Void> = new Dispatcher();
 
     /**
      * Нативное событие ввода значения.
      * @param e Событие.
      */
     private function onInput(e:InputEvent):Void {
-        if (!disabled)
-            evInput.emit(this);
+        evInput.emit(e);
     }
 
     /**
@@ -134,30 +193,52 @@ class InputText extends UIInputComponent
      * @param e Событие.
      */
     private function onChange(e:Event):Void {
-        if (!disabled)
-            evChange.emit(this);
+        evChange.emit(e);
     }
 
     /**
-     * Обновить DOM этого компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    override private function updateDOM():Void {
-        var arr:Array<Element> = [];
-        if (ico != null)                        arr.push(ico);
-        if (nodeLabel != null)                  arr.push(nodeLabel);
-                                                arr.push(nodeInput);
-        if (required && nodeRequire != null)    arr.push(nodeRequire);
-        if (incorrect && nodeError != null)     arr.push(nodeError);
-        DOM.set(node, arr);
+    override public function updateDOM():Void {
+        DOM.setChilds(node, [
+            ico==null?                        null:ico,
+            nodeLabel==null?                  null:nodeLabel,
+            nodeInput,
+            (nodeRequire==null || !required)? null:nodeRequire,
+            (nodeError==null || !wrong)?      null:nodeError,
+        ]);
     }
 
     override function set_disabled(value:Bool):Bool {
-        nodeInput.disabled = value;
-        return super.set_disabled(value);
+        if (value == disabled)
+            return value;
+
+        if (value) {
+            super.disabled = true;
+            nodeInput.disabled = true;
+        }
+        else {
+            super.disabled = false;
+            nodeInput.disabled = false;
+        }
+        return value;
     }
 
     override function set_required(value:Bool):Bool {
-        nodeInput.required = value;
+        if (value == required)
+            return value;
+
+        if (value) {
+            super.required = true;
+            nodeInput.required = true;
+        }
+        else {
+            super.required = false;
+            nodeInput.required = false;
+        }
         return value;
     }
 }

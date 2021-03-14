@@ -1,14 +1,11 @@
 package dom.display;
 
-import dom.enums.Style;
 import dom.geom.Rect;
-import dom.theme.Theme;
 import dom.utils.DOM;
 import js.Browser;
 import js.lib.Error;
 import js.html.Element;
 import tools.Dispatcher;
-import tools.NativeJS;
 
 /**
  * Компонент.  
@@ -54,94 +51,84 @@ class Component
      * Уникальный ключ, однозначно идентифицирующий
      * этот экземпляр объекта в рамках Haxe приложения.
      * 
+     * Полезен для однозначной идентификации этого
+     * компонента в рамках запущеного приложения.
+     * 
      * Не может быть: `null`
      */
-    public var componentID(default, null):Int = ++autoID;
-
-    /**
-     * Это контейнер!  
-     * Используется для быстрой проверки типа в рантайме.  
-     * Истина, если это экземпляр: `Container`
-     */
-    public var isContainer(default, null):Bool = false;
-
-    /**
-     * Это корневой узел.  
-     * Используется для быстрой проверки типа в рантайме.
-     * Истина, если это экземпляр: `Stage`
-     */
-    public var isStage(default, null):Bool = false;
+    public var componentID(default, never):Int = ++autoID;
 
     /**
      * Корневой узел этого компонента.  
-     * Используется для представления этого компонента в DOM.
-     * - Может содержать произвольное количество дочерних узлов,
-     *   управляемых автоматически.
-     * - Создаётся вместе с компонентом и никогда не удаляется.
-     * - Вы можете добавлять в него собственные узлы без страха
-     *   их удаления или перезаписи.
+     * Используется как ссылка на елемент дерева DOM,
+     * представляющего этот экземпляр компонента. Может
+     * быть использована для доступа к нативным DOM API
+     * элемента.
+     * 
+     * Некоторые особенности:
+     * - Ссылка задаётся при создании экземпляра компонента
+     *   и не может быть изменения в дальнейшем.
+     * - Может содержать произвольное количество дочерних
+     *   узлов.
+     * - Каждый компонент управляет своим узлом на своё
+     *   усмотрение. Например, этот узел **может**
+     *   содержать другие узлы, управляемые компонентом.
+     * - Не может быть: `null`.
+     * - По умолчанию используется: `div`, если в конструктор
+     *   не было передано иное.
      * 
      * Не может быть: `null`
      */
     public var node(default, null):Element;
 
     /**
-     * Тип компонента.  
-     * Используется для дополнительной стилизации.
-     * 
-     * По умолчанию: `null` *(Дополнительное декорирование не используется)*
-     * 
-     * @see Темы оформления: `dom.theme.Theme`
+     * Это контейнер!  
+     * Используется для быстрой проверки типа в рантайме.  
+     * Истина, если это экземпляр: `Container` или один
+     * из его потомков.
      */
-    public var type(default, set):String = null;
-    function set_type(value:String):String {
-        if (theme != null) {
-            theme.clean(this);
-            theme = null;
-        }
-        type = value;
-        if (value != null && Theme.current != null) {
-            theme = Theme.current;
-            theme.apply(this);
-        }
-        return value;
-    }
+    public var isContainer(default, null):Bool = false;
 
     /**
-     * Используемая тема оформления.  
-     * Свойство используется для автоматической очистки
-     * дополнительной стилизации. (См.: `type`)
-     * 
-     * По умолчанию: `null`
+     * Это корневой узел!  
+     * Используется для быстрой проверки типа в рантайме.
+     * Истина, если это экземпляр: `Stage` или один из
+     * его потомков.
      */
-    @:noCompletion
-    private var theme:Theme;
+    public var isStage(default, null):Bool = false;
 
     /**
-     * Компонент выключен.  
-     * Переключение этого свойства может влиять на работу некоторых
-     * UI компонентов.
-     * - Если `true`, компонент в DOM будет помечен классом: `class="disabled"`
-     *   Это также влияет на срабатывания событий некоторых компонентов, например,
-     *   не будут посылаться события нажатия на кнопку.
-     * - Если `false`, в DOM разметке будет удалён класс `class="disabled"` (Если есть).
-     *   Компонент будет работать как обычно.
-     * 
-     * По умолчанию: `false` *(Компонент активен)*
+     * Это элемент интерфейса!  
+     * Используется для быстрой проверки типа в рантайме.
+     * Истина, если это экземпляр: `UI` или один из
+     * его потомков.
      */
-    public var disabled(get, set):Bool;
-    function get_disabled():Bool {
-        return untyped NativeJS.dnot(node.disabled);
-    }
-    function set_disabled(value:Bool):Bool {
-        if (value) {
-            untyped node.disabled = true;
-            node.classList.add(Style.DISABLED);
-        }
-        else {
-            untyped node.disabled = false;
-            node.classList.remove(Style.DISABLED);
-        }
+    public var isUI(default, null):Bool = false;
+
+    /**
+     * Имя элемента.  
+     * Используется для добавления имени DOM элементу.  
+     * Это может быть полезно для нативных методов:
+     * `document.getElementsByName()`
+     * 
+     * - Если указано новое значение, элементу присваивается
+     *   атрибут: `name="value"`
+     * - Если передан `null` или пустая строка, у элемента
+     *   удаляется атрибут: `name`
+     * 
+     * По умолчанию: `null` *(Имя не задано)*
+     */
+    public var name(default, set):String = null;
+    function set_name(value:String):String {
+        if (value == name)
+            return value;
+
+        name = value;
+        if (value == null || value == "")
+            node.removeAttribute("name");
+        else
+            node.setAttribute("name", value);
+
         return value;
     }
 
@@ -155,9 +142,9 @@ class Component
      * - Если: `false`, DOM элементу устанавливается: `display: none`
      * - Если: `true`, у DOM элемента очищается CSS свойство: `display`
      * 
-     * *п.с. Разница между свойствами: **display** и **visible** состоит
-     * в том, что в первом случае компонент удаляется из
-     * потока визуализации DOM. Во втором случае, скрытый элемент по
+     * *п.с. Разница между свойствами: **display** и **visible**
+     * в том, что в первом случае компонент удаляется из потока
+     * визуализации DOM. Во втором случае, скрытый элемент по
      * прежнему занимает место на странице.*
      * 
      * По умолчанию: `true` *(Отображается)*
@@ -189,9 +176,9 @@ class Component
      * - Если: `false`, DOM элементу устанавливается: `visibility: hidden`
      * - Если: `true`, у DOM элемента очищается CSS свойство: `visibility`
      * 
-     * *п.с. Разница между свойствами: **display** и **visible** состоит
-     * в том, что в первом случае компонент удаляется из
-     * потока визуализации DOM. Во втором случае, скрытый элемент по
+     * *п.с. Разница между свойствами: **display** и **visible**
+     * в том, что в первом случае компонент удаляется из потока
+     * визуализации DOM. Во втором случае, скрытый элемент по
      * прежнему занимает место на странице.*
      * 
      * По умолчанию: `true` *(Отображается)*
@@ -214,29 +201,16 @@ class Component
     }
 
     /**
-     * Имя компонента.  
-     * Вы можете задать произвольное имя вашему компоненту.
-     * Больше никак не используется.
-     * 
-     * По умолчанию: `null`
-     */
-    public var name(default, set):String = null;
-    function set_name(value:String):String {
-        name = value;
-        return value;
-    }
-
-    /**
      * Родительский контейнер.  
-     * Автоматически устанавливается при добавлений или удалений этого
-     * компонента из контейнера.
+     * Автоматически устанавливается при добавлений или
+     * удалений этого компонента из контейнера.
      * 
      * По умолчанию: `null`
      */
     public var parent(default, null):Container = null;
 
     /**
-     * Основная сцена.  
+     * Корень сцены.  
      * Если компонент находится на главной сцене, это свойство будет
      * содержать на неё ссылку.
      * 
@@ -255,7 +229,7 @@ class Component
      * Метод вычисляет габариты элемента на странице и возвращает
      * стандартизированный объект - прямоугольник, который
      * содержит описание размеров и его положение относительно
-     * **окна просмотра**.
+     * **окна просмотра** браузера.
      * @param rect Объект для записи. Если не передан - создаётся новый.
      * @return Прямоугольник с описанием размеров элемента.
      * @see Размер элемента: [getBoundingClientRect](https://developer.mozilla.org/ru/docs/Web/API/Element/getBoundingClientRect)
@@ -294,7 +268,7 @@ class Component
      * 
      * Не может быть: `null`
      */
-    public var evAdded(default, never):Dispatcher<Component->Void> = new Dispatcher();
+    public var evAdded(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Событие удаления из родительского контейнера.  
@@ -303,7 +277,7 @@ class Component
      * 
      * Не может быть: `null`
      */
-    public var evRemoved(default, never):Dispatcher<Component->Void> = new Dispatcher();
+    public var evRemoved(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Событие добавления на сцену.  
@@ -312,7 +286,7 @@ class Component
      * 
      * Не может быть: `null`
      */
-    public var evAddedToStage(default, never):Dispatcher<Component->Void> = new Dispatcher();
+    public var evAddedToStage(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
     /**
      * Событие удаления со сцены.  
@@ -321,7 +295,7 @@ class Component
      * 
      * Не может быть: `null`
      */
-    public var evRemovedFromStage(default, never):Dispatcher<Component->Void> = new Dispatcher();
+    public var evRemovedFromStage(default, never):Dispatcher<Void->Void> = new Dispatcher();
 
 
 

@@ -46,19 +46,19 @@ class Image extends Component
      * 
      * Не может быть: `null`
      */
-    public var evLoad(default, never):Dispatcher<Image->Error->Void> = new Dispatcher();
+    public var evLoad(default, never):Dispatcher<Error->Void> = new Dispatcher();
 
     /**
      * Картинка загружена.
      */
     private function onLoad():Void {
-        evLoad.emit(this, null);
+        evLoad.emit(null);
     }
 
     /**
      * Ошибка загрузки изображения.
      */
     private function onError():Void {
-        evLoad.emit(this, new Error("Ошибка загрузки изображения: " + src));
+        evLoad.emit(new Error("Ошибка загрузки изображения: " + src));
     }
 }

@@ -3,6 +3,7 @@ package dom.utils;
 import js.Syntax;
 import js.html.Element;
 import tools.NativeJS;
+import tools.Utils;
 
 /**
  * Вспомогательные методы для работы с DOM API.  
@@ -57,11 +58,13 @@ class DOM
      *   элементы в `parent`, не затрагивая пользовательские, которые
      *   могли быть добавлены произвольно, чтобы они не были удалены.
      * - Этот метод также индексирует все ноды в `childs`.
+     * - Список не должен содержать: `null`'ы
      * @param parent Обновляемый узел.
      * @param childs Список детей.
      * @see Индексация DOM элементов: `NativeJS.setNodeID()`
      */
-    static public function set(parent:Element, childs:Array<Element>):Void {
+    static public function setChilds(parent:Element, childs:Array<Element>):Void {
+        childs = Utils.ca(childs, null);
 
         // Добавляем новые узлы, сортируем:
         var len = childs.length;

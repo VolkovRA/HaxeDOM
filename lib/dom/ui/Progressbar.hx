@@ -1,8 +1,8 @@
 package dom.ui;
 
-import dom.display.Component;
 import dom.enums.Style;
 import dom.utils.DOM;
+import dom.ui.base.LabelUI;
 import js.Browser;
 import js.html.DivElement;
 import js.html.Element;
@@ -12,7 +12,7 @@ import js.lib.Error;
  * Прогрессбар.  
  * В DOM представлен тегом: `<div class="progressbar">`
  */
-class Progressbar extends Component
+class Progressbar extends LabelUI
 {
     /**
      * Создать новый экземпляр.  
@@ -115,13 +115,16 @@ class Progressbar extends Component
     public var nodeProgress(default, null):DivElement;
 
     /**
-     * Обновить DOM компонента.
+     * Обновить DOM компонента.  
+     * Выполняет перестроение дерева DOM этого элемента
+     * интерфейса. Каждый компонент определяет собственное
+     * поведение.
      */
-    private function updateDOM():Void {
+    override public function updateDOM():Void {
         var p:Float = 0;
         if (max > min)
             p = (value / (max - min)) * 100;
         nodeProgress.style.width = p + "%";
-        DOM.set(node, [nodeProgress]);
+        DOM.setChilds(node, [nodeProgress]);
     }
 }

@@ -288,7 +288,7 @@ class DragAndDrop
      * 
      * Не может быть: `null`
      */
-    public var evStart(default, never):Dispatcher<DragAndDrop->Void> = new Dispatcher();
+    public var evStart(default, never):Dispatcher<PointerEvent->Void> = new Dispatcher();
 
     /**
      * Событие перетаскивания.  
@@ -298,7 +298,7 @@ class DragAndDrop
      * 
      * Не может быть: `null`
      */
-    public var evMove(default, never):Dispatcher<DragAndDrop->Void> = new Dispatcher();
+    public var evMove(default, never):Dispatcher<PointerEvent->Void> = new Dispatcher();
 
     /**
      * Событие броска перетаскивания.  
@@ -310,7 +310,7 @@ class DragAndDrop
      * 
      * Не может быть: `null`
      */
-    public var evDrop(default, never):Dispatcher<DragAndDrop->Void> = new Dispatcher();
+    public var evDrop(default, never):Dispatcher<PointerEvent->Void> = new Dispatcher();
 
     /**
      * Событие завершения перетаскивания.  
@@ -321,7 +321,7 @@ class DragAndDrop
      * 
      * Не может быть: `null`
      */
-    public var evStop(default, never):Dispatcher<DragAndDrop->Void> = new Dispatcher();
+    public var evStop(default, never):Dispatcher<PointerEvent->Void> = new Dispatcher();
 
     /**
      * Завершить перетаскивание объекта.  
@@ -452,8 +452,8 @@ class DragAndDrop
 
         // События:
         if (es)
-            evStart.emit(this);
-        evMove.emit(this);
+            evStart.emit(e);
+        evMove.emit(e);
     }
 
     /**
@@ -479,7 +479,7 @@ class DragAndDrop
         tugY = 0;
 
         if (up)
-            evDrop.emit(this);
-        evStop.emit(this);
+            evDrop.emit(e);
+        evStop.emit(e);
     }
 }

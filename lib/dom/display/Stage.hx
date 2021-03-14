@@ -9,10 +9,10 @@ import tools.Dispatcher;
  * Этот объект должен использоваться как самый верхний
  * элемент в иерархии отображения всех компонентов. Он
  * нужен для правильной работы событий: `evAddedToStage`
- * и `evRemovedFromStage`
+ * и `evRemovedFromStage`.
  * 
  * Вы можете привязать корень сцены к уже существующему
- * DOM элементу (Например `<body>`), или создать новый.
+ * DOM элементу, (Например: `<body>`) или создать новый.
  * 
  * В DOM по умолчанию представлен тегом: `<div>`
  */
@@ -27,17 +27,14 @@ class Stage extends Container
     public function new(?node:Element) {
         super(node);
 
-        this.evResize = new Dispatcher();
         this.stage = this;
         this.isStage = true;
 
-        // Событие ресайзинга:
+        // Подключение прослушки ресайза:
         ResizeObserver.on(node, function(element) {
-            evResize.emit(this);
+            evResize.emit();
         });
     }
-
-
 
     /**
      * Событие ресайза сцены.  
@@ -46,5 +43,5 @@ class Stage extends Container
      * 
      * Не может быть: `null`
      */
-    public var evResize(default, null):Dispatcher<Stage->Void>;
+    public var evResize(default, never):Dispatcher<Void->Void> = new Dispatcher();
 }
